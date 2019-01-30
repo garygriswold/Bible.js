@@ -85,7 +85,7 @@ class AudioBible {
             playerItem.seek(to: seekTime, completionHandler: nil) // nil handler added 6/2/18
         }
         self.player = AVPlayer(playerItem: playerItem)
-        self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.none
+        self.player?.actionAtItemEnd = AVPlayer.ActionAtItemEnd.none
         
         self.controller.audioReadyToPlay(enabled: true)
         self.preFetchNextChapter(reference: reference)
@@ -98,11 +98,11 @@ class AudioBible {
             } else {
                 let duration: Int64 = Int64(Date().timeIntervalSince(state.timestamp))
                 let backupSec: Int = String(duration).count // could multiply by a factor here
-                let backupTime: CMTime = CMTimeMake(Int64(backupSec), 1)
+                let backupTime: CMTime = CMTimeMake(value: Int64(backupSec), timescale: 1)
                 return(CMTimeSubtract(state.position, backupTime))
             }
         } else {
-            return kCMTimeZero
+            return CMTime.zero
         }
     }
     
@@ -171,11 +171,11 @@ class AudioBible {
                         }
                     }
                 } else {
-                    item.seek(to: kCMTimeZero, completionHandler: nil) // nil handler added 7/2/18
+                    item.seek(to: CMTime.zero, completionHandler: nil) // nil handler added 7/2/18
                     self.controlCenter.nowPlaying(player: self)
                     if startPlayRate == 0 {
                         if let curr = self.currReference {
-                            self.audioAnalytics?.playStarted(item: curr.toString(), position: kCMTimeZero)
+                            self.audioAnalytics?.playStarted(item: curr.toString(), position: CMTime.zero)
                         }
                     }
                 }
@@ -212,19 +212,19 @@ class AudioBible {
                             object: nil)*/
         notify.addObserver(self,
                            selector: #selector(applicationDidFinishLaunching(note:)),
-                           name: .UIApplicationDidFinishLaunching,
+                           name: UIApplication.didFinishLaunchingNotification,
                            object: nil)
         notify.addObserver(self,
                            selector: #selector(applicationWillEnterForeground(note:)),
-                           name: .UIApplicationWillEnterForeground,
+                           name: UIApplication.willEnterForegroundNotification,
                            object: nil)
         notify.addObserver(self,
                            selector: #selector(applicationDidEnterBackground(note:)),
-                           name: .UIApplicationDidEnterBackground,
+                           name: UIApplication.didEnterBackgroundNotification,
                            object: nil)
         notify.addObserver(self,
                            selector: #selector(applicationWillTerminate(note:)),
-                           name: .UIApplicationWillTerminate,
+                           name: UIApplication.willTerminateNotification,
                            object: nil)
     }
 
@@ -275,7 +275,7 @@ class AudioBible {
     }
     
     private func updateMediaPlayStateTime(reference: AudioReference) {
-        var result: CMTime = kCMTimeZero
+        var result: CMTime = CMTime.zero
         if let currentTime = self.player?.currentTime() {
             if let audioChapter = reference.audioChapter {
                 let verse: Int = audioChapter.findVerseByPosition(priorVerse: 1, time: currentTime)

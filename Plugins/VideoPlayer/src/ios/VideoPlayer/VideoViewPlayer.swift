@@ -63,7 +63,7 @@ public class VideoViewPlayer : NSObject {
     func backupSeek(state: MediaPlayState) -> CMTime {
 		let duration: Int64 = Int64(Date().timeIntervalSince(state.timestamp))
 		let backupSec: Int = String(duration).count // could multiply by a factor here
-		let backupTime: CMTime = CMTimeMake(Int64(backupSec), 1)
+        let backupTime: CMTime = CMTimeMake(value: Int64(backupSec), timescale: 1)
 		return(CMTimeSubtract(state.position, backupTime))
 	}
 }

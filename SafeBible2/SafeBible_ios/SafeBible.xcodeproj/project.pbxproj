@@ -35,6 +35,8 @@
 		E463896E21793DC0009BF5E2 /* HistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463896D21793DC0009BF5E2 /* HistoryModel.swift */; };
 		E463897221799013009BF5E2 /* BiblesActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463897121799013009BF5E2 /* BiblesActionSheet.swift */; };
 		E4638974217AE210009BF5E2 /* SettingsDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4638973217AE210009BF5E2 /* SettingsDB.swift */; };
+		E465D73E2201700B009C2F1F /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E478BFEE21DE82CF0093320D /* AWS.framework */; };
+		E465D73F2201700B009C2F1F /* AWS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E478BFEE21DE82CF0093320D /* AWS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E469080B21964F5E00155F2A /* Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469080A21964F5E00155F2A /* Measurement.swift */; };
 		E469080D2196650F00155F2A /* ReaderViewQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469080C2196650F00155F2A /* ReaderViewQueue.swift */; };
 		E46B2C83218E50200063E68C /* TextHeightSliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */; };
@@ -57,6 +59,10 @@
 		E4B4433921A3BBA3007A266B /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B4433821A3BBA3007A266B /* PageViewController.swift */; };
 		E4B4433B21A46999007A266B /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B4433A21A46999007A266B /* ColorPicker.swift */; };
 		E4B7B357219E7E210057E838 /* WKWebViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B7B356219E7E210057E838 /* WKWebViewExtension.swift */; };
+		E4BB145222016BB000D5A704 /* AudioPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4BB145122016BB000D5A704 /* AudioPlayer.framework */; };
+		E4BB145322016BB000D5A704 /* AudioPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4BB145122016BB000D5A704 /* AudioPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E4BB145522016BD000D5A704 /* VideoPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4BB145422016BD000D5A704 /* VideoPlayer.framework */; };
+		E4BB145622016BD000D5A704 /* VideoPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4BB145422016BD000D5A704 /* VideoPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4C2E978211B70F500B71CC5 /* AppFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E977211B70F500B71CC5 /* AppFont.swift */; };
 		E4C2E97F211B711C00B71CC5 /* BibleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E97C211B711C00B71CC5 /* BibleModel.swift */; };
 		E4C2E980211B711C00B71CC5 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E97D211B711C00B71CC5 /* FeedbackViewController.swift */; };
@@ -85,6 +91,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		E465D7402201700B009C2F1F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E478BFE821DE82CF0093320D /* AWS.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = E4C23FD2202D627F00F98324;
+			remoteInfo = AWS;
+		};
 		E478BFE621DE829D0093320D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E478BFE221DE829D0093320D /* Utility.xcodeproj */;
@@ -125,8 +138,11 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				E465D73F2201700B009C2F1F /* AWS.framework in Embed Frameworks */,
 				E429FDBA21E9500E004A193A /* AWSCore.framework in Embed Frameworks */,
+				E4BB145622016BD000D5A704 /* VideoPlayer.framework in Embed Frameworks */,
 				E44C056E211BE1F700476DAD /* Utility.framework in Embed Frameworks */,
+				E4BB145322016BB000D5A704 /* AudioPlayer.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -249,6 +265,8 @@
 		E4BB144E2200C73500D5A704 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4BB144F2200C76100D5A704 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4BB14502200C77B00D5A704 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E4BB145122016BB000D5A704 /* AudioPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AudioPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4BB145422016BD000D5A704 /* VideoPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4C2E977211B70F500B71CC5 /* AppFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFont.swift; sourceTree = "<group>"; };
 		E4C2E97C211B711C00B71CC5 /* BibleModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BibleModel.swift; sourceTree = "<group>"; };
 		E4C2E97D211B711C00B71CC5 /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
@@ -285,7 +303,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E465D73E2201700B009C2F1F /* AWS.framework in Frameworks */,
+				E4BB145222016BB000D5A704 /* AudioPlayer.framework in Frameworks */,
 				E44C056D211BE1F700476DAD /* Utility.framework in Frameworks */,
+				E4BB145522016BD000D5A704 /* VideoPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,6 +431,8 @@
 		E4F720AD211B6F2A00E26B07 = {
 			isa = PBXGroup;
 			children = (
+				E4BB145422016BD000D5A704 /* VideoPlayer.framework */,
+				E4BB145122016BB000D5A704 /* AudioPlayer.framework */,
 				E487F79221F1B454000CB564 /* UIPlayUPButton90.png */,
 				E487F79021F1B43F000CB564 /* UIPlayDNButton90.png */,
 				E487F78E21F1B42A000CB564 /* UIPauseUPButton90.png */,
@@ -475,6 +498,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				E465D7412201700B009C2F1F /* PBXTargetDependency */,
 			);
 			name = SafeBible;
 			productName = Settings;
@@ -653,6 +677,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E465D7412201700B009C2F1F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AWS;
+			targetProxy = E465D7402201700B009C2F1F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		E437414921FEC42B00BB4C9F /* Localizable.strings */ = {

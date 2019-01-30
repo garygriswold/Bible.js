@@ -34,8 +34,8 @@ class AudioSession : NSObject {
         self.audioBibleView = audioBibleView
         super.init()
         do {
-            try self.session.setCategory(AVAudioSessionCategoryPlayback,
-                                         mode: AVAudioSessionModeSpokenAudio,
+            try self.session.setCategory(AVAudioSession.Category.playback,
+                                         mode: AVAudioSession.Mode.spokenAudio,
                                          options: [])
             try self.session.setActive(true)
         } catch let err {
@@ -44,19 +44,19 @@ class AudioSession : NSObject {
         let center = NotificationCenter.default
         center.addObserver(self,
                            selector: #selector(audioSessionInterruption(note:)),
-                           name: .AVAudioSessionInterruption,
+                           name: AVAudioSession.interruptionNotification,
                            object: self.session)
         center.addObserver(self,
                            selector: #selector(audioSessionRouteChange(note:)),
-                           name: .AVAudioSessionRouteChange,
+                           name: AVAudioSession.routeChangeNotification,
                            object: self.session)
         center.addObserver(self,
                            selector: #selector(audioSessionSilenceSecondaryAudioHint(note:)),
-                           name: .AVAudioSessionSilenceSecondaryAudioHint,
+                           name: AVAudioSession.silenceSecondaryAudioHintNotification,
                            object: self.session)
         center.addObserver(self,
                            selector: #selector(audioSessionMediaServicesWereReset(note:)),
-                           name: .AVAudioSessionMediaServicesWereReset,
+                           name: AVAudioSession.mediaServicesWereResetNotification,
                            object: self.session)
     }
     
@@ -66,14 +66,14 @@ class AudioSession : NSObject {
     
     @objc func audioSessionInterruption(note: NSNotification) {
         if let value = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt {
-            if let interruptionType =  AVAudioSessionInterruptionType(rawValue: value) {
+            if let interruptionType =  AVAudioSession.InterruptionType(rawValue: value) {
                 if interruptionType == .began {
                     print("\n****** Interruption Began")//, Pause in UI")
                     //self.audioBibleView.pause()
                 } else if interruptionType == .ended {
                     print("\n****** Interruption Ended, Play in UI, try to resume")
                     if let optionValue = note.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt {
-                        if AVAudioSessionInterruptionOptions(rawValue: optionValue) == .shouldResume {
+                        if AVAudioSession.InterruptionOptions(rawValue: optionValue) == .shouldResume {
                             print("****** Should resume")
                             self.audioBibleView.play()
                         }
@@ -87,7 +87,7 @@ class AudioSession : NSObject {
         if let userInfo = note.userInfo {
             if let value = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt {
                 print("****** Route Change VALUE \(value))")
-                if let reason = AVAudioSessionRouteChangeReason(rawValue: value) {
+                if let reason = AVAudioSession.RouteChangeReason(rawValue: value) {
                     if reason == .oldDeviceUnavailable {
                         print("****** Old Device Unavailable, pause in UI")
                         if Thread.isMainThread {

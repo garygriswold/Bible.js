@@ -64,7 +64,7 @@ extension AVPlayerViewController {
                                                object: nil)
         NotificationCenter.default.addObserver(self,
         										selector: #selector(applicationWillResignActive(note:)),
-												name: .UIApplicationWillResignActive,
+                                                name: UIApplication.willResignActiveNotification,
 												object: nil)
     }
     func initDebugNotifications() {
@@ -83,7 +83,7 @@ extension AVPlayerViewController {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemFailedToPlayToEndTime, object: nil)
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemPlaybackStalled, object: nil)
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewErrorLogEntry, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willResignActiveNotification, object: nil)
     }
     func removeDebugNotifications() {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewAccessLogEntry, object: nil)
@@ -132,7 +132,7 @@ extension AVPlayerViewController {
     }
     private func sendVideoAnalytics(isStart: Bool, isDone: Bool) {
         print("\n*********** INSIDE SAVE ANALYTICS \(isDone)")
-        let currTime = (self.player != nil) ? self.player!.currentTime() : kCMTimeZero
+        let currTime = (self.player != nil) ? self.player!.currentTime() : CMTime.zero
         if (self.delegate != nil) {
             let videoDelegate = self.delegate as? VideoViewControllerDelegate
             if (isStart) {

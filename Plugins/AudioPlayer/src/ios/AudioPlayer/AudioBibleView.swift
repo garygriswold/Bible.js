@@ -60,7 +60,7 @@ class AudioBibleView {
     private init(view: UIView, audioBible: AudioBible) {
         self.view = view
         self.audioBible = audioBible
-        self.scrubSliderDuration = kCMTimeZero
+        self.scrubSliderDuration = CMTime.zero
         self.scrubSliderDrag = false
         self.scrubSuspendedPlay = false
 
@@ -80,7 +80,7 @@ class AudioBibleView {
         self.panelHeight = self.audioPanel.heightAnchor.constraint(equalToConstant: 110.0)
         self.panelBottom = self.audioPanel.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
                                                                    constant: -panelInsetY)
-        if !UIAccessibilityIsReduceTransparencyEnabled() {
+        if !UIAccessibility.isReduceTransparencyEnabled {
             self.audioPanel.backgroundColor = .clear
             
             let blur = UIBlurEffect(style: .light)
@@ -104,9 +104,9 @@ class AudioBibleView {
         
         self.playButton = UIButton(type: .custom)
         self.playUpImg = UIImage(named: "UIPlayUPButton90.png")
-        self.playButton.setImage(self.playUpImg, for: UIControlState.normal)
+        self.playButton.setImage(self.playUpImg, for: UIControl.State.normal)
         self.playDnImg = UIImage(named: "UIPlayDNButton90.png")
-        self.playButton.setImage(self.playDnImg, for: UIControlState.highlighted)
+        self.playButton.setImage(self.playDnImg, for: UIControl.State.highlighted)
         self.playButton.isEnabled = false
         self.audioPanel.addSubview(self.playButton)
         
@@ -116,9 +116,9 @@ class AudioBibleView {
         let scrub = UISlider()
         scrub.isContinuous = true
         let thumbUpImg = UIImage(named: "UIThumbUP30.png")
-        scrub.setThumbImage(thumbUpImg, for: UIControlState.normal)
+        scrub.setThumbImage(thumbUpImg, for: UIControl.State.normal)
         let thumbDnImg = UIImage(named: "UIThumbDN30.png")
-        scrub.setThumbImage(thumbDnImg, for: UIControlState.highlighted)
+        scrub.setThumbImage(thumbDnImg, for: UIControl.State.highlighted)
         
         scrub.setValue(0.0, animated: false)
         self.audioPanel.addSubview(scrub)
@@ -163,8 +163,8 @@ class AudioBibleView {
         verse2.fontSize = 12
         verse2.foregroundColor = UIColor.black.cgColor
         verse2.isWrapped = false
-        verse2.alignmentMode = kCAAlignmentCenter
-        verse2.contentsGravity = kCAGravityCenter // Why doesn't contentsGravity work
+        verse2.alignmentMode = CATextLayerAlignmentMode.center
+        verse2.contentsGravity = CALayerContentsGravity.center // Why doesn't contentsGravity work
         self.verseLabel.addSublayer(verse2)
         self.verseNumLabel = verse2
 /*
@@ -238,7 +238,7 @@ class AudioBibleView {
         self.panelHeight.isActive = true
         self.panelBottom.isActive = true
         UIView.animate(withDuration: 1.0, delay: 0.0,
-                       options: UIViewAnimationOptions.curveEaseOut,
+                       options: UIView.AnimationOptions.curveEaseOut,
                        animations: { self.audioPanel.center.y -= self.audioPanel.bounds.height + homeBarSafe },
                        completion: nil
         )
@@ -249,7 +249,7 @@ class AudioBibleView {
             self.audioReadyToPlay(enabled: false)
         }
         self.progressLink = CADisplayLink(target: self, selector: #selector(updateProgress))
-        self.progressLink!.add(to: .current, forMode: .defaultRunLoopMode)
+        self.progressLink!.add(to: .current, forMode: RunLoop.Mode.default)
         self.progressLink!.preferredFramesPerSecond = 15
         
         self.playButton.addTarget(self, action: #selector(self.playPause), for: .touchUpInside)
@@ -264,7 +264,7 @@ class AudioBibleView {
     func dismissPlayer() {
         self.isAudioViewActive = false
         UIView.animate(withDuration: 1.0, delay: 0.0,
-                       options: UIViewAnimationOptions.curveEaseOut,
+                       options: UIView.AnimationOptions.curveEaseOut,
                        animations: { self.audioPanel.center.y += self.audioPanel.bounds.height * 1.2 },
                        completion: { _ in
                         self.panelLeft.isActive = false
@@ -374,7 +374,7 @@ class AudioBibleView {
     private func initNotifications() {
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(applicationWillEnterForeground(note:)),
-                           name: .UIApplicationWillEnterForeground, object: nil)
+                           name: UIApplication.willEnterForegroundNotification, object: nil)
     }
     @objc private func applicationWillEnterForeground(note: Notification) {
         print("\n****** APP WILL ENTER FOREGROUND IN VIEW \(Date().timeIntervalSince1970)")
@@ -387,11 +387,11 @@ class AudioBibleView {
     
     private func setPlayButtonPlay(play: Bool) {
         if play {
-            self.playButton.setImage(playUpImg, for: UIControlState.normal)
-            self.playButton.setImage(playDnImg, for: UIControlState.highlighted)
+            self.playButton.setImage(playUpImg, for: UIControl.State.normal)
+            self.playButton.setImage(playDnImg, for: UIControl.State.highlighted)
         } else {
-            self.playButton.setImage(pauseUpImg, for: UIControlState.normal)
-            self.playButton.setImage(pauseDnImg, for: UIControlState.highlighted)
+            self.playButton.setImage(pauseUpImg, for: UIControl.State.normal)
+            self.playButton.setImage(pauseDnImg, for: UIControl.State.highlighted)
         }
     }
 }
