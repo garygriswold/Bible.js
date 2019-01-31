@@ -26,22 +26,25 @@ class AudioControlCenter {
     func setupControlCenter(player: AudioBible) {
         let controlCenter = MPRemoteCommandCenter.shared()
         
-        controlCenter.playCommand.addTarget { event in
+        controlCenter.playCommand.addTarget(handler: { event in
             if !player.isPlaying() {
                 player.play()
                 return MPRemoteCommandHandlerStatus.success
             }
             return MPRemoteCommandHandlerStatus.commandFailed
-        }
+        })
         
-        controlCenter.pauseCommand.addTarget { event in
+        controlCenter.pauseCommand.addTarget(handler: { event in
             if player.isPlaying() {
                 player.pause()
                 return MPRemoteCommandHandlerStatus.success
             }
             return MPRemoteCommandHandlerStatus.commandFailed
-        }
+        })
         
+        controlCenter.nextTrackCommand.isEnabled = false
+        controlCenter.previousTrackCommand.isEnabled = false
+        /*
         controlCenter.nextTrackCommand.addTarget { event in
             if player.getPlayer() != nil {
                 player.nextChapter()
@@ -57,6 +60,30 @@ class AudioControlCenter {
             }
             return MPRemoteCommandHandlerStatus.commandFailed
         }
+        */
+        controlCenter.skipBackwardCommand.isEnabled = true
+        controlCenter.skipBackwardCommand.preferredIntervals = [30.0]
+        controlCenter.skipBackwardCommand.addTarget(handler: { event in
+            if player.getPlayer() != nil {
+                player.skip(seconds: -30)
+                return MPRemoteCommandHandlerStatus.success
+            }
+            return MPRemoteCommandHandlerStatus.commandFailed
+        })
+        
+        controlCenter.skipForwardCommand.isEnabled = true
+        controlCenter.skipForwardCommand.preferredIntervals = [30.0]
+        controlCenter.skipForwardCommand.addTarget(handler: { event in
+            if player.getPlayer() != nil {
+                player.skip(seconds: 30)
+                return MPRemoteCommandHandlerStatus.success
+            }
+            return MPRemoteCommandHandlerStatus.commandFailed
+        })
+        
+        controlCenter.seekBackwardCommand.isEnabled = false
+        controlCenter.seekForwardCommand.isEnabled = false
+        controlCenter.bookmarkCommand.isEnabled = false
     }
     
     func nowPlaying(player: AudioBible) {
