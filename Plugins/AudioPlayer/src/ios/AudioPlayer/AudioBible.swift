@@ -134,12 +134,14 @@ class AudioBible {
         }
     }
     
-    func skip(seconds: Double) {
+    func skip(seconds: Double) -> Double {
         if let play = self.player {
-            let backSec = play.currentTime().seconds + seconds
-            let seekTime = CMTimeMake(value: Int64(backSec), timescale: 1)
+            let sec = play.currentTime().seconds + seconds
+            let seekTime = CMTimeMake(value: Int64(sec), timescale: 1)
             play.seek(to: seekTime)
+            return sec
         }
+        return 0.0
     }
     
     /** This method is called when the prior chapter completes, and by AudioControlCenter.swift
