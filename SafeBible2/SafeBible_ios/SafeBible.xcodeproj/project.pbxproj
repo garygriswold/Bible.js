@@ -17,6 +17,7 @@
 		E40D6065218252CA00A06B54 /* BiblePageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D6064218252CA00A06B54 /* BiblePageModel.swift */; };
 		E41B8DC821D9AE4B0099A63D /* FileListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8DC721D9AE4B0099A63D /* FileListViewController.swift */; };
 		E41B8DCA21D9EA880099A63D /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8DC921D9EA880099A63D /* FileCell.swift */; };
+		E425B17A2202EB7A00A75132 /* icon_180.png in Resources */ = {isa = PBXBuildFile; fileRef = E425B1772202EB7A00A75132 /* icon_180.png */; };
 		E429FDB621E94F7C004A193A /* www in Resources */ = {isa = PBXBuildFile; fileRef = E429FDB521E94F7B004A193A /* www */; };
 		E429FDB821E94FAB004A193A /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E429FDB721E94FAB004A193A /* Versions.db */; };
 		E429FDBA21E9500E004A193A /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E429FDB921E9500D004A193A /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -160,6 +161,7 @@
 		E40D6064218252CA00A06B54 /* BiblePageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblePageModel.swift; sourceTree = "<group>"; };
 		E41B8DC721D9AE4B0099A63D /* FileListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileListViewController.swift; sourceTree = "<group>"; };
 		E41B8DC921D9EA880099A63D /* FileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
+		E425B1772202EB7A00A75132 /* icon_180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_180.png; path = SafeBible/Assets.xcassets/AppIcon.appiconset/icon_180.png; sourceTree = "<group>"; };
 		E428B7ED2138C297000AB2A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E429FDB521E94F7B004A193A /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = SafeBible/www; sourceTree = "<group>"; };
 		E429FDB721E94FAB004A193A /* Versions.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = Versions.db; path = SafeBible/Versions.db; sourceTree = "<group>"; };
@@ -431,6 +433,7 @@
 		E4F720AD211B6F2A00E26B07 = {
 			isa = PBXGroup;
 			children = (
+				E425B1772202EB7A00A75132 /* icon_180.png */,
 				E4BB145422016BD000D5A704 /* VideoPlayer.framework */,
 				E4BB145122016BB000D5A704 /* AudioPlayer.framework */,
 				E487F79221F1B454000CB564 /* UIPlayUPButton90.png */,
@@ -591,6 +594,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E425B17A2202EB7A00A75132 /* icon_180.png in Resources */,
 				E487F79321F1B454000CB564 /* UIPlayUPButton90.png in Resources */,
 				E487F79121F1B43F000CB564 /* UIPlayDNButton90.png in Resources */,
 				E487F78F21F1B42A000CB564 /* UIPauseUPButton90.png in Resources */,

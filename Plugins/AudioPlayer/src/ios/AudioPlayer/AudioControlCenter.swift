@@ -64,7 +64,7 @@ class AudioControlCenter {
             if let play = player.getPlayer() {
                 if let item = play.currentItem {
                     var info = [String : Any]()
-                    if let image = UIImage(named: "icon_180") {
+                    if let image = UIImage(named: "icon_180.png") {
                         info[MPMediaItemPropertyArtwork] =
                             MPMediaItemArtwork(boundsSize: image.size) { size in
                                 return image
