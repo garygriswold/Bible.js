@@ -55,7 +55,11 @@ var postProcessBibleDownload = function(callback) {
 		var os = parts.indexOf('OS');
 		row.osVersion = parts[os +1].replace(/_/g, '.');
 		row.manufacturer = 'Apple';
-		row.model = parts[1].replace(/[(;]/g, '');
+		if (parts.length > 1) {
+			row.model = parts[1].replace(/[(;]/g, '');
+		} else {
+			row.model = 'unknown';
+		}
 		//console.log('iOS ', row);		
 	}
 	
