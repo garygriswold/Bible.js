@@ -1,0 +1,196 @@
+AutoLayout
+1. Test appearance of each page in iphone in each rotation
+2. Test appearance of each page in iPad in each rotation
+3. Test ability to multi-view the App in iPad
+
+Share
+1. Share presents a share menu, test that a few work
+2a. Are the save file, pdf, and print options really necessary
+
+Highlight
+1. Highlight presents a color menu with 1 blank
+2. Test highlighting separate
+3. Test highlighting overlapping
+4. Test erasing by selecting white
+5. Verify that highlighted item appears in Notes
+6. Highlighted text should appear in Notes
+7. Test that highlighted text is retained after restart
+8. Test that highlighted text is retained after app update
+
+Note
+1. Note presents a text editor with selected text
+2. Edit button should turn on editor
+3. Edit button should present keyboard
+4. Save button should dismiss keyboard
+5. Done button should remove editor
+6. Test that note is retained after restart
+7. Test that note is retained after app update
+8. Test that icon appear at location of notes
+9. Test that clicking on icon presents note
+
+Bookmark
+1. Test that icon appears where text was selected
+2. Test that icon is retained after restart
+3. Test that icon is retained after app update
+4. Test that clicking on icon presents a delete button
+5. Test that icon is retained after restart
+6. Test that icon is retained after app update
+
+Compare
+1. Test that verse or verses are presented in list
+2. Test that each has a translation name
+3. Test that the + button works to add versions
+
+
+System Text Size Change
+1. Change system text size change
+2. Verify that text size changes in App if actively running
+3. Try moving this code to AppDelegate or ReaderViewNavigator and see if still works
+
+Reader
+1. Scrolling right and left should have no delay, unless it is done very fast
+2. I should verify through log that both cashes are working as expected.
+3. Test that menu button goes to menu and back
+4. Test that history button goes to history and back 
+5. Test that Book button goes to TOC and back
+6. Test that Chapter button goes to chapter TOC and back
+7. Test that Version button presents versions dialog and cancel
+8. Test that audio button presents audio and back
+9. Test that Notes button presents notes list and back
+
+Menu
+1. Test that TOC button presents TOC and back
+2. Test that History button presents History and back
+3. Test that Videos button presents Video list and back
+4. Test Night-time button changes to white on black
+5. View each page to ensure that it is white on black
+6. Test night-time button changes to black on white
+7. View each page to ensure that it is black on white
+8. Test Verse numbers button to ensure that verse numbers are present when on
+9. View Verse numbers in a few chapters including in memory, in database, and over AWS-S3.
+10. Test Verse numbers button to ensure that verse numbers are absent when off
+11. Test More Bibles present Bibles view and back
+12. Test More Languages presents Languages view and back
+13. Test Write a Review button presents view and back
+14. Test Send us comments button presents view and back
+15. Test Privacy policy button presents view and back
+16. Test Share Safe Bible presents message dialog and back
+17. Test that Share is absent when there is no message App
+
+Text Size and Height
+1. Test that Text Size when clicked presents text size dialog
+2. Test that it changes in size relative
+3. Test that all pages are effected once the size is released
+4. Test that Text Height when clicked presents text height dialog
+5. Test that it changes in relative height
+6. Verify that size of Text Hieght text is correct for size setting
+7. Verify that height of Text Size is correct for height setting
+
+Bibles
+1. Test that clicking on an version presents the current chapter in that version
+2. Verify that all Versions have reasonable names
+3. Ideally those names should be in the language
+4. Test that delete button moves version back to "My group"
+5. Test that add button moves version up to "My group"
+6. Test that languages can be rearranged.
+5. Verify that changes of 4-6 persist after cold restart
+6. Verify that changes of 4-6 persist after app update
+7. Delete all current Bibles
+8. Add all Bibles from all languages present
+
+Languages
+1. Verify that clicking on a language presents a list of versions in that language
+2. Verify that clicking on one of those Bibles presents that Bible
+3. Verify that each language has at least one version
+4. Display app in other languages and verify that the right hand name is in that language
+5. Test that delete button moves version back to bottom list
+6. Test that add button moves version up to top list
+7. Test that language items can be rearranged.
+8. Test that versions are presented in the sequence set by the language
+9. Test that search finds languages in the bottom section.
+
+Initial Settings
+1. Test that initial language settings are based upon language preferences of user
+2. Test that initial bible settings are based upon algorithm
+3. Review algorithm
+4. Test this with a variety of initial language settings
+
+Table of Contents
+1. Verify that the table of contents is correct for a few versions
+2. Test click History takes to History page and back
+3. Test click book takes one to list of chapters in book
+4. Test that first and last book do display
+5. Test that index presents books in middle of page
+6. Test that chapters display correctly in middle of page
+7. Test that appearance if correct in any orientation
+8. Test that clicking on a chapter presents that chapter
+9. Test that Psalms chapters display correctly, and Jude also
+
+History
+1. Test that history contains each chapter that we have looked at for n seconds not every chapter that has been presented.
+2. Test that clear erases all history
+3. Test that clicking on history presents the chapter
+4. Verify that History correctly displays versions when they have changed.
+
+Bibles Action Sheet
+1. Verify that Action Sheet contains the name of all selected Bibles
+2. Verify that the sequence is as user specified in Bible View
+3. Verify there is a + Bibles lines that takes one to Bible View
+4. Verify there is a + Languages line that takes on to Language View
+5. Verify that clicking on a version presents the same chapter in that version
+6. Verify that navigation of chapters left and right keeps place in current version
+
+Privacy Page
+1. Verify that page displays correctly, and rotates and scrolls to top and bottom correctly.
+
+Send Comments
+1. Verify that page displays as editable immediately
+2. Verify that page makes audible sound when message is sent.
+3. Verify that message is received in bucket.
+4. Verify that message is emailed to me from bucket and then erased.
+5. Verify that menu button does not send a message.
+6. Verify that message is not lost, when a user uses menu
+
+User Message Share
+1. Verify that message window presents
+2. Verify that content are editable
+3. Verify that message is sent
+4. Verify that cancel does not send message
+
+Review
+1. Verify that write a review will present the review page
+2. After deployment, verify that review is displayed in App Store
+
+Notes List
+1. Verify that each note, highlight and bookmark item displays.
+2. Verify that each note includes an icon, a reference, and text.
+3. Test how overlapping highlights are presented.  This seems like it will be a problem.
+4. Test how bookmarks are displayed
+5. Test segmentation controls ability to choose between kinds of content.
+(It seems like bookmarks should be one list for Bible, and Notes just for a Book)
+(Or, should the bar highlight the ones that are active)
+
+Note Export
+1. Test text export by book, and text export for Bible
+2. Test delivery by a number of the media
+3. Test database delivery by book, and database delivery by Bible
+4. Open database received in sqlite to verify correctness.
+5. Verify that Notes file can be shared with another user using attachment share in email
+
+Notes File List
+1. Verify that the original notes file and all received notes files are present in list
+2. Verify that we can select a notes file and all notes will be displayed in notes view.
+3. The App offers not delete feature at this time.
+
+App Update
+1. When there is no update verify that Versions.db is unchanged
+2. When there is an App update verify that Versions.db in bundle is used.
+
+Store Review
+1. Not sure how to test
+
+ReaderViewQueue
+NotesExportDocument
+NotesExportDatabase
+DynamicCSS
+AppFont
