@@ -1,0 +1,62 @@
+Amazon AWS S3 Buckets
+
+Updated Feb 6, 2018
+By GNG
+
+Audio Analytics - nothing is yet written to download this data
+analytics-ap-northeast-1-shortsands - Tokyo 160
+analytics-ap-southeast-1-shortsands - Singapore - 83
+analytics-ap-southeast-2-shortsands - Sydney - 150
+analytics-eu-west-1-shortsands - Ireland - 300
+analytics-us-east-1-shortsands - US thousands
+analytics-us-west-2-shortsands - US - test, I think 123
+
+Audio Files - obsolete, the App move to use FCBH files July 2018
+The following should be deleted soon
+blgambn1da.shortsands.com - us-east-1 - 260
+chnunvn2da.shortsands.com - us-east-1 - 260
+chnunv02da.shortsands.com - us-east-1 - 260
+engesvo2da.shortsands.com - us-east-1 - 260
+engesvn2da.shortsands.com - us-east-
+engkjvn2da.shortsands.com - us-east-1 - 260
+engkjv02da.shortsands.com - us-east-1
+engwebn2da.shortsands.com - us-east
+hunhbsn1da.shortsands.com - us-east
+poranan2da.shortsands.com
+russ76n2da.shortsands.com
+russ76o2da.shortsands.com
+sprn95n2da.shortsands.com
+ukro95n2da.shortsands.com
+urdpakn2da.shortsands.com
+
+Test
+shortsands.drop - download log entries
+shortsands - bibles.zip
+
+Bible Download buckets
+shortsands-as-jp
+shortsands-as-jp-drop
+shortsands-as-jp-log
+shortsands-as-sg-drop
+shortsands-as-sg-log
+shortsands-eu-ie
+shortsands-eu-ie-drop
+shortsands-eu-ie-log
+shortsands-na-va
+shortsands-na-va-drop
+shortsands-na-va-log
+shortsands-oc-au
+shortsands-oc-au-drop
+shortsands-oc-au-log
+
+App Messaginging
+user.feedback.safebible
+
+Chapter Text Buckets
+text-us-east-1-shortsands - replicates to ap-northeast-1
+text-ap-northeast-1-shortsands - replicates to ap-southeast-1
+text-ap-southeast-1-shortsands - replicates to ap-southeast-2
+text-ap-southeast-2-shortsands - replicates to eu-west-1
+text-eu-west-1-shortsands
+Test
+text-us-west-1-shortsands

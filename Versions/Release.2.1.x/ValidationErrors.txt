@@ -1,0 +1,36 @@
+Validation Errors
+
+missing text KMRKKN text/KMRKKN/KMRIBT/, but text/KMRIBT/KM2IBT/ does exist  does exist I want**
+missing text KMRMBN text/KMRMBN/KM2IBT/, but text/KM2IBT/KMRMBN (the reverse) does exist I WANT**
+missing text PESTPV text/PESTPV/PESTPV/, nothing like this exists in text
+missing text SPAR60 text/SPAR60/SPNR60/, nothing like this exists in text
+missing text TZESBM text/TZESBM/TZESBM/, but text/TZOCHN/TZESBM/ does exist
+missing text YADTBL text/YADTBL/NUJWBT/, nothing like this exists in text
+
+missing nt audio AK1UBS audio/AK1UBS/AK1UBSN1DA/, but audio/AKAUBS/AK1UBSN1DA/ does exist
+missing nt audio EWOEWO audio/EWOEWO/EWOABCN2DA/, nothing like this exists in audio
+missing nt audio FUVATBL audio/FUVATBL/FU2TBLN1DA/, but audio/FUVTBL/FU2TBLN1DA/ does exist
+missing nt audio HNDOVV audio/HNDOVV/HNDOVVN2DA/, nothing like this exists in audio
+missing nt audio HNJASI audio/HNJASI/BLUASIN1DA/, but audio/HNJHNJ/BLUASIN1DA/ does exist
+missing nt audio IXIWBT audio/IXIWBT/IXIWBTN2DA/, but audio/IXLNWBT/IXIWBTN2DA/ does exist
+missing nt audio KMRK05 audio/KMRK05/KMRUBSN2DA/, but audio/KMRK09/KMRUBSN2DA/ does exist
+missing nt audio KMRKKN audio/KMRKKN/KMRIBTN2DA/, but audio/KMRIBT/KMRIBTN2DA/ does exist
+missing nt audio MMSBSG audio/MMSBSG/MMSBSGN1DA/, but audio/MAMS09/MMSBSGN1DA/ does exist
+missing nt audio TNNWBT audio/TNNWBT/TNNWBTN1DA/, but audio/TNNTNT/TNNWBTN1DA/ does exist
+missing nt audio TUWBSM audio/TUWBSM/TUWBSMN2DA/, but audio/TUMEWT/TUWBSMN2DA/ does exist
+missing nt audio TZESBM audio/TZESBM/TZESBMN2DA/, but audio/TZOCHN/TZESBMN2DA/ does exist
+missing nt audio TZJIBS audio/TZJIBS/TZJIBSN1DA/, but audio/TZJWES/TZJIBSN1DA/ does exist
+
+
+After deletes
+
+
+missing text KMRKKN text/KMRKKN/KMRIBT/
+missing text KMRMBN text/KMRMBN/KM2IBT/
+missing text PESTPV text/PESTPV/PESTPV/
+missing text SPAR60 text/SPAR60/SPNR60/
+missing nt audio KMRK05 audio/KMRK05/KMRUBSN2DA/
+missing nt audio KMRKKN audio/KMRKKN/KMRIBTN2DA/
+
+
+
