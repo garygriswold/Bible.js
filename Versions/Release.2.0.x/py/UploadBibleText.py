@@ -7,6 +7,7 @@ import sys
 import io
 import sqlite3
 import os
+import boto3
 
 SOURCE_DIR = os.environ['HOME'] + "/ShortSands/DBL/5ready/"
 #BUCKET = "text-us-east-1-shortsands" # AWS S3 will replicate to other regions
@@ -120,6 +121,8 @@ if not os.path.isfile(filename):
 	exit()
 
 versionId = sys.argv[1]
+s3 = boto3.client('s3')
+
 db = sqlite3.connect(filename)
 cursor = db.cursor()
 sql = "SELECT reference, html FROM chapters limit 4"
@@ -137,6 +140,8 @@ for row in rows:
 	else:
 		key = "%s_%s_%s.html" % (versionId, sequence, book)
 	print key
+
+	s3.put_object(Bucket=BUCKET, Key=key, Body=html, ContentType="text/html; charset=utf-8")
 
 db.close()
 
