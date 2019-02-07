@@ -8,6 +8,8 @@ import io
 import sqlite3
 import os
 import boto3
+import json
+from collections import OrderedDict
 
 SOURCE_DIR = os.environ['HOME'] + "/ShortSands/DBL/5ready/"
 #BUCKET = "text-us-east-1-shortsands" # AWS S3 will replicate to other regions
@@ -143,8 +145,34 @@ for row in rows:
 		key = "text/%s/%s/%s_%s_%s.html" % \
 		(versionId, versionId, versionId, sequence, book)
 	print key
-
 	s3.put_object(Bucket=BUCKET, Key=key, Body=html, ContentType="text/html; charset=utf-8")
+
+bookNames = []
+bookIds = []
+chapters = []
+sql = "SELECT code, heading, title, name, abbrev, lastChapter FROM tableContents"
+cursor.execute(sql, values)
+rows = cursor.fetchall()
+for row in rows:
+	bookId = row[0]
+	heading = row[1]
+	lastChapter = row[5]
+	bookIds.append(bookId)
+	bookNames.append(heading)
+	for chapter in range(1, lastChapter + 1): 
+		chapters.append(bookId + str(chapter))
+
+info = OrderedDict()
+info["id"] = versionId
+info["divisionNames"] = bookNames
+info["divisions"] = bookIds
+info["sections"] = chapters
+
+string = json.dumps(info)
+print string
+key = "text/%s/%s/info.json" % (versionId, versionId)
+print key
+s3.put_object(Bucket=BUCKET, Key=key, Body=string, ContentType="application/json")
 
 db.close()
 
