@@ -114,7 +114,8 @@ bookMap = {
          }
 
 
-filename = SOURCE_DIR + sys.argv[1] + ".db"
+#filename = SOURCE_DIR + sys.argv[1] + ".db"
+filename = SOURCE_DIR + "WEB.db"
 print filename
 if not os.path.isfile(filename):
 	print "Database does not exist", sys.argv[1]
@@ -125,7 +126,7 @@ s3 = boto3.client('s3')
 
 db = sqlite3.connect(filename)
 cursor = db.cursor()
-sql = "SELECT reference, html FROM chapters limit 4"
+sql = "SELECT reference, html FROM chapters"
 values = ()
 cursor.execute(sql, values)
 rows = cursor.fetchall()
@@ -136,9 +137,11 @@ for row in rows:
 	html = row[1]
 	#key %I_%O_%B_%C.html
 	if chapter != "0":
-		key = "%s_%s_%s_%s.html" % (versionId, sequence, book, chapter)
+		key = "text/%s/%s/%s_%s_%s_%s.html" % \
+		(versionId, versionId, versionId, sequence, book, chapter)
 	else:
-		key = "%s_%s_%s.html" % (versionId, sequence, book)
+		key = "text/%s/%s/%s_%s_%s.html" % \
+		(versionId, versionId, versionId, sequence, book)
 	print key
 
 	s3.put_object(Bucket=BUCKET, Key=key, Body=html, ContentType="text/html; charset=utf-8")
