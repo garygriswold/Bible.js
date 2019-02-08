@@ -15,6 +15,37 @@ SOURCE_DIR = os.environ['HOME'] + "/ShortSands/DBL/5ready/"
 #BUCKET = "text-us-east-1-shortsands" # AWS S3 will replicate to other regions
 BUCKET = "text-us-west-2-shortsands" # Test bucket
 
+versionMap = {
+	"ARBVDPD.db": "ARBVDV",
+	"ERV-ARB.db": "ARBWTC",
+	"ERV-AWA.db": "AWAWTC",
+	"ERV-BEN.db": "BENWTC",
+	"ERV-BUL.db": "", # did use BULPRB
+	"ERV-CMN.db": "", # did use CMNUNV
+	"ERV-ENG.db": "",
+	"ERV-HIN.db": "HINWTC",
+	"ERV-HRV.db": "",
+	"ERV-HUN.db": "", # did use HINHBS
+	"ERV-IND.db": "", # did use INDSHL
+	"ERV-KAN.db": "KANWTC",
+	"ERV-MAR.db": "MARWTC",
+	"ERV-NEP.db": "",
+	"ERV-ORI.db": "ORYWTC", # check this ORI vs ORY
+	"ERV-PAN.db": "",
+	"ERV-POR.db": "", # did use PORBAR
+	"ERV-RUS.db": "", # did use RUSS76
+	"ERV-SPA.db": "SPAWTC",
+	"ERV-SRP.db": "",
+	"ERV-TAM.db": "TAMWTC",
+	"ERV-THA.db": "",
+	"ERV-UKR.db": "", # did use UKRN39
+	"ERV-URD.db": "URDWTC",
+	"ERV-VIE.db": "",
+	"KJVPD.db": "ENGKJV",
+	"NMV.db": "",
+	"WEB.db": "ENGWEB"
+}
+
 bookMap = {
         "FRT": "0",
         "INT": "1",
@@ -116,14 +147,13 @@ bookMap = {
          }
 
 
-#filename = SOURCE_DIR + sys.argv[1] + ".db"
-filename = SOURCE_DIR + "WEB.db"
+filename = SOURCE_DIR + sys.argv[1]
 print filename
 if not os.path.isfile(filename):
 	print "Database does not exist", sys.argv[1]
 	exit()
 
-versionId = sys.argv[1]
+versionId = versionMap[sys.argv[1]]
 s3 = boto3.client('s3')
 
 db = sqlite3.connect(filename)
@@ -145,7 +175,7 @@ for row in rows:
 		key = "text/%s/%s/%s_%s_%s.html" % \
 		(versionId, versionId, versionId, sequence, book)
 	print key
-	s3.put_object(Bucket=BUCKET, Key=key, Body=html, ContentType="text/html; charset=utf-8")
+	#s3.put_object(Bucket=BUCKET, Key=key, Body=html, ContentType="text/html; charset=utf-8")
 
 bookNames = []
 bookIds = []
@@ -172,7 +202,7 @@ string = json.dumps(info)
 print string
 key = "text/%s/%s/info.json" % (versionId, versionId)
 print key
-s3.put_object(Bucket=BUCKET, Key=key, Body=string, ContentType="application/json")
+#s3.put_object(Bucket=BUCKET, Key=key, Body=string, ContentType="application/json")
 
 db.close()
 
