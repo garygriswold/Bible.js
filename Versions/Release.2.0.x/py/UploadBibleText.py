@@ -16,34 +16,34 @@ SOURCE_DIR = os.environ['HOME'] + "/ShortSands/DBL/5ready/"
 BUCKET = "text-us-west-2-shortsands" # Test bucket
 
 versionMap = {
-	"ARBVDPD.db": "ARBVDV",
-	"ERV-ARB.db": "ARBWTC",
-	"ERV-AWA.db": "AWAWTC",
-	"ERV-BEN.db": "BENWTC",
-	"ERV-BUL.db": "", # did use BULPRB
-	"ERV-CMN.db": "", # did use CMNUNV
-	"ERV-ENG.db": "",
-	"ERV-HIN.db": "HINWTC",
-	"ERV-HRV.db": "",
-	"ERV-HUN.db": "", # did use HINHBS
-	"ERV-IND.db": "", # did use INDSHL
-	"ERV-KAN.db": "KANWTC",
-	"ERV-MAR.db": "MARWTC",
-	"ERV-NEP.db": "",
-	"ERV-ORI.db": "ORYWTC", # check this ORI vs ORY
-	"ERV-PAN.db": "",
-	"ERV-POR.db": "", # did use PORBAR
-	"ERV-RUS.db": "", # did use RUSS76
-	"ERV-SPA.db": "SPAWTC",
-	"ERV-SRP.db": "",
-	"ERV-TAM.db": "TAMWTC",
-	"ERV-THA.db": "",
-	"ERV-UKR.db": "", # did use UKRN39
-	"ERV-URD.db": "URDWTC",
-	"ERV-VIE.db": "",
-	"KJVPD.db": "ENGKJV",
-	"NMV.db": "",
-	"WEB.db": "ENGWEB"
+	"ARBVDPD.db": ["ARBVDV"], # FCBH has, and also has ARZVDV
+	"ERV-ARB.db": ["ARBERV"], # FCBH has, and also has ARBWTC
+	"ERV-AWA.db": ["AWAERV"], # FCBH has, and also has AWAWTC
+	"ERV-BEN.db": ["BENERV"], # FCBH has, also has BENWTC/BNGWTC
+	"ERV-BUL.db": ["BULERV"], # FCBH has
+	"ERV-CMN.db": ["CMNERV"], # FCBH has
+	"ERV-ENG.db": ["ENGERU"], # FCBH has
+	"ERV-HIN.db": ["HINERV"], # FCBH has, also has HINWTC/HNDWTC
+	"ERV-HRV.db": ["HRVERV"], # FCBH has
+	"ERV-HUN.db": ["HUNERV"], # FCBH has
+	"ERV-IND.db": ["INDERV"], # FCBH has
+	"ERV-KAN.db": ["KANERV"], # FCBH has, also has KANWTC
+	"ERV-MAR.db": ["MARERV"], # FCBH has
+	"ERV-NEP.db": ["NEPERV"], # FCBH has
+	"ERV-ORI.db": ["ORIERV"], # FCBH has, also has ORYWTC
+	"ERV-PAN.db": ["PANERV"], # FCBH has
+	"ERV-POR.db": ["PORERV"], # FCBH has
+	"ERV-RUS.db": ["RUSWTC"], # FCBH has
+	"ERV-SPA.db": ["SPAWTC", "SPNWTC"], # FCBH has, also has SPNWTC
+	"ERV-SRP.db": ["SRPERV"], # FCBH has
+	"ERV-TAM.db": ["TAMERV"], # FCBH has, also has TABWTC/TCVWTC
+	"ERV-THA.db": ["THAERV"], # FCBH has
+	"ERV-UKR.db": ["UKRBLI", "URKERV"], # FCBH has
+	"ERV-URD.db": ["URDWTC"], # FCBH has, also has URDWTC/URDERV
+	"ERV-VIE.db": ["VIEWTC"], # FCBH has
+	"KJVPD.db": ["ENGKJV"], # FCBH does not have text
+	"NMV.db": ["PESNMV", "PESEMV"], # FCBH has
+	"WEB.db": ["ENGWEB"] # FCBH has
 }
 
 bookMap = {
@@ -153,7 +153,9 @@ if not os.path.isfile(filename):
 	print "Database does not exist", sys.argv[1]
 	exit()
 
-versionId = versionMap[sys.argv[1]]
+versionArray = versionMap[sys.argv[1]]
+versionId = versionArray[0]
+versionId2 = versionArray[1] if len(versionArray) > 1 else versionId
 s3 = boto3.client('s3')
 
 db = sqlite3.connect(filename)
@@ -170,10 +172,10 @@ for row in rows:
 	#key %I_%O_%B_%C.html
 	if chapter != "0":
 		key = "text/%s/%s/%s_%s_%s_%s.html" % \
-		(versionId, versionId, versionId, sequence, book, chapter)
+		(versionId, versionId2, versionId2, sequence, book, chapter)
 	else:
 		key = "text/%s/%s/%s_%s_%s.html" % \
-		(versionId, versionId, versionId, sequence, book)
+		(versionId, versionId2, versionId2, sequence, book)
 	print key
 	#s3.put_object(Bucket=BUCKET, Key=key, Body=html, ContentType="text/html; charset=utf-8")
 
@@ -199,8 +201,8 @@ info["divisions"] = bookIds
 info["sections"] = chapters
 
 string = json.dumps(info)
-print string
-key = "text/%s/%s/info.json" % (versionId, versionId)
+#print string
+key = "text/%s/%s/info.json" % (versionId, versionId2)
 print key
 #s3.put_object(Bucket=BUCKET, Key=key, Body=string, ContentType="application/json")
 
