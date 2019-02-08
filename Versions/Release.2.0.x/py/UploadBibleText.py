@@ -177,7 +177,7 @@ for row in rows:
 		key = "text/%s/%s/%s_%s_%s.html" % \
 		(versionId, versionId2, versionId2, sequence, book)
 	print key
-	#s3.put_object(Bucket=BUCKET, Key=key, Body=html, ContentType="text/html; charset=utf-8")
+	s3.put_object(Bucket=BUCKET, Key=key, Body=html, ContentType="text/html; charset=utf-8")
 
 bookNames = []
 bookIds = []
@@ -204,7 +204,7 @@ string = json.dumps(info)
 #print string
 key = "text/%s/%s/info.json" % (versionId, versionId2)
 print key
-#s3.put_object(Bucket=BUCKET, Key=key, Body=string, ContentType="application/json")
+s3.put_object(Bucket=BUCKET, Key=key, Body=string, ContentType="application/json")
 
 db.close()
 
