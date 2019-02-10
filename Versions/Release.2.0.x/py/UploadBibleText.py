@@ -38,7 +38,7 @@ versionMap = {
 	"ERV-SRP.db": ["SRPERV"], # FCBH has
 	"ERV-TAM.db": ["TAMERV"], # FCBH has, also has TABWTC/TCVWTC
 	"ERV-THA.db": ["THAERV"], # FCBH has
-	"ERV-UKR.db": ["UKRBLI", "URKERV"], # FCBH has
+	"ERV-UKR.db": ["UKRBLI", "UKRERV"], # FCBH has
 	"ERV-URD.db": ["URDWTC"], # FCBH has, also has URDWTC/URDERV
 	"ERV-VIE.db": ["VIEWTC"], # FCBH has
 	"KJVPD.db": ["ENGKJV"], # FCBH does not have text
