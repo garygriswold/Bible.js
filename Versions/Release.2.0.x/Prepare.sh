@@ -29,3 +29,9 @@ python py/UploadBibleText.py ERV-VIE.db
 python py/UploadBibleText.py KJVPD.db
 python py/UploadBibleText.py NMV.db
 python py/UploadBibleText.py WEB.db
+
+# To validate the naming in the Upload:
+# sh extract_dbp_prod.sh # to extract these bibles from dbp
+# python py/ListBucket.py > west_2.out # to List uploaded Bibles
+# diff dbp_prod.out west_2.out
+
