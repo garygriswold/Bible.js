@@ -192,43 +192,6 @@ sqlite Versions.db <<END_SQL6
 UPDATE Bible SET localizedName = name WHERE localizedName is NULL;
 END_SQL6
 
-###################### Video Player ######################
-
-# Pulls data from JFP web service, and generates JesusFilm table
-python py/JesusFilmImporter.js
-
-sqlite Versions.db < sql/jesus_film.sql
-
-# Create Video table by extracting data from Jesus Film Project
-python py/VideoTable.py
-
-sqlite Versions.db < sql/video.sql
-
-# Erase video descriptions in English for non-English languages
-sqlite Versions.db <<END_SQL7
-update Video set description=null where languageId != '529' and mediaId='1_jf-0-0' and description = (select description from Video where languageId='529' and mediaId='1_jf-0-0');
-update Video set description=null where languageId != '529' and mediaId='1_wl-0-0' and description = (select description from Video where languageId='529' and mediaId='1_wl-0-0');
-update Video set description=null where languageId != '529' and mediaId='1_cl-0-0' and description = (select description from Video where languageId='529' and mediaId='1_cl-0-0');
-vacuum;
-END_SQL7
-
-# Edit VideoUpdate.sql for changes in ROCK videos
-sqlite Versions.db < sql/VideoUpdate.sql
-
-# Loads KOG Descriptions into Video table
-python py/UpdateVideo.py
-
-# Add a table that contols the sequence of Video Presentation in App
-sqlite Versions.db <<END_SQL8
-DROP TABLE IF EXISTS VideoSeq;
-CREATE TABLE VideoSeq (mediaId TEXT PRIMARY KEY, sequence INT NOT NULL);
-INSERT INTO VideoSeq VALUES ('1_jf-0-0', 1);
-INSERT INTO VideoSeq VALUES ('1_cl-0-0', 2);
-INSERT INTO VideoSeq VALUES ('1_wl-0-0', 3);
-INSERT INTO VideoSeq VALUES ('KOG_OT', 4);
-INSERT INTO VideoSeq VALUES ('KOG_NT', 5);
-END_SQL8
-
 ###################### Audio Player ######################
 
 # Generate AudioBook table by parse of dbp-prod
@@ -250,6 +213,43 @@ UPDATE Bible SET otDamId='ENGWEBO2DA', ntDamId='ENGWEBN2DA' WHERE bibleId='ENGWE
 update AudioBook set damId='ENGWEBN2DA' where damId='EN1WEBN2DA';
 update AudioBook set damId='ENGWEBO2DA' where damId='EN1WEBO2DA';
 END_SQL7
+
+###################### Video Player ######################
+
+# Pulls data from JFP web service, and generates JesusFilm table
+python py/JesusFilmImporter.js
+
+sqlite Versions.db < sql/jesus_film.sql
+
+# Create Video table by extracting data from Jesus Film Project
+python py/VideoTable.py
+
+sqlite Versions.db < sql/video.sql
+
+# Erase video descriptions in English for non-English languages
+sqlite Versions.db <<END_SQL8
+update Video set description=null where languageId != '529' and mediaId='1_jf-0-0' and description = (select description from Video where languageId='529' and mediaId='1_jf-0-0');
+update Video set description=null where languageId != '529' and mediaId='1_wl-0-0' and description = (select description from Video where languageId='529' and mediaId='1_wl-0-0');
+update Video set description=null where languageId != '529' and mediaId='1_cl-0-0' and description = (select description from Video where languageId='529' and mediaId='1_cl-0-0');
+vacuum;
+END_SQL8
+
+# Edit VideoUpdate.sql for changes in ROCK videos
+sqlite Versions.db < sql/VideoUpdate.sql
+
+# Loads KOG Descriptions into Video table
+python py/UpdateVideo.py
+
+# Add a table that contols the sequence of Video Presentation in App
+sqlite Versions.db <<END_SQL9
+DROP TABLE IF EXISTS VideoSeq;
+CREATE TABLE VideoSeq (mediaId TEXT PRIMARY KEY, sequence INT NOT NULL);
+INSERT INTO VideoSeq VALUES ('1_jf-0-0', 1);
+INSERT INTO VideoSeq VALUES ('1_cl-0-0', 2);
+INSERT INTO VideoSeq VALUES ('1_wl-0-0', 3);
+INSERT INTO VideoSeq VALUES ('KOG_OT', 4);
+INSERT INTO VideoSeq VALUES ('KOG_NT', 5);
+END_SQL9
 
 ###################### String Localization ######################
 
