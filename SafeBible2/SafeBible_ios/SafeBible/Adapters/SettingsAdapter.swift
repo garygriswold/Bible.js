@@ -14,7 +14,7 @@ struct SettingsAdapter {
     private static let LANGS_SELECTED = "langs_selected"
     private static let BIBLE_SELECTED = "bible_selected"
     private static let PSEUDO_USER_ID = "pseudo_user_id"
-    private static let CURR_VERSION = "version"
+    private static let CURR_VERSION = "version" // I think this is unused.  History is used instead.
     private static let USER_FONT_DELTA = "userFontDelta"
     
     //
