@@ -177,7 +177,7 @@ null, null, null); -- audio is a different version
 
 -- currently ERV-URD
 INSERT INTO Bible VALUES('ERV-URD.db', 'ERV', 'urd', 'B', null,
-'Urdu: Easy-to-Read Bible', null, 'text-%R-shortsands', 'text/URDWTC/URDERV', 
+'Urdu: Easy-to-Read Bible', null, 'text-%R-shortsands', 'text/URDWTC/URDWTC', 
 '%I_%O_%B_%C.html', 'dbp-prod',  null, 'audio/URDWTC/URDWTCN2DA', 
 null, null, null);
 

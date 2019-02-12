@@ -138,6 +138,8 @@ sqlite Versions.db < sql/BibleTable.sql
 
 # Validate Bible Table keys against dbp-prod bucket
 python py/BibleValidate.py
+# Note: The above program only matches against one bucket
+# tweek it to text every bucket involved.
 
 # Create A Copy of DB before Deletions
 cp Versions.db VersionsFull.db
