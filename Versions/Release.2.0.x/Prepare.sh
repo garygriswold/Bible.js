@@ -149,14 +149,11 @@ sqlite Versions.db <<END_SQL3
 select count(*) AS Language_Count from Language;
 select count(*) AS Bibles_Count from Bible;
 delete from Language where iso1 is null;
--- delete from Bible where iso3 not in (select iso3 from Language);
--- delete from Language where iso3 not in (select iso3 from Bible);
-select bibleId from Bible where iso3 not in (select iso3 from Bible);
 select count(*) AS Language_Count from Language;
--- select count(*) AS Bibles_Count from Bible;
+select bibleId from Bible where iso3 not in (select iso3 from Bible);
 
 create index language_iso1_idx on Language(iso1);
-create index bible_iso3_idx on Bible(iso3);
+-- create index bible_iso3_idx on Bible(iso3);
 
 drop table LanguageTemp;
 drop table ISO3Priority;
@@ -165,11 +162,6 @@ END_SQL3
 
 # Patch some with bad entries
 sqlite Versions.db <<END_SQL4
--- update Bible set textBucket='inapp', textId='ENGKJV' where bibleId='ENGKJV';
--- update Bible set otDamId='ENGESVO2DA', ntDamId='ENGESVN2DA' where bibleId='ENGESV';
--- delete from Bible where textId is null;
--- INSERT INTO Bible (bibleId, abbr, iso3, name, englishName, textBucket, textId, keyTemplate, audioBucket, otDamId, ntDamId) VALUES 
--- ('KMRIBT', 'IBT', 'kmr', 'Încîl Mizgînî', 'Kurmanji Kurdish New Testament (Latin)', 'dbp-prod', 'KM2IBT', '%I_%O_%B_%C.html', 'dbp-prod', null, 'KMRIBTN2DA');
 select count(*) from Bible;
 vacuum;
 END_SQL4
@@ -183,8 +175,9 @@ python py/BibleValidate.sh
 
 # Make any needed deletions from Bible based upon errors in validation
 sqlite Versions.db <<END_SQL5
-
-
+UPDATE Bible SET direction='ltr', script='Latn', country=null WHERE bibleId='KJVPD.db';
+UPDATE Bible SET country='RU' WHERE bibleId='ERV-RUS.db';
+UPDATE Bible SET country='IR' WHERE bibleId='NMV.db';
 END_SQL5
 
 # Use Google Translate to improve the Bible names
