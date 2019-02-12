@@ -134,7 +134,7 @@ END_SQL2
 ############################ Bible Text ############################
 
 # Create and Load Bible table
-sqlite Versions.db < sql/bible.sql
+sqlite Versions.db < sql/BibleTable.sql
 
 # Validate Bible Table keys against dbp-prod bucket
 python py/BibleValidate.py

@@ -183,6 +183,6 @@ null, null, null);
 
 -- currently ERV-VIE
 INSERT INTO Bible VALUES('ERV-VIE.db', 'ERV', 'vie', 'B', 'Thánh Kinh: Bản Phổ thông',
-'Vietnamese" Easy-to-Read Bible', null, 'text-%R-shortsands', 'text/VIEWTC/VIEWTC', 
+'Vietnamese: Easy-to-Read Bible', null, 'text-%R-shortsands', 'text/VIEWTC/VIEWTC', 
 '%I_%O_%B_%C.html', 'dbp-prod', null, null, 
 null, null, null);
