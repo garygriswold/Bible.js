@@ -191,7 +191,7 @@ END_SQL6
 ###################### Audio Player ######################
 
 # Generate AudioBook table by parse of dbp-prod
-python py/AudioDBImporter.py
+python py/AudioDBPImporter.py
 
 sqlite Versions.db < sql/AudioBookTable.sql
 
