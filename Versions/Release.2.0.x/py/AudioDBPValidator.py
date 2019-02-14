@@ -27,7 +27,8 @@ def generateS3Key(book, chap):
 		chap = "_" + chap[1:]
 	name = book[3].replace(" ", "_")
 	name = name + "____________"[0:(12 - len(name))]
-	key = "audio/%s/%s/%s__%s_%s%s.%s" % (book[5], book[0], book[2], chap, name, book[0], "mp3")
+	damId = book[0].split("/")[2]
+	key = "%s/%s__%s_%s%s.mp3" % (book[0], book[2], chap, name, damId)
 	return key
 
 dbProdSet = set()
@@ -81,8 +82,6 @@ for book in books:
 		except:
 			print "Error Failed ", key
 
-
-#dbpProd.close()
 
 
 
