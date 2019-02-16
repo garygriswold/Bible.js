@@ -35,8 +35,9 @@ struct VersionsDB {
         }
         // Return default, because optional causes too many complexities in program
         // Failure could occur when a bibleId in user history is removed.
-        return Bible(bibleId: "ENGESV", abbr: "ESV", iso3: "eng", name: "English Standard",
-                     textBucket: "dbp-prod", textId: "ENGESV", s3TextTemplate: "%I_%O_%B_%C.html",
+        return Bible(bibleId: "ENGESV.db", abbr: "ESV", iso3: "eng", name: "English Standard",
+                     textBucket: "text-us-east-1-shortsands", textId: "text/ENGESV/ENGESV",
+                     s3TextTemplate: "%I_%O_%B_%C.html",
                      audioBucket: nil, otDamId: nil, ntDamId: nil, locale: Locale.current)
     }
     

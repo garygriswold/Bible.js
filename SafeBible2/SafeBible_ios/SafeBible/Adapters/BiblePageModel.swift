@@ -60,7 +60,7 @@ struct BiblePageModel {
         if html == nil {
             let progress = self.addProgressIndicator(view: view)
             let s3Key = self.generateKey(reference: reference)
-            AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
+            AwsS3Manager.findSS().downloadText(s3Bucket: reference.bible.textBucket, s3Key: s3Key,
                                                 complete: { error, data in
                                                     self.removeProgressIndicator(indicator: progress)
                                                     if let err = error {
@@ -144,7 +144,7 @@ struct BiblePageModel {
                 }
             }
         }
-        return reference.s3TextPrefix + result.joined()
+        return reference.s3TextPrefix + "/" + result.joined()
     }
 
     struct BookData {

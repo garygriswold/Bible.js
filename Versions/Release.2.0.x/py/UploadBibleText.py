@@ -12,8 +12,14 @@ import json
 from collections import OrderedDict
 
 SOURCE_DIR = os.environ['HOME'] + "/ShortSands/DBL/5ready/"
-#BUCKET = "text-us-east-1-shortsands" # AWS S3 will replicate to other regions
-BUCKET = "text-us-west-2-shortsands" # Test bucket
+BUCKETS = [
+    "text-us-east-1-shortsands", 
+    "text-ap-northeast-1-shortsands",
+    "text-ap-southeast-1-shortsands",
+    "text-ap-southeast-2-shortsands",
+    "text-eu-west-1-shortsands"
+]
+#BUCKET = "text-us-west-2-shortsands" # Test bucket
 
 versionMap = {
 	"ARBVDPD.db": ["ARBVDV"], # FCBH has, and also has ARZVDV
@@ -165,19 +171,20 @@ values = ()
 cursor.execute(sql, values)
 rows = cursor.fetchall()
 for row in rows:
-	book = row[0][0:3]
-	sequence = bookMap[book]
-	chapter = row[0][4:]
-	html = row[1]
-	#key %I_%O_%B_%C.html
-	if chapter != "0":
-		key = "text/%s/%s/%s_%s_%s_%s.html" % \
+    book = row[0][0:3]
+    sequence = bookMap[book]
+    chapter = row[0][4:]
+    html = row[1]
+    #key %I_%O_%B_%C.html
+    if chapter != "0":
+        key = "text/%s/%s/%s_%s_%s_%s.html" % \
 		(versionId, versionId2, versionId2, sequence, book, chapter)
-	else:
-		key = "text/%s/%s/%s_%s_%s.html" % \
+    else:
+        key = "text/%s/%s/%s_%s_%s.html" % \
 		(versionId, versionId2, versionId2, sequence, book)
-	print key
-	s3.put_object(Bucket=BUCKET, Key=key, Body=html, ContentType="text/html; charset=utf-8")
+    print key
+    for bucket in BUCKETS:
+        s3.put_object(Bucket=bucket, Key=key, Body=html, ContentType="text/html; charset=utf-8")
 
 bookNames = []
 bookIds = []
@@ -204,7 +211,8 @@ string = json.dumps(info)
 #print string
 key = "text/%s/%s/info.json" % (versionId, versionId2)
 print key
-s3.put_object(Bucket=BUCKET, Key=key, Body=string, ContentType="application/json")
+for bucket in BUCKETS:
+    s3.put_object(Bucket=bucket, Key=key, Body=string, ContentType="application/json")
 
 db.close()
 

@@ -82,11 +82,10 @@ struct BibleDB {
     
     private func getBibleDB(bibleId: String) throws -> Sqlite3 {
         var db: Sqlite3?
-        let dbname = bibleId + ".db"
         do {
-            db = try Sqlite3.findDB(dbname: dbname)
+            db = try Sqlite3.findDB(dbname: bibleId)
         } catch Sqlite3Error.databaseNotOpenError {
-            db = try Sqlite3.openDB(dbname: dbname, copyIfAbsent: false) // No more embedded Bibles
+            db = try Sqlite3.openDB(dbname: bibleId, copyIfAbsent: false) // No more embedded Bibles
             let create1 = "CREATE TABLE IF NOT EXISTS TableContents(" +
                 " bookId TEXT PRIMARY KEY NOT NULL," +
                 " ordinal INT NOT NULL," +

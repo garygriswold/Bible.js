@@ -92,35 +92,37 @@ public class AwsS3 {
     */
     public func downloadText(s3Bucket: String, s3Key: String,
                       complete: @escaping (_ error:Error?, _ data:String?) -> Void) {
+        let bucket = self.regionalizeBucket(bucket: s3Bucket)
         let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) -> Void in
             DispatchQueue.main.async(execute: {
                 if let err = error {
-                    print("ERROR in s3.downloadText \(s3Bucket) \(s3Key) Error: \(err)")
+                    print("ERROR in s3.downloadText \(bucket) \(s3Key) Error: \(err)")
                 } else {
-                    print("SUCCESS in s3.downloadText \(s3Bucket) \(s3Key)")
+                    print("SUCCESS in s3.downloadText \(bucket) \(s3Key)")
                 }
                 let datastring = (data != nil) ? String(data: data!, encoding: String.Encoding.utf8) as String? : ""
                 complete(error, datastring)
             })
         }
-		self.transfer.downloadData(fromBucket: s3Bucket, key: s3Key, expression: nil, completionHandler: completionHandler)
+		self.transfer.downloadData(fromBucket: bucket, key: s3Key, expression: nil, completionHandler: completionHandler)
     }
     /**
     * Download Binary object to Data, receiving code might need to convert it needed form
     */
     public func downloadData(s3Bucket: String, s3Key: String,
                       complete: @escaping (_ error:Error?, _ data:Data?) -> Void) {
+        let bucket = self.regionalizeBucket(bucket: s3Bucket)
         let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) -> Void in
             DispatchQueue.main.async(execute: {
                 if let err = error {
-                    print("ERROR in s3.downloadData \(s3Bucket) \(s3Key) Error: \(err)")
+                    print("ERROR in s3.downloadData \(bucket) \(s3Key) Error: \(err)")
                 } else {
-                    print("SUCCESS in s3.downloadData \(s3Bucket) \(s3Key)")
+                    print("SUCCESS in s3.downloadData \(bucket) \(s3Key)")
                 }
                 complete(error, data)
             })
         }
-		self.transfer.downloadData(fromBucket: s3Bucket, key: s3Key, expression: nil, completionHandler: completionHandler)
+		self.transfer.downloadData(fromBucket: bucket, key: s3Key, expression: nil, completionHandler: completionHandler)
     } 
     /**
     * Download File.  This works for binary and text files. This method does not use
@@ -129,18 +131,18 @@ public class AwsS3 {
     */
     public func downloadFile(s3Bucket: String, s3Key: String, filePath: URL,
                       complete: @escaping (_ error:Error?) -> Void) {
-        
+        let bucket = self.regionalizeBucket(bucket: s3Bucket)
         let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) in
             DispatchQueue.main.async(execute: {
                 if let err = error {
-                    print("ERROR in s3.downloadFile \(s3Bucket) \(s3Key) Error: \(err)")
+                    print("ERROR in s3.downloadFile \(bucket) \(s3Key) Error: \(err)")
                 } else {
-                    print("SUCCESS in s3.downloadFile \(s3Bucket) \(s3Key)")
+                    print("SUCCESS in s3.downloadFile \(bucket) \(s3Key)")
                 }
                 complete(error)
             })
         }
-        self.transfer.download(to: filePath, bucket: s3Bucket, key: s3Key, expression: nil,
+        self.transfer.download(to: filePath, bucket: bucket, key: s3Key, expression: nil,
                                     completionHandler: completionHandler)
         //.continueWith has been dropped, because it did not report errors
     }   
@@ -273,18 +275,19 @@ public class AwsS3 {
      */
     public func uploadData(s3Bucket: String, s3Key: String, data: Data, contentType: String,
                     complete: @escaping (_ error: Error?) -> Void) {
+        let bucket = self.regionalizeBucket(bucket: s3Bucket)
         let completionHandler: AWSS3TransferUtilityUploadCompletionHandlerBlock = {(task, error) -> Void in
             DispatchQueue.main.async(execute: {
                 if let err = error {
-                    print("ERROR in s3.uploadData \(s3Bucket) \(s3Key) Error: \(err)")
+                    print("ERROR in s3.uploadData \(bucket) \(s3Key) Error: \(err)")
                 } else {
-                    print("SUCCESS in s3.uploadData \(s3Bucket) \(s3Key)")
+                    print("SUCCESS in s3.uploadData \(bucket) \(s3Key)")
                 }
                 complete(error)
             })
         }
         self.transfer.uploadData(data,
-                            bucket: s3Bucket,
+                            bucket: bucket,
                             key: s3Key,
                             contentType: contentType,
                             expression: nil,
@@ -349,6 +352,9 @@ public class AwsS3 {
         }
         if bucket2.contains("region") {
             return bucket2.replacingOccurrences(of: "region", with: self.region.name)
+        }
+        if bucket2.contains("%R") {
+            return bucket2.replacingOccurrences(of: "%R", with: self.region.name)
         }
         return bucket
     }

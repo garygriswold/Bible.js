@@ -59,19 +59,19 @@ struct Bible : Equatable {
     
     var s3TextPrefix: String {
         get {
-            return "text/\(self.bibleId)/\(self.textId)/"
+            return self.textId
         }
     }
     
     var s3AudioOTPrefix: String? {
         get {
-            return (self.otDamId != nil) ? "audio/\(self.bibleId)/\(self.otDamId!)/" : nil
+            return self.otDamId
         }
     }
     
     var s3AudioNTPrefix: String? {
         get {
-            return (self.ntDamId != nil) ? "audio/\(self.bibleId)/\(self.ntDamId!)/" : nil
+            return self.ntDamId
         }
     }
 }
