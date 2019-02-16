@@ -109,7 +109,9 @@ class AudioReference {
         }
         var name: String = self.dbpBookName.replacingOccurrences(of: " ", with: "_")
         name = name.padding(toLength: 12, withPad: "_", startingAt: 0)
-        let key = "audio/\(self.bibleId)/\(self.damId)/\(self.sequence)__\(chapNum)_\(name)\(self.damId).\(self.fileType)"
+        let parts = self.damId.split(separator: "/")
+        let damId2 = (parts.count > 2) ? parts[2] : parts[0] // If parts[0] is selected expect ERROR
+        let key = "\(self.damId)/\(self.sequence)__\(chapNum)_\(name)\(damId2).\(self.fileType)"
         print("KEY: \(key)")
         return key
     }

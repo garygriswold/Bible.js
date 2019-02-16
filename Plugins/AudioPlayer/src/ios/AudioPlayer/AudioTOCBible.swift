@@ -98,9 +98,8 @@ class AudioTOCBible {
     private func readBookNames() {
         let query = "SELECT bookId, name from TableContents"
         do {
-            let dbName = self.bibleId + ".db"
             let db = Sqlite3()
-            try db.open(dbname: dbName, copyIfAbsent: true)
+            try db.open(dbname: self.bibleId, copyIfAbsent: true)
             let resultSet = try db.queryV1(sql: query, values: [])
             for row in resultSet {
                 let bookId = row[0]!
