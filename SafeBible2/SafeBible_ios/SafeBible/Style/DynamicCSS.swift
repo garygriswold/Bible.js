@@ -86,4 +86,8 @@ struct DynamicCSS {
             + "<meta name=\"viewport\" content=\"viewport-fit=cover\" />"
             + "</head><body></body></html>"
     }
+    
+    func wrapHTML(html: String) -> String {
+        return "<html><head><style type='text/css'>\(self.cssFile)</style></head><body>\(html)</body></html>"
+    }
 }

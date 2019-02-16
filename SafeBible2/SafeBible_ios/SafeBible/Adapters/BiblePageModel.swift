@@ -24,7 +24,11 @@ struct BiblePageModel {
     func loadPage(reference: Reference, webView: WKWebView) {
         self.getChapter(reference: reference, view: webView, complete: { html in
             if html != nil {
-                webView.loadHTMLString(DynamicCSS.shared.getCSS() + html!, baseURL: nil)
+                if reference.bible.textBucket.contains("shortsands") {
+                    webView.loadHTMLString(DynamicCSS.shared.wrapHTML(html: html!), baseURL: nil)
+                } else {
+                    webView.loadHTMLString(DynamicCSS.shared.getCSS() + html!, baseURL: nil)
+                }
             }
         })
     }
@@ -33,8 +37,8 @@ struct BiblePageModel {
                   cell: CompareVerseCell, table: UITableView, indexPath: IndexPath) {
         self.getChapter(reference: reference, view: cell.contentView, complete: { html in
             if html != nil {
-                let parser = HTMLVerseParser(html: html!, startVerse: startVerse, endVerse: endVerse)
-                cell.verse.text = parser.parseVerses()
+                cell.verse.text = self.parse(html: html!, reference: reference,
+                                             startVerse: startVerse, endVerse: endVerse)
                 table.reloadRows(at: [indexPath], with: .automatic)
             }
         })
@@ -46,12 +50,22 @@ struct BiblePageModel {
     func loadLabel(reference: Reference, verse: Int, label: UILabel) {
         self.getChapter(reference: reference, view: nil, complete: { html in
             if html != nil {
-                let parser = HTMLVerseParser(html: html!, startVerse: verse, endVerse: verse)
-                var result = parser.parseVerses()
+                var result = self.parse(html: html!, reference: reference, startVerse: verse, endVerse: verse)
                 result = result.replacingOccurrences(of: String(verse), with: "")
                 label.text = result.trimmingCharacters(in: .whitespacesAndNewlines)
             }
         })
+    }
+    
+    private func parse(html: String, reference: Reference, startVerse: Int, endVerse: Int) -> String {
+        print("Ref \(reference.bible.textBucket)")
+        if reference.bible.textBucket.contains("shortsands") {
+            let parser = HTMLVerseParserSS(html: html, startVerse: startVerse, endVerse: endVerse)
+            return parser.parseVerses()
+        } else {
+            let parser = HTMLVerseParserDBP(html: html, startVerse: startVerse, endVerse: endVerse)
+            return parser.parseVerses()
+        }
     }
     
     private func getChapter(reference: Reference, view: UIView?, complete: @escaping (_ data:String?) -> Void) {
