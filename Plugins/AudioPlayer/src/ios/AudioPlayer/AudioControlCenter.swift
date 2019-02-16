@@ -64,10 +64,10 @@ class AudioControlCenter {
         }
         */
         controlCenter.skipBackwardCommand.isEnabled = true
-        controlCenter.skipBackwardCommand.preferredIntervals = [30.0]
+        controlCenter.skipBackwardCommand.preferredIntervals = [10.0]
         controlCenter.skipBackwardCommand.addTarget(handler: { event in
             if player.getPlayer() != nil {
-                let position = player.skip(seconds: -30)
+                let position = player.skip(seconds: -10)
                 self.info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
                 MPNowPlayingInfoCenter.default().nowPlayingInfo = self.info
                 return MPRemoteCommandHandlerStatus.success
@@ -76,10 +76,10 @@ class AudioControlCenter {
         })
         
         controlCenter.skipForwardCommand.isEnabled = true
-        controlCenter.skipForwardCommand.preferredIntervals = [30.0]
+        controlCenter.skipForwardCommand.preferredIntervals = [10.0]
         controlCenter.skipForwardCommand.addTarget(handler: { event in
             if player.getPlayer() != nil {
-                let position = player.skip(seconds: 30)
+                let position = player.skip(seconds: 10)
                 self.info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
                 MPNowPlayingInfoCenter.default().nowPlayingInfo = self.info
                 return MPRemoteCommandHandlerStatus.success

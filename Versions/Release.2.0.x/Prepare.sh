@@ -148,9 +148,9 @@ cp Versions.db VersionsFull.db
 sqlite Versions.db <<END_SQL3
 select count(*) AS Language_Count from Language;
 select count(*) AS Bibles_Count from Bible;
-delete from Language where iso1 is null;
+delete from Language where iso3 not in (select iso3 from Bible);
 select count(*) AS Language_Count from Language;
-select bibleId from Bible where iso3 not in (select iso3 from Bible);
+select bibleId from Bible where iso3 not in (select iso3 from Language);
 
 create index language_iso1_idx on Language(iso1);
 -- create index bible_iso3_idx on Bible(iso3);
