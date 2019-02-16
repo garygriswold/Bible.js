@@ -19,8 +19,7 @@ struct HistoryModel {
         if self.history.count < 1 {
             let bibleModel = BibleModel(availableSection: 0, language: nil, selectedOnly: true)
             let bible = bibleModel.getSelectedBible(row: 0)! /// unsafe should be used to for Reference
-            //let reference = Reference(bibleId: bible.bibleId, bookId: "JHN", chapter: 3, verse: 1)
-            let reference = Reference(bibleId: "ENGWEB", bookId: "JHN", chapter: 3)
+            let reference = Reference(bibleId: bible.bibleId, bookId: "JHN", chapter: 3)
             self.history.append(reference)
             self.index = 0
             SettingsDB.shared.storeHistory(reference: self.history[0])

@@ -29,7 +29,9 @@ struct DynamicCSS {
     
     init() {
         let bundle: Bundle = Bundle.main
-        let path = bundle.path(forResource: "www/BibleApp2", ofType: "css")
+        // BibleApp2 is for FCBH html files
+        //let path = bundle.path(forResource: "www/BibleApp2", ofType: "css")
+        let path = bundle.path(forResource: "www/Codex", ofType: "css")
         let url = URL(fileURLWithPath: path!)
         do {
             self.cssFile = try String(contentsOf: url)
