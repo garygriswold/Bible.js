@@ -44,6 +44,14 @@ struct Reference : Equatable {
         get { return self.bible.name }
     }
     
+    var textBucket: String {
+        get { return self.bible.textBucket }
+    }
+    
+    var isShortsands: Bool {
+        get { return self.bible.textBucket.contains("shortsands") }
+    }
+    
     var s3TextPrefix: String {
         get { return self.bible.s3TextPrefix }
     }

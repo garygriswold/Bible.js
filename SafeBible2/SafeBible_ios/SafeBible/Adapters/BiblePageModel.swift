@@ -24,11 +24,8 @@ struct BiblePageModel {
     func loadPage(reference: Reference, webView: WKWebView) {
         self.getChapter(reference: reference, view: webView, complete: { html in
             if html != nil {
-                if reference.bible.textBucket.contains("shortsands") {
-                    webView.loadHTMLString(DynamicCSS.shared.wrapHTML(html: html!), baseURL: nil)
-                } else {
-                    webView.loadHTMLString(DynamicCSS.shared.getCSS() + html!, baseURL: nil)
-                }
+                let page = DynamicCSS.shared.wrapHTML(html: html!, isShortsands: reference.isShortsands)
+                webView.loadHTMLString(page, baseURL: nil)
             }
         })
     }
@@ -59,7 +56,7 @@ struct BiblePageModel {
     
     private func parse(html: String, reference: Reference, startVerse: Int, endVerse: Int) -> String {
         print("Ref \(reference.bible.textBucket)")
-        if reference.bible.textBucket.contains("shortsands") {
+        if reference.isShortsands {
             let parser = HTMLVerseParserSS(html: html, startVerse: startVerse, endVerse: endVerse)
             return parser.parseVerses()
         } else {
@@ -74,19 +71,19 @@ struct BiblePageModel {
         if html == nil {
             let progress = self.addProgressIndicator(view: view)
             let s3Key = self.generateKey(reference: reference)
-            AwsS3Manager.findSS().downloadText(s3Bucket: reference.bible.textBucket, s3Key: s3Key,
-                                                complete: { error, data in
-                                                    self.removeProgressIndicator(indicator: progress)
-                                                    if let err = error {
-                                                        print("ERROR: \(err)")
-                                                        complete(nil)
-                                                    }
-                                                    else if let data1 = data {
-                                                        complete(data1)
-                                                        print("AWS Load \(reference.toString())")
-                                                        _ = BibleDB.shared.storeBiblePage(reference: reference, html: data1)
-                                                        print("*** BiblePageModel.getChapter duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
-                                                    }
+            let s3 = (reference.isShortsands) ? AwsS3Manager.findSS() : AwsS3Manager.findDbp()
+            s3.downloadText(s3Bucket: reference.bible.textBucket, s3Key: s3Key, complete: { error, data in
+                self.removeProgressIndicator(indicator: progress)
+                if let err = error {
+                    print("ERROR: \(err)")
+                    complete(nil)
+                }
+                else if let data1 = data {
+                    complete(data1)
+                    print("AWS Load \(reference.toString())")
+                    _ = BibleDB.shared.storeBiblePage(reference: reference, html: data1)
+                    print("*** BiblePageModel.getChapter duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
+                }
             })
         } else {
             complete(html)

@@ -25,20 +25,29 @@ struct DynamicCSS {
         }
     }
     
-    private let cssFile: String
+    private let shortsandCSS: String
+    private let dbpCSS: String
     
     init() {
+        let measure = Measurement()
         let bundle: Bundle = Bundle.main
-        // BibleApp2 is for FCBH html files
-        //let path = bundle.path(forResource: "www/BibleApp2", ofType: "css")
-        let path = bundle.path(forResource: "www/Codex", ofType: "css")
-        let url = URL(fileURLWithPath: path!)
+        let dbpPath = bundle.path(forResource: "www/BibleApp2", ofType: "css")
+        let ssPath = bundle.path(forResource: "www/Codex", ofType: "css")
+        let dbpUrl = URL(fileURLWithPath: dbpPath!)
+        let ssUrl = URL(fileURLWithPath: ssPath!)
         do {
-            self.cssFile = try String(contentsOf: url)
+            self.dbpCSS = try String(contentsOf: dbpUrl)
         } catch let err {
-            print("ERROR: DynamicCSS.init() Loading CSS \(err)")
-            self.cssFile = ""
+            print("ERROR: DynamicCSS.init() Loading BibleApp2.css \(err)")
+            self.dbpCSS = ""
         }
+        do {
+            self.shortsandCSS = try String(contentsOf: ssUrl)
+        } catch let err {
+            print("ERROR: DynamicCSS.init() Loading Codex.css \(err)")
+            self.shortsandCSS = ""
+        }
+        measure.duration(location: "Load CSS")
     }
     
     var fontSize: RuleSet {
@@ -71,23 +80,27 @@ struct DynamicCSS {
         }
     }
     
-    func getCSS() -> String {
-        return "<style type='text/css'>" +
-            self.cssFile +
-            self.fontSize.genCSS() +
-            self.lineHeight.genCSS() +
-            self.nightMode.genCSS() +
-            self.verseNumbers.genCSS() +
-        "</style>\n"
-    }
-    
     func getEmptyHtml() -> String {
         return "<html><head><style type='text/css'>" + nightMode.genCSS() + "</style>"
             + "<meta name=\"viewport\" content=\"viewport-fit=cover\" />"
             + "</head><body></body></html>"
     }
     
-    func wrapHTML(html: String) -> String {
-        return "<html><head><style type='text/css'>\(self.cssFile)</style></head><body>\(html)</body></html>"
+    func wrapHTML(html: String, isShortsands: Bool) -> String {
+        if isShortsands {
+            let css = self.shortsandCSS
+                + self.fontSize.genCSS()
+                + self.lineHeight.genCSS()
+                + self.nightMode.genCSS()
+                + self.verseNumbers.genCSS()
+            return "<html><head><style type='text/css'>\(css)</style></head><body>\(html)</body></html>"
+        } else {
+            let css = self.dbpCSS
+                + self.fontSize.genCSS()
+                + self.lineHeight.genCSS()
+                + self.nightMode.genCSS()
+                + self.verseNumbers.genCSS()
+            return "<style type='text/css'>\(css)</style>\(html)"
+        }
     }
 }

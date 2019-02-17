@@ -37,18 +37,18 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         let start: Double = CFAbsoluteTimeGetCurrent()
         self.books = BibleDB.shared.getTableContents(bibleId: bible.bibleId)
         if self.books.count < 1 {
-            AwsS3Manager.findSS().downloadData(s3Bucket: self.bible.textBucket,
-                                       s3Key: "\(self.bible.s3TextPrefix)/info.json",
-                                       complete: { error, data in
-                                        if let data1 = data {
-                                            print(data1)
-                                            self.books = self.parseJSON(data: data1)
-                                            self.bookMap = self.buildMap()
-                                            self.index = self.buildIndex()
-                                            _ = BibleDB.shared.storeTableContents(bibleId: bible.bibleId,
-                                                                                  books: self.books)
-                                            print("*** TableContentsModel.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
-                                        }
+            let s3 = (bible.textBucket.contains("shortsands")) ? AwsS3Manager.findSS() : AwsS3Manager.findDbp()
+            s3.downloadData(s3Bucket: self.bible.textBucket, s3Key: "\(self.bible.s3TextPrefix)/info.json",
+                complete: { error, data in
+                    if let data1 = data {
+                        print(data1)
+                        self.books = self.parseJSON(data: data1)
+                        self.bookMap = self.buildMap()
+                        self.index = self.buildIndex()
+                        _ = BibleDB.shared.storeTableContents(bibleId: bible.bibleId,
+                                                              books: self.books)
+                        print("*** TableContentsModel.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
+                    }
             })
         } else {
             self.bookMap = self.buildMap()
