@@ -25,3 +25,4 @@ UPDATE Bible SET direction='rtl', script='Arab', country='PK' WHERE bibleId='ERV
 UPDATE Bible SET direction='ltr', script='Latn', country='VN' WHERE bibleId='ERV-VIE.db';
 UPDATE Bible SET direction='rtl', script='Latn', country=null WHERE bibleId='NMV.db';
 UPDATE Bible SET direction='ltr', script='Latn', country='GB' WHERE bibleId='WEB.db';
+UPDATE Bible SET direction='ltr', script='Latn', country='US' WHERE bibleId='ENGESV.db';

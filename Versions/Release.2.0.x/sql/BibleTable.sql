@@ -186,3 +186,10 @@ INSERT INTO Bible VALUES('ERV-VIE.db', 'ERV', 'vie', 'B', 'Thánh Kinh: Bản Ph
 'Easy-to-Read Holy Bible', null, 'text-%R-shortsands', 'text/VIEWTC/VIEWTC', 
 '%I_%O_%B_%C.html', 'dbp-prod', null, null, 
 null, null, null);
+
+-- new ENGESV
+INSERT INTO Bible VALUES('ENGESV.db', 'ESV', 'eng', 'B', 'English Standard Bible',
+'English Standard Bible', null, 'dbp-prod', 'text/ENGESV/ENGESV', 
+'%I_%O_%B_%C.html', 'dbp-prod', 'audio/ENGESV/ENGESVO2DA', 'audio/ENGESV/ENGESVN2DA', 
+null, null, null);
+
