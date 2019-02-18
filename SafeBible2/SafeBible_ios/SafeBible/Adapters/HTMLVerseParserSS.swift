@@ -37,7 +37,7 @@ class HTMLVerseParserSS : NSObject, XMLParserDelegate {
             parser.delegate = self
             parser.shouldProcessNamespaces = false
             let ok = parser.parse()
-            print("PARSER DONE \(ok)")
+            print("SS VerseParser DONE \(ok)")
         }
         return result.joined().trimmingCharacters(in: .whitespacesAndNewlines)
     }

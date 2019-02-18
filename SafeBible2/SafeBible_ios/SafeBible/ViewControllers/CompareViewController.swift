@@ -93,7 +93,12 @@ class CompareViewController: AppTableViewController, UITableViewDataSource {
     // Delegate
     //
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("NOT YET IMPLEMENTED, because need to support multiple versions first.")
+        if let bible = dataModel.getSelectedBible(row: indexPath.row) {
+            HistoryModel.shared.changeBible(bible: bible)
+            NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                            object: HistoryModel.shared.current())
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 }
 
