@@ -168,17 +168,20 @@ class TableContentsModel { // class is used to permit self.contents inside closu
     }
     
     func nextChapter(reference: Reference) -> Reference {
-        let book = self.getBook(bookId: reference.bookId)!
-        if reference.chapter < book.lastChapter {
-            return Reference(bibleId: reference.bibleId, bookId: reference.bookId,
-                             chapter: reference.chapter + 1)
-        } else {
-            if let next = self.getBook(row: book.ordinal + 1) {
-                return Reference(bibleId: reference.bibleId, bookId: next.bookId, chapter: 1)
+        if let book = self.getBook(bookId: reference.bookId) {
+            if reference.chapter < book.lastChapter {
+                return Reference(bibleId: reference.bibleId, bookId: reference.bookId,
+                                 chapter: reference.chapter + 1)
             } else {
-                let first = self.getBook(row: 0)!
-                return Reference(bibleId: reference.bibleId, bookId: first.bookId, chapter: 1)
+                if let next = self.getBook(row: book.ordinal + 1) {
+                    return Reference(bibleId: reference.bibleId, bookId: next.bookId, chapter: 1)
+                } else {
+                    let first = self.getBook(row: 0)!
+                    return Reference(bibleId: reference.bibleId, bookId: first.bookId, chapter: 1)
+                }
             }
+        } else {
+            return TableContentsDefault.nextChapter(reference: reference)
         }
     }
     
@@ -187,14 +190,17 @@ class TableContentsModel { // class is used to permit self.contents inside closu
             return Reference(bibleId: reference.bibleId, bookId: reference.bookId,
                              chapter: reference.chapter - 1)
         } else {
-            let book = self.getBook(bookId: reference.bookId)!
-            if let prior = self.getBook(row: book.ordinal - 1) {
-                return Reference(bibleId: reference.bibleId, bookId: prior.bookId,
-                                 chapter: prior.lastChapter)
+            if let book = self.getBook(bookId: reference.bookId) {
+                if let prior = self.getBook(row: book.ordinal - 1) {
+                    return Reference(bibleId: reference.bibleId, bookId: prior.bookId,
+                                     chapter: prior.lastChapter)
+                } else {
+                    let last = self.getBook(row: self.bookCount - 1)!
+                    return Reference(bibleId: reference.bibleId, bookId: last.bookId,
+                                     chapter: last.lastChapter)
+                }
             } else {
-                let last = self.getBook(row: self.bookCount - 1)!
-                return Reference(bibleId: reference.bibleId, bookId: last.bookId,
-                                 chapter: last.lastChapter)
+                return TableContentsDefault.priorChapter(reference: reference)
             }
         }
     }

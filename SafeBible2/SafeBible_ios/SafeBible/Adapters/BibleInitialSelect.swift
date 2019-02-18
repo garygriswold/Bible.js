@@ -239,9 +239,9 @@ struct BibleInitialSelect {
                 switch bibles[i].abbr {
                 case "ESV":
                     bibles[i].score *= 7.0
-                case "NIV":
+                case "KJV":
                     bibles[i].score *= 6.0
-                case "NKJV":
+                case "ERV":
                     bibles[i].score *= 5.0
                 default:
                     bibles[i].score *= 1.0
