@@ -174,7 +174,8 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
     
     @objc func verseSwitchHandler(sender: UISwitch) {
         AppFont.verseNumbers = sender.isOn
-        ReaderViewQueue.shared.updateCSS(css: DynamicCSS.shared.verseNumbers.genRule())
+        let cssRules = DynamicCSS.shared.verseNumbersSS.genRule() + DynamicCSS.shared.verseNumbersDBP.genRule()
+        ReaderViewQueue.shared.updateCSS(css: cssRules)
     }
     
     private func genericCell(view: UITableView, indexPath: IndexPath, title: String,

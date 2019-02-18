@@ -72,11 +72,19 @@ struct DynamicCSS {
         }
     }
     
-    var verseNumbers: RuleSet {
+    var verseNumbersDBP: RuleSet {
         get {
             let verse = AppFont.verseNumbers ? "inline" : "none"
             let verseDecl = "display:\(verse);"
             return RuleSet(selector: ".v-num", declaration: verseDecl)
+        }
+    }
+    
+    var verseNumbersSS: RuleSet {
+        get {
+            let verse = AppFont.verseNumbers ? "inline" : "none"
+            let verseDecl = "display:\(verse);"
+            return RuleSet(selector: ".v", declaration: verseDecl)
         }
     }
     
@@ -92,14 +100,14 @@ struct DynamicCSS {
                 + self.fontSize.genCSS()
                 + self.lineHeight.genCSS()
                 + self.nightMode.genCSS()
-                + self.verseNumbers.genCSS()
+                + self.verseNumbersSS.genCSS()
             return "<html><head><style type='text/css'>\(css)</style></head><body>\(html)</body></html>"
         } else {
             let css = self.dbpCSS
                 + self.fontSize.genCSS()
                 + self.lineHeight.genCSS()
                 + self.nightMode.genCSS()
-                + self.verseNumbers.genCSS()
+                + self.verseNumbersDBP.genCSS()
             return "<style type='text/css'>\(css)</style>\(html)"
         }
     }
