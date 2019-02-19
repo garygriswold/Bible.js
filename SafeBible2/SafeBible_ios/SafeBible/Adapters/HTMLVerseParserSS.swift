@@ -20,6 +20,8 @@ class HTMLVerseParserSS : NSObject, XMLParserDelegate {
     private let startVerse: Int
     private let endVerse: Int
     private var insideVerses: Bool
+    private var insideFootnote: Int
+    private var stack: [String]
     private var result: [String]
     
     init(html: String, startVerse: Int, endVerse: Int) {
@@ -27,6 +29,8 @@ class HTMLVerseParserSS : NSObject, XMLParserDelegate {
         self.startVerse = startVerse
         self.endVerse = endVerse + 1
         self.insideVerses = false
+        self.insideFootnote = 0
+        self.stack = []
         self.result = []
         super.init()
     }
@@ -45,6 +49,9 @@ class HTMLVerseParserSS : NSObject, XMLParserDelegate {
     func parser(_ parser: XMLParser, didStartElement elementName: String,
                 namespaceURI: String?, qualifiedName qName: String?,
                 attributes attributeDict: [String : String] = [:]) {
+        self.stack.append(elementName)
+        //let tabs = String(repeating: "  ", count: self.stack.count)
+        //print("**\(tabs)<\(elementName)>")
         if elementName == "span" {
             if let id:String = attributeDict["id"] {
                 let parts = id.split(separator: ":")
@@ -57,13 +64,44 @@ class HTMLVerseParserSS : NSObject, XMLParserDelegate {
                     }
                 }
             }
+            if let clas:String = attributeDict["class"] {
+                if clas == "topx" || clas == "topf" {
+                    self.insideFootnote = stack.count
+                }
+            }
+        }
+    }
+    
+    func parser(_ parser: XMLParser, didEndElement elementName: String,
+                namespaceURI: String?, qualifiedName qName: String?) {
+        //let tabs = String(repeating: "  ", count: self.stack.count)
+        //print("**\(tabs)</\(elementName)>")
+        if self.insideFootnote == self.stack.count {
+            self.insideFootnote = 0
+        }
+        let last = self.stack.popLast()
+        if last != elementName {
+            print("XML element mismatch error \(elementName)")
         }
     }
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
-        if self.insideVerses {
+        if self.insideVerses && self.insideFootnote == 0 {
             self.result.append(string)
         }
+        //if self.insideVerses {
+        //    print("Inside verse |\(string)|")
+        //}
+        //else if self.insideFootnote > 0 {
+        //    print("Exlude footnote |\(string)|")
+        //}
+        //else {
+        //    let str = string.trimmingCharacters(in: .whitespacesAndNewlines)
+        //    if str.count > 0 {
+        //        let tabs = String(repeating: "  ", count: self.stack.count + 1)
+        //        print("**\(tabs)\(string.trimmingCharacters(in: .whitespacesAndNewlines))")
+        //    }
+        //}
     }
     
     func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
