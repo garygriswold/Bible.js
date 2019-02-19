@@ -216,7 +216,7 @@ span[class^='verse PSA_'] {
   font-weight: bold;
   margin-top: 0;
   margin-bottom: 0;
-  margin-right: 0.2rem; /* .2em */
+  margin-right: 0.3rem; /* .2em */
   font-family: avenir, helvetica;
 }
 
