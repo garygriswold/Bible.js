@@ -31,8 +31,8 @@ struct DynamicCSS {
     init() {
         let measure = Measurement()
         let bundle: Bundle = Bundle.main
-        let dbpPath = bundle.path(forResource: "www/BibleApp2", ofType: "css")
-        let ssPath = bundle.path(forResource: "www/Codex", ofType: "css")
+        let dbpPath = bundle.path(forResource: "www/DBP_FCBH", ofType: "css")
+        let ssPath = bundle.path(forResource: "www/ShortSands", ofType: "css")
         let dbpUrl = URL(fileURLWithPath: dbpPath!)
         let ssUrl = URL(fileURLWithPath: ssPath!)
         do {
