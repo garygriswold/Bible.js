@@ -94,8 +94,9 @@ struct DynamicCSS {
             + "</head><body></body></html>"
     }
     
-    func wrapHTML(html: String, isShortsands: Bool) -> String {
-        if isShortsands {
+    func wrapHTML(html: String, reference: Reference) -> String {
+        if reference.isShortsands {
+            let bookName = "<div class=\"bookname\">\(reference.bookName)</div>"
             let css = self.shortsandCSS
                 + self.fontSize.genCSS()
                 + self.lineHeight.genCSS()
@@ -105,7 +106,7 @@ struct DynamicCSS {
                 + "<meta charset=\"utf-8\"/>\n"
                 + "<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'/>\n"
                 + "<style type=\"text/css\">\(css)</style></head>\n"
-                + "<body>\(html)</body></html>"
+                + "<body>\(bookName)\n\(html)</body></html>"
         } else {
             let css = self.dbpCSS
                 + self.fontSize.genCSS()

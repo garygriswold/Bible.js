@@ -24,7 +24,7 @@ struct BiblePageModel {
     func loadPage(reference: Reference, webView: WKWebView) {
         self.getChapter(reference: reference, view: webView, complete: { html in
             if html != nil {
-                let page = DynamicCSS.shared.wrapHTML(html: html!, isShortsands: reference.isShortsands)
+                let page = DynamicCSS.shared.wrapHTML(html: html!, reference: reference)
                 webView.loadHTMLString(page, baseURL: nil)
             }
         })
