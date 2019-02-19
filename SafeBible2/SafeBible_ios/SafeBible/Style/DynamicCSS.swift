@@ -53,7 +53,7 @@ struct DynamicCSS {
     var fontSize: RuleSet {
         get {
             let font = AppFont.serif(style: .body)
-            return RuleSet(selector: "html", declaration: "font-size:\(Int(font.pointSize))pt")
+            return RuleSet(selector: "html", declaration: "font-size:\(Int(font.pointSize))pt;")
         }
     }
     
@@ -101,7 +101,11 @@ struct DynamicCSS {
                 + self.lineHeight.genCSS()
                 + self.nightMode.genCSS()
                 + self.verseNumbersSS.genCSS()
-            return "<html><head><style type='text/css'>\(css)</style></head><body>\(html)</body></html>"
+            return "<html><head>"
+                + "<meta charset=\"utf-8\"/>\n"
+                + "<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'/>\n"
+                + "<style type=\"text/css\">\(css)</style></head>\n"
+                + "<body>\(html)</body></html>"
         } else {
             let css = self.dbpCSS
                 + self.fontSize.genCSS()
