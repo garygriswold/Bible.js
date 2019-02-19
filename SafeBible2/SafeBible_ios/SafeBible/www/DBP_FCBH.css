@@ -9,6 +9,15 @@ body {
     font-size: 1.0rem; /* 16pt */
 }
 
+body {
+    font-family: Cambria, Times;
+    line-height: 1.8;
+    padding-left: 5%; /* padding changed from 20px, GNG 2/19/19 */
+    padding-top: 5%;
+    padding-right: 3%;
+    padding-bottom: 5%;
+}
+
 /* Affects notes and bookmarks */
 a {
   text-decoration: none;
@@ -49,12 +58,6 @@ img.bookmark {
   font-size: 0.625rem;
 }
 
-.section {
-  padding: 20px;
-  /* font-size: 0.875rem; GNG removed 2/19/19 */
-  font-family: Cambria, Times;
-}
-
 /* GNG Added 11/11/18, because footnote data appeared incomplete */
 div.footnotes {
     display: none;
@@ -81,12 +84,6 @@ span.note {
   src: url(fonts/sileot-webfont.eot?#iefix) format('eot'), url(fonts/sileot-webfont.woff) format('woff'), url(fonts/sileot-webfont.ttf) format('truetype'), url(fonts/sileot-webfont.svg#webfontVIEluHTx) format('svg');
   font-weight: normal;
   font-style: normal;
-}
-
-/* main bible verse, text formatting */
-.section,
-.chapter {
-  line-height: 1.8;
 }
 
 .section p,

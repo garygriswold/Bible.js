@@ -59,7 +59,7 @@ struct DynamicCSS {
     
     var lineHeight: RuleSet {
         get {
-            return RuleSet(selector: ".section,.chapter",
+            return RuleSet(selector: "body",
                            declaration: "line-height:\(AppFont.bodyLineHeight);")
         }
     }
