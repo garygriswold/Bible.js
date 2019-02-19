@@ -35,14 +35,18 @@ class BiblesActionSheet : UIAlertController {
         
         let dataModel = BibleModel(availableSection: 0, language: nil, selectedOnly: true)
         
+        let currBibleId = HistoryModel.shared.currBible.bibleId
+        
         for index in 0..<dataModel.selectedCount {
             if let bible = dataModel.getSelectedBible(row: index) {
-                let item = UIAlertAction(title: bible.name, style: .default, handler: { _ in
-                    HistoryModel.shared.changeBible(bible: bible)
-                    NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
-                                                    object: HistoryModel.shared.current())
-                })
-                self.addAction(item)
+                if bible.bibleId != currBibleId {
+                    let item = UIAlertAction(title: bible.name, style: .default, handler: { _ in
+                        HistoryModel.shared.changeBible(bible: bible)
+                        NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                                        object: HistoryModel.shared.current())
+                    })
+                    self.addAction(item)
+                }
             }
         }
         
