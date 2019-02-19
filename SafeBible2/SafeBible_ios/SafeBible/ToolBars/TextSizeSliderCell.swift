@@ -92,7 +92,7 @@ class TextSizeSliderCell : UITableViewCell {
             TextSizeSliderCell.sampleTextLabel = label
         }
         // can this line be static?
-        self.serifBodyFont = AppFont.serif(ofRelativeSize: 0.9) // This is not 1.0 as a hack, reason unknown
+        self.serifBodyFont = AppFont.serif(ofRelativeSize: 1.0)
         self.valueChangedHandler(sender: sender) // set initial size correctly
         
         let versePopup = TextSizeSliderCell.sampleTextLabel
