@@ -24,7 +24,8 @@ class CompareViewController: AppTableViewController, UITableViewDataSource {
     
     init(note: Note) {
         self.note = note
-        self.dataModel = BibleModel(availableSection: 0, language: nil, selectedOnly: true)
+        // get selected and available, available is needed for CompareActionSheet
+        self.dataModel = BibleModel(availableSection: 0, language: nil, selectedOnly: false)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -60,9 +61,7 @@ class CompareViewController: AppTableViewController, UITableViewDataSource {
     }
     
     @objc func addBibleHandler(sender: UIBarButtonItem) {
-        print("NOT YET IMPLEMENTED, because need to support multiple versions first.")
-        let bibleController = SettingsViewController(settingsViewType: .bible)
-        self.navigationController?.pushViewController(bibleController, animated: true)
+        CompareActionSheet.present(controller: self, bibleModel: self.dataModel)
     }
     
     @objc func doneHandler(sender: UIBarButtonItem) {

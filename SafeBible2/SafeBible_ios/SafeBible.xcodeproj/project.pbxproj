@@ -41,6 +41,7 @@
 		E469080B21964F5E00155F2A /* Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469080A21964F5E00155F2A /* Measurement.swift */; };
 		E469080D2196650F00155F2A /* ReaderViewQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469080C2196650F00155F2A /* ReaderViewQueue.swift */; };
 		E46B2C83218E50200063E68C /* TextHeightSliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */; };
+		E4706AE6221CBD92006C7AB5 /* CompareActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4706AE5221CBD92006C7AB5 /* CompareActionSheet.swift */; };
 		E474FE2021C4CB1000DC11D8 /* NotesExportDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E474FE1F21C4CB1000DC11D8 /* NotesExportDocument.swift */; };
 		E478BFDB21DCDE490093320D /* AppTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E478BFDA21DCDE490093320D /* AppTableViewController.swift */; };
 		E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4825C412124F0B400D36620 /* BibleInitialSelect.swift */; };
@@ -187,6 +188,7 @@
 		E469080A21964F5E00155F2A /* Measurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Measurement.swift; sourceTree = "<group>"; };
 		E469080C2196650F00155F2A /* ReaderViewQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderViewQueue.swift; sourceTree = "<group>"; };
 		E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextHeightSliderCell.swift; sourceTree = "<group>"; };
+		E4706AE5221CBD92006C7AB5 /* CompareActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareActionSheet.swift; sourceTree = "<group>"; };
 		E474FE1F21C4CB1000DC11D8 /* NotesExportDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExportDocument.swift; sourceTree = "<group>"; };
 		E478BFDA21DCDE490093320D /* AppTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTableViewController.swift; sourceTree = "<group>"; };
 		E478BFE221DE829D0093320D /* Utility.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Utility.xcodeproj; path = ../../Plugins/Utility/src/ios/Utility.xcodeproj; sourceTree = "<group>"; };
@@ -362,6 +364,7 @@
 				E4F66864217D85AC00E998CC /* TOCChaptersViewController.swift */,
 				E40D605E217FC70700A06B54 /* HistoryViewController.swift */,
 				E463897121799013009BF5E2 /* BiblesActionSheet.swift */,
+				E4706AE5221CBD92006C7AB5 /* CompareActionSheet.swift */,
 				E4015257215D2DF60031654B /* InfoPageController.swift */,
 				E4C2E97D211B711C00B71CC5 /* FeedbackViewController.swift */,
 				E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */,
@@ -671,6 +674,7 @@
 				E4638974217AE210009BF5E2 /* SettingsDB.swift in Sources */,
 				E4C99A8F21BC533F00691604 /* CompareViewController.swift in Sources */,
 				E402BCB5217B80BA0026E1DE /* TableContentsModel.swift in Sources */,
+				E4706AE6221CBD92006C7AB5 /* CompareActionSheet.swift in Sources */,
 				E46B2C83218E50200063E68C /* TextHeightSliderCell.swift in Sources */,
 				E4A4B325219F5D5800F70888 /* NotesModel.swift in Sources */,
 				E474FE2021C4CB1000DC11D8 /* NotesExportDocument.swift in Sources */,
