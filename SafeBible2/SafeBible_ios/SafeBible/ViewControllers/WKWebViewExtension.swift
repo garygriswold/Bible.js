@@ -114,43 +114,30 @@ extension WKWebView {
 
     func addNotes(reference: Reference) {
         let notes: [Note] = NotesDB.shared.getNotes(bookId: reference.bookId, chapter: reference.chapter)
-        var varLine1: String
         for note in notes {
             if note.highlight != nil {
-                varLine1 = "installEffect(range, 'lite_saved', '\(note.noteId)', '\(note.highlight!)');\n"
+                let query = "var range = decodeRange(\"\(note.selection)\");\n"
+                + "installEffect(range, 'lite_saved', '\(note.noteId)', '\(note.highlight!)');\n"
+                self.evaluateJavaScript(query, completionHandler: { data, error in
+                    if let err = error {
+                        print("ERROR: addNote Highlite \(err)")
+                    }
+                })
             }
             else if note.bookmark {
-                varLine1 = "installEffect(range, 'book', '\(note.noteId)');\n"
+                self.installIcon(verse: note.startVerse, selectionUse: .bookmark, noteId: note.noteId)
             }
             else if note.note != nil {
-                varLine1 = "installEffect(range, 'note', '\(note.noteId)');\n"
-            } else {
-                varLine1 = ""
+                self.installIcon(verse: note.startVerse, selectionUse: .note, noteId: note.noteId)
             }
-            let query = "var range = decodeRange(\"\(note.selection)\");\n"
-                + varLine1
-            //print(query)
-            print("SAVED RANGE \(note.selection)")
-            self.evaluateJavaScript(query, completionHandler: { data, error in
-                if let err = error {
-                    print("ERROR: addNote \(err)")
-                }
-            })
         }
     }
     
     private func handleSelection(selectionUse: SelectionUse, color: String?) {
         let noteId = Note.genNoteId()
-        var varLine1: String
-        switch selectionUse {
-        case .highlight:
+        var varLine1 = ""
+        if selectionUse == .highlight {
             varLine1 = "installEffect(range, 'lite_select', '\(noteId)', '\(color!)');\n"
-        case .bookmark:
-            varLine1 = "installEffect(range, 'book', '\(noteId)');\n"
-        case .note:
-            varLine1 = "installEffect(range, 'note', '\(noteId)');\n"
-        case .compare:
-            varLine1 = ""
         }
         let query = "var select = window.getSelection();\n"
             + "var range = select.getRangeAt(0);\n"
@@ -184,6 +171,37 @@ extension WKWebView {
                 if selectionUse == .note {
                     NoteEditViewController.present(note: note, webView: self)
                 }
+                if selectionUse == .bookmark || selectionUse == .note {
+                    self.installIcon(verse: note.startVerse, selectionUse: selectionUse, noteId: noteId)
+                }
+            }
+        })
+    }
+    
+    private func installIcon(verse: Int, selectionUse: SelectionUse, noteId: String) {
+        let currRef = HistoryModel.shared.current()
+        var source: String
+        var verseId: String
+        var type: String = ""
+        var icon: String = ""
+        if currRef.isShortsands {
+            source = "SS"
+            verseId = currRef.nodeId(verse: verse)
+        } else {
+            source = "DBP"
+            verseId = "verse\(verse)"
+        }
+        if selectionUse == .bookmark {
+            type = "book"
+            icon = "&#x1F516;"
+        } else if selectionUse == .note {
+            type = "note"
+            icon = "&#x1F5D2;"
+        }
+        let command = "installIcon('\(source)', '\(verseId)', '\(type)', '\(icon)', '\(noteId)');"
+        self.evaluateJavaScript(command, completionHandler: { data, error in
+            if let err = error {
+                print("ERROR: installIcon \(err)")
             }
         })
     }

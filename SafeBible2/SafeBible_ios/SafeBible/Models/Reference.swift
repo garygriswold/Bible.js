@@ -106,6 +106,10 @@ struct Reference : Equatable {
         return self.description() + ":" + verse
     }
     
+    func nodeId(verse: Int) -> String {
+        return "\(self.bookId):\(self.chapter):\(verse)"
+    }
+    
     func toString() -> String {
         if self.verse != nil {
             return "\(self.bibleId) \(self.bookId):\(self.chapter):\(self.verse!)"
