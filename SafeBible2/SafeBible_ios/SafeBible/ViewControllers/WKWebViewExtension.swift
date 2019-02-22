@@ -116,13 +116,15 @@ extension WKWebView {
         let notes: [Note] = NotesDB.shared.getNotes(bookId: reference.bookId, chapter: reference.chapter)
         for note in notes {
             if note.highlight != nil {
-                let query = "var range = decodeRange(\"\(note.selection)\");\n"
-                + "installEffect(range, 'lite_saved', '\(note.noteId)', '\(note.highlight!)');\n"
-                self.evaluateJavaScript(query, completionHandler: { data, error in
-                    if let err = error {
-                        print("ERROR: addNote Highlite \(err)")
-                    }
-                })
+                if note.bibleId == HistoryModel.shared.current().bibleId {
+                    let query = "var range = decodeRange(\"\(note.selection)\");\n"
+                    + "installEffect(range, 'lite_saved', '\(note.noteId)', '\(note.highlight!)');\n"
+                    self.evaluateJavaScript(query, completionHandler: { data, error in
+                        if let err = error {
+                            print("ERROR: addNote Highlite \(err)")
+                        }
+                    })
+                }
             }
             else if note.bookmark {
                 self.installIcon(verse: note.startVerse, selectionUse: .bookmark, noteId: note.noteId)
