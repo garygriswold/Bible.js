@@ -17,8 +17,9 @@ struct Note {
         return UUID().uuidString
     }
     
-    private static var regex1 = try! NSRegularExpression(pattern: "SPAN\\.v .+_(\\d+)\\/")
-    private static var regex2 = try! NSRegularExpression(pattern: "SPAN\\.verse.*\\sv-(\\d+)\\/")
+    private static var regex0 = try! NSRegularExpression(pattern: "id=.+:.+:(\\d+)")
+    private static var regex1 = try! NSRegularExpression(pattern: "cl=v .+_(\\d+)")
+    private static var regex2 = try! NSRegularExpression(pattern: "cl=verse.*\\sv-(\\d+)")
     
     let noteId: String
     let bookId: String
@@ -79,16 +80,26 @@ struct Note {
     }
     
     private func getVerseNum(classes: String) -> Int {
-        var result = Note.regex1.matches(in: classes, range: NSMakeRange(0, classes.count))
+        var result = self.getVerseNumHelper(classes: classes, regex: Note.regex0)
+        if result == nil {
+            result = self.getVerseNumHelper(classes: classes, regex: Note.regex1)
+        }
+        if result == nil {
+            result = self.getVerseNumHelper(classes: classes, regex: Note.regex2)
+        }
+        if result == nil {
+            result = 0
+        }
+        return result!
+    }
+    
+    private func getVerseNumHelper(classes: String, regex: NSRegularExpression) -> Int? {
+        var result = regex.matches(in: classes, range: NSMakeRange(0, classes.count))
         if result.count > 0 && result[0].numberOfRanges > 1 {
             return getSubstringInt(leaf: classes, result: result[0])
         } else {
-            result = Note.regex2.matches(in: classes, range: NSMakeRange(0, classes.count))
-            if result.count > 0 && result[0].numberOfRanges > 1 {
-                return getSubstringInt(leaf: classes, result: result[0])
-            }
+            return nil
         }
-        return 0
     }
     
     private func getSubstringInt(leaf: String, result: NSTextCheckingResult) -> Int {
@@ -159,14 +170,25 @@ struct Note {
         + "  return xpath;\n"
         + "}\n"
         + "function getClass(node) {\n"
-        + "  var clas = '';\n"
         + "  while(node && node.nodeName !== 'BODY') {\n"
-        + "    if (node.nodeType === 1) {\n"
-        + "      clas += '/' + node.nodeName + '.' + node.getAttribute('class');\n"
+        + "    if (node.nodeType === 1 && node.nodeName !== 'A') {\n"
+        + "      var id = node.getAttribute('id');\n"
+        + "      if (id) {\n"
+        + "        return 'id=' + id;\n"
+        + "      } else {\n"
+        + "        var clas = node.getAttribute('class');\n"
+        + "        if (clas && (clas.startsWith('v ') || clas.startsWith('verse'))) {\n"
+        + "          return 'cl=' + clas;\n"
+        + "        }\n"
+        + "      }\n"
         + "    }\n"
-        + "  node = node.parentNode;\n"
+        + "    var prior = node.previousSibling;\n"
+        + "    if (!prior) {\n"
+        + "      prior = node.parentNode;\n"
+        + "    }\n"
+        + "    node = prior;\n"
         + "  }\n"
-        + "  return clas;\n"
+        + "  return null;\n"
         + "}\n"
     
     static let decodeRange = "function decodeRange(encoded) {\n"
