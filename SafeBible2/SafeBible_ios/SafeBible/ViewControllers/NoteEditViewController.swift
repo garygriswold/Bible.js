@@ -11,8 +11,9 @@ import WebKit
 
 class NoteEditViewController : AppViewController, UITextViewDelegate {
     
-    static func push(note: Note, controller: UIViewController) {
+    static func push(note: Note, controller: NotesListViewController) {
         let noteEditViewController = NoteEditViewController(note: note, webView: nil)
+        noteEditViewController.listController = controller
         controller.navigationController?.pushViewController(noteEditViewController, animated: true)
     }
     
@@ -29,6 +30,7 @@ class NoteEditViewController : AppViewController, UITextViewDelegate {
     private weak var webView: WKWebView?
     private var textView: UITextView!
     private var isModal: Bool
+    private weak var listController: NotesListViewController?
     
     init(note: Note, webView: WKWebView?) {
         self.note = note
@@ -135,6 +137,9 @@ class NoteEditViewController : AppViewController, UITextViewDelegate {
     @objc func saveHandler(sender: UIBarButtonItem) {
         self.note.text = self.textView.text
         NotesDB.shared.storeNote(note: self.note)
+        if self.listController != nil {
+            self.listController?.refresh(note: true, lite: true, book: true)
+        }
         self.cancelHandler(sender: sender)
     }
     
