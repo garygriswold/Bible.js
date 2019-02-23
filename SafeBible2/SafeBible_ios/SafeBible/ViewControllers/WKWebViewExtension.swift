@@ -129,7 +129,7 @@ extension WKWebView {
             else if note.bookmark {
                 self.installIcon(verse: note.startVerse, selectionUse: .bookmark, noteId: note.noteId)
             }
-            else if note.note != nil {
+            else if note.note {
                 self.installIcon(verse: note.startVerse, selectionUse: .note, noteId: note.noteId)
             }
         }
@@ -160,11 +160,14 @@ extension WKWebView {
                 let selection = String(parts[0])
                 let classes = (parts.count > 0) ? String(parts[1]) : ""
                 let bookmark = (selectionUse == .bookmark)
+                let noteFlag = (selectionUse == .note)
                 let highlight = (selectionUse == .highlight) ? color! : nil
-                let text = (selectionUse == .note && parts.count > 1) ? String(parts[2]) : nil
+                let text = ((selectionUse == .note || selectionUse == .highlight) && parts.count > 1)
+                    ? String(parts[2]) : nil
                 let ref = HistoryModel.shared.current()
-                let note = Note(noteId: noteId, bookId: ref.bookId, chapter: ref.chapter, bibleId: ref.bibleId,
-                                selection: selection, classes: classes, bookmark: bookmark, highlight: highlight, note: text)
+                let note = Note(noteId: noteId, bookId: ref.bookId, chapter: ref.chapter,
+                                bibleId: ref.bibleId, selection: selection, classes: classes,
+                                bookmark: bookmark, note: noteFlag, highlight: highlight, text: text)
                 if selectionUse == .compare {
                     CompareViewController.present(note: note)
                 } else {

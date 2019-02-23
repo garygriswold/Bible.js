@@ -31,12 +31,13 @@ struct Note {
     var selection: String
     var classes: String
     var bookmark: Bool
+    var note: Bool
     var highlight: String?      // color name in HEX, presence indicates highlight
-    var note: String?
+    var text: String?
 
     // Used to instantiate after user does selection
     init(noteId: String, bookId: String, chapter: Int, bibleId: String, selection: String, classes: String,
-         bookmark: Bool, highlight: String?, note: String?) {
+         bookmark: Bool, note: Bool, highlight: String?, text: String?) {
         self.noteId = noteId
         self.bookId = bookId
         self.chapter = chapter
@@ -47,8 +48,9 @@ struct Note {
         self.selection = selection
         self.classes = classes
         self.bookmark = bookmark
-        self.highlight = highlight
         self.note = note
+        self.highlight = highlight
+        self.text = text
         
         let parts = classes.split(separator: "~")
         self.startVerse = getVerseNum(classes: String(parts[0]))
@@ -59,8 +61,9 @@ struct Note {
     }
     
     // Used to instantiate from selection from Notes table
-    init(noteId: String, bookId: String, chapter: Int, datetime: Int, startVerse: Int, endVerse: Int, bibleId: String,
-         selection: String, classes: String, bookmark: Bool, highlight: String?, note: String?) {
+    init(noteId: String, bookId: String, chapter: Int, datetime: Int, startVerse: Int, endVerse: Int,
+         bibleId: String, selection: String, classes: String, bookmark: Bool, note: Bool,
+         highlight: String?, text: String?) {
         self.noteId = noteId
         self.bookId = bookId
         self.chapter = chapter
@@ -71,8 +74,9 @@ struct Note {
         self.selection = selection
         self.classes = classes
         self.bookmark = bookmark
-        self.highlight = highlight
         self.note = note
+        self.highlight = highlight
+        self.text = text
     }
     
     func getReference() -> Reference {

@@ -72,7 +72,7 @@ class NoteEditViewController : AppViewController, UITextViewDelegate {
         self.textView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
         self.textView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
         
-        self.textView.text = note.note
+        self.textView.text = note.text
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -133,7 +133,7 @@ class NoteEditViewController : AppViewController, UITextViewDelegate {
     }
     
     @objc func saveHandler(sender: UIBarButtonItem) {
-        self.note.note = self.textView.text
+        self.note.text = self.textView.text
         NotesDB.shared.storeNote(note: self.note)
         self.cancelHandler(sender: sender)
     }

@@ -28,12 +28,12 @@ struct NotesDB {
         do {
             db = try self.getNotesDB()
             var sql = "SELECT noteId, Notes.bookId, chapter, datetime, startVerse, endVerse, bibleId,"
-                + " selection, classes, bookmark, highlight, note"
+                + " selection, classes, bookmark, note, highlight, text"
                 + " FROM Notes JOIN BookSeq ON Notes.bookId = BookSeq.bookId"
             var values: [String] = []
             var orPredicates = [String]()
             if note {
-                orPredicates.append("note is not NULL")
+                orPredicates.append("note = 'T'")
             }
             if lite {
                 orPredicates.append("highlight is not NULL")
@@ -55,8 +55,8 @@ struct NotesDB {
             let notes = resultSet.map {
                 Note(noteId: $0[0]!, bookId: $0[1]!, chapter: Int($0[2]!)!, datetime: Int($0[3]!)!,
                      startVerse: Int($0[4]!)!, endVerse: Int($0[5]!)!, bibleId: $0[6]!,
-                     selection: $0[7]!, classes: $0[8]!, bookmark: $0[9] == "T", highlight: $0[10],
-                     note: $0[11])
+                     selection: $0[7]!, classes: $0[8]!, bookmark: $0[9] == "T", note: $0[10] == "T",
+                     highlight: $0[11], text: $0[12])
             }
             return notes
         } catch let err {
@@ -69,7 +69,7 @@ struct NotesDB {
         let db: Sqlite3
         do {
             db = try self.getNotesDB()
-            let sql = "SELECT noteId, datetime, startVerse, endVerse, bibleId, selection, classes, bookmark, highlight, note"
+            let sql = "SELECT noteId, datetime, startVerse, endVerse, bibleId, selection, classes, bookmark, note, highlight, text"
                 + " FROM Notes"
                 + " WHERE bookId = ?"
                 + " AND chapter = ?"
@@ -79,7 +79,8 @@ struct NotesDB {
             let notes = resultSet.map {
                 Note(noteId: $0[0]!, bookId: bookId, chapter: chapter, datetime: Int($0[1]!)!,
                      startVerse: Int($0[2]!)!, endVerse: Int($0[3]!)!, bibleId: $0[4]!,
-                     selection: $0[5]!, classes: $0[6]!, bookmark: $0[7] == "T", highlight: $0[8], note: $0[9])
+                     selection: $0[5]!, classes: $0[6]!, bookmark: $0[7] == "T", note: $0[8] == "T",
+                     highlight: $0[9], text: $0[10])
             }
             return notes
         } catch let err {
@@ -92,7 +93,7 @@ struct NotesDB {
         let db: Sqlite3
         do {
             db = try self.getNotesDB()
-            let sql = "SELECT bookId, chapter, datetime, startVerse, endVerse, bibleId, selection, classes, bookmark, highlight, note"
+            let sql = "SELECT bookId, chapter, datetime, startVerse, endVerse, bibleId, selection, classes, bookmark, note, highlight, text"
                 + " FROM Notes"
                 + " WHERE noteId = ?"
             let values: [Any] = [noteId]
@@ -100,7 +101,8 @@ struct NotesDB {
             let notes = resultSet.map {
                 Note(noteId: noteId, bookId: $0[0]!, chapter: Int($0[1]!)!, datetime: Int($0[2]!)!,
                      startVerse: Int($0[3]!)!, endVerse: Int($0[4]!)!, bibleId: $0[5]!,
-                     selection: $0[6]!, classes: $0[7]!, bookmark: $0[8] == "T", highlight: $0[9], note: $0[10])
+                     selection: $0[6]!, classes: $0[7]!, bookmark: $0[8] == "T", note: $0[9] == "T",
+                     highlight: $0[10], text: $0[11])
             }
             return (notes.count > 0) ? notes[0] : nil
         } catch let err {
@@ -113,9 +115,8 @@ struct NotesDB {
         let db: Sqlite3
         do {
             db = try self.getNotesDB()
-            let sql = "REPLACE INTO Notes (noteId, bookId, chapter, datetime, startVerse, endVerse, bibleId," +
-                " selection, classes, bookmark, highlight, note) VALUES" +
-            " (?,?,?,?,?,?,?,?,?,?,?,?)"
+            let sql = "REPLACE INTO Notes (noteId, bookId, chapter, datetime, startVerse, endVerse, bibleId," + " selection, classes, bookmark, note, highlight, text) VALUES"
+                + " (?,?,?,?,?,?,?,?,?,?,?,?,?)"
             var values = [Any?]()
             values.append(note.noteId)
             values.append(note.bookId)
@@ -127,8 +128,9 @@ struct NotesDB {
             values.append(note.selection)
             values.append(note.classes)
             values.append(note.bookmark)
-            values.append(note.highlight)
             values.append(note.note)
+            values.append(note.highlight)
+            values.append(note.text)
             _ = try db.executeV1(sql: sql, values: values)
         } catch let err {
             print("ERROR NotesDB.storeNote \(err)")
@@ -174,7 +176,7 @@ struct NotesDB {
             let resultSet = try db.queryV1(sql: select, values: [bookId])
             //measure.duration(location: "select notes")
 
-            let insert = "INSERT INTO Notes VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+            let insert = "INSERT INTO Notes VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)"
             _ = try target.bulkExecuteV1(sql: insert, values: resultSet)
             //measure.duration(location: "insert notes")
             target.close()
@@ -328,8 +330,9 @@ struct NotesDB {
             + " selection TEXT NOT NULL,"
             + " classes TEXT NOT NULL,"
             + " bookmark TEXT check(bookmark IN ('T', 'F')),"
+            + " note TEXT check(note IN ('T', 'F')),"
             + " highlight TEXT NULL,"
-            + " note TEXT NULL)"
+            + " text TEXT NULL)"
         _ = try db.executeV1(sql: create3, values: [])
         let create4 = "CREATE INDEX IF NOT EXISTS book_chapter_idx on Notes (bookId, chapter, datetime)"
         _ = try db.executeV1(sql: create4, values: [])

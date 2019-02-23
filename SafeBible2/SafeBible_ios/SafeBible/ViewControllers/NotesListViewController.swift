@@ -65,24 +65,27 @@ class NotesListViewController : AppTableViewController, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "notesCell", for: indexPath) as? NoteCell
         guard cell != nil else { fatalError("notesCell must be type NotesCell") }
         cell!.backgroundColor = AppFont.backgroundColor
-        cell!.passage.font = AppFont.sansSerif(style: .body)
+        //cell!.passage.font = AppFont.sansSerif(style: .body)
+        cell!.passage.font = AppFont.sansSerif(style: .subheadline)
         cell!.passage.textColor = AppFont.textColor
         cell!.passage.text = noteRef.description(startVerse: note.startVerse, endVerse: note.endVerse)
+            + "  (\(noteRef.bibleName))"
         cell!.noteText.numberOfLines = 10
-        cell!.noteText.font = AppFont.sansSerif(style: .subheadline)
+        //cell!.noteText.font = AppFont.sansSerif(style: .subheadline)
+        cell!.noteText.font = AppFont.sansSerif(style: .body)
         cell!.noteText.textColor = AppFont.textColor
         if note.highlight != nil {
             cell!.iconGlyph.text = Note.liteIcon//"\u{1F58C}"//    "\u{1F3F7}"
-            cell!.noteText.text = "Highlited text here"
+            cell!.noteText.text = note.text
             cell!.accessoryType = .none
         }
         else if note.bookmark {
             cell!.iconGlyph.text = Note.bookIcon//"\u{1F516}"
             cell!.accessoryType = .none
         }
-        else if note.note != nil {
+        else if note.note {
             cell!.iconGlyph.text = Note.noteIcon//"\u{1F5D2}"
-            cell!.noteText.text = note.note
+            cell!.noteText.text = note.text
             cell!.accessoryType = .disclosureIndicator
         }
         cell!.selectionStyle = .default
@@ -111,7 +114,7 @@ class NotesListViewController : AppTableViewController, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let note = self.notes[indexPath.row]
-        if note.note != nil {
+        if note.note {
             NoteEditViewController.push(note: note, controller: self)
         } else {
             let ref = HistoryModel.shared.current()

@@ -41,12 +41,12 @@ class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
         var contents = [String]()
         let notes = NotesDB.shared.getNotes(bookId: self.bookId, note: true, lite: false, book: false)
         for note in notes {
-            if note.note != nil {
+            if note.note {
                 contents.append("\n")
                 let reference = note.getReference()
                 let passage = reference.description(startVerse: note.startVerse, endVerse: note.endVerse)
                 contents.append(passage)
-                contents.append(note.note!)
+                contents.append(note.text!)
             }
         }
         let data = contents.joined(separator: "\n").data(using: .utf8)
