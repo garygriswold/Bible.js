@@ -82,7 +82,9 @@ extension WKWebView {
     }
     
     @objc func shareHandler(sender: UIMenuItem) {
-        let query = "window.getSelection().toString();"
+        let query = "var select = window.getSelection();\n"
+        + "select.removeAllRanges();\n"
+        + "select.toString();"
         self.evaluateJavaScript(query, completionHandler: { data, error in
             if let err = error {
                 print("ERROR: shareHandler \(err)")
