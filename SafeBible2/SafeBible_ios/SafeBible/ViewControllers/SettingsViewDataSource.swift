@@ -36,7 +36,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         switch self.settingsViewType {
         case .bible: return 1 + self.dataModel!.locales.count
-        case .language: return 2
         case .oneLang: return 2
         }
     }
@@ -54,17 +53,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 } else {
                     return 0
                 }
-            }
-        case .language:
-            switch section {
-            case 0: return self.dataModel!.selectedCount
-            case 1:
-                if self.searchController!.isSearching() {
-                    return self.dataModel!.filteredCount
-                } else {
-                    return self.dataModel!.availableCount
-                }
-            default: fatalError("Unknown section \(section) in .language ")
             }
         case .oneLang:
             switch section {
@@ -91,14 +79,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 return self.dataModel!.availableCell(tableView: tableView, indexPath: indexPath,
                                                      inSearch: false)
             }
-        case .language:
-            switch indexPath.section {
-            case 0:
-                return self.dataModel!.selectedCell(tableView: tableView, indexPath: indexPath)
-            case 1:
-                return self.dataModel!.availableCell(tableView: tableView, indexPath: indexPath, inSearch: self.searchController?.isSearching() ?? false)
-            default: fatalError("Unknown section \(indexPath.section) in .language")
-            }
         case .oneLang:
             switch indexPath.section {
             case 0:
@@ -115,7 +95,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         switch self.settingsViewType {
         case .bible: return true
-        case .language: return true
         case .oneLang: return true
         }
     }

@@ -50,8 +50,7 @@ class CompareActionSheet : UIAlertController {
         
         let moreLangText = NSLocalizedString("+ More Languages", comment: "Title on action sheet")
         let moreLang = UIAlertAction(title: moreLangText, style: .default, handler: { _ in
-            SettingsViewController.push(settingsViewType: .language, controller: self.controller,
-                                        language: nil)
+            LanguageListViewController.push(controller: self.controller)
         })
         self.addAction(moreLang)
         

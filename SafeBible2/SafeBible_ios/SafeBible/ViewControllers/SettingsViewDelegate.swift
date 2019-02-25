@@ -39,8 +39,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         switch self.settingsViewType {
         case .bible:
             bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
-        case .language:
-            languageViewRowSelect(tableView: tableView, indexPath: indexPath)
         case .oneLang:
             bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
@@ -52,8 +50,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         switch self.settingsViewType {
         case .bible:
             bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
-        case .language:
-            languageViewRowSelect(tableView: tableView, indexPath: indexPath)
         case .oneLang:
             bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
@@ -82,17 +78,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             self.controller?.navigationController?.popToRootViewController(animated: true)
         }
     }
-    
-    private func languageViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
-        var language: Language?
-        if indexPath.section == self.selectedSection {
-            language = self.dataModel!.getSelectedLanguage(row: indexPath.row)
-        } else {
-            language = self.dataModel!.getAvailableLanguage(row: indexPath.row)
-        }
-        SettingsViewController.push(settingsViewType: .oneLang, controller: self.controller,
-                                    language: language)
-    }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if let heading = titleForHeaderInSection(section: section) {
@@ -120,14 +105,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 let locale = self.dataModel!.locales[index]
                 let lang = Locale.current.localizedString(forLanguageCode: locale.languageCode ?? "en")
                 return lang
-            }
-            else { return nil }
-        case .language:
-            if section == self.selectedSection {
-                return NSLocalizedString("My Languages", comment: "Section heading for User languages")
-            }
-            else if section == self.availableSection {
-                return NSLocalizedString("More Languages", comment: "Section heading for Other languages")
             }
             else { return nil }
         case .oneLang:

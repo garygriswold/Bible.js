@@ -9,12 +9,12 @@ import UIKit
 
 class SettingsSearchController: NSObject, UISearchResultsUpdating {
     
-    private weak var controller: SettingsViewController?
+    private weak var controller: AppTableViewController?
     private let availableSection: Int
     private let searchController: UISearchController
     private var dataModel: SettingsModel?
     
-    init(controller: SettingsViewController, selectionViewSection: Int) {
+    init(controller: AppTableViewController, selectionViewSection: Int) {
         self.controller = controller
         self.availableSection = selectionViewSection + 1
         self.searchController = UISearchController(searchResultsController: nil)

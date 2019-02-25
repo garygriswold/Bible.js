@@ -29,4 +29,10 @@ class AppTableViewController : AppViewController, UITableViewDelegate {
         self.tableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
         self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
+    
+    @objc override func preferredContentSizeChanged(note: NSNotification) {
+        super.preferredContentSizeChanged(note: note)
+        
+        tableView.reloadData() // updates preferred font size in table
+    }
 }

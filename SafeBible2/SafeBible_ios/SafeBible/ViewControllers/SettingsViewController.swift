@@ -7,7 +7,6 @@ import UIKit
 
 enum SettingsViewType {
     case bible
-    case language
     case oneLang
 }
 
@@ -20,7 +19,6 @@ class SettingsViewController: AppViewController {
     }
     
     let settingsViewType: SettingsViewType
-    var searchController: SettingsSearchController?
     var dataModel: SettingsModel!
     var tableView: UITableView!
     var oneLanguage: Language? // Used only when settingsViewType == .oneLang
@@ -39,10 +37,6 @@ class SettingsViewController: AppViewController {
         self.recentContentOffset = CGPoint(x:0, y: 0)
         
         super.init(nibName: nil, bundle: nil)
-        
-        if settingsViewType == .language {
-            self.searchController = SettingsSearchController(controller: self, selectionViewSection: self.selectedSection)
-        }
     }
     
     required init?(coder: NSCoder) {
@@ -77,27 +71,14 @@ class SettingsViewController: AppViewController {
         case .bible:
             self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
-        case .language:
-            self.navigationItem.title = NSLocalizedString("Languages", comment: "Languages view page title")
-            self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
         case .oneLang:
             /// This should be a pre- translated language name
             self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
         }
         self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
         
-        // prevent searchBar from holding onto focus
-        self.definesPresentationContext = true
-        
-        AppFont.updateSearchFontSize()
-        
-        if self.editModeOnOff {
-            self.saveHandler(sender: nil)
-        } else {
-            self.tableView.setEditing(true, animated: false)
-        }
+        self.tableView.setEditing(true, animated: false)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -116,80 +97,27 @@ class SettingsViewController: AppViewController {
         case .bible:
             self.dataModel = BibleModel(availableSection: self.availableSection, language: nil,
                                         selectedOnly: false)
-        case .language:
-            self.dataModel = LanguageModel(availableSection: self.availableSection)
         case .oneLang:
             self.dataModel = BibleModel(availableSection: self.availableSection,
                                         language: self.oneLanguage,
                                         selectedOnly: false)
         }
         self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: self.selectedSection,
-                                                 searchController: self.searchController)
+                                                 searchController: nil)
         self.delegate = SettingsViewDelegate(controller: self, selectionViewSection: self.selectedSection)
         self.tableView.dataSource = self.dataSource
         self.tableView.delegate = self.delegate
-        
-        let notify = NotificationCenter.default
-        notify.addObserver(self, selector: #selector(keyboardWillShow),
-                           name: UIResponder.keyboardWillShowNotification, object: nil)
-        notify.addObserver(self, selector: #selector(keyboardWillHide),
-                           name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        if self.settingsViewType == .language {
-            self.searchController?.viewAppears(dataModel: self.dataModel)
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         self.recentContentOffset = self.tableView.contentOffset;
         super.viewWillDisappear(animated)
-        
-        //Must remove, or this view will scroll because of keyboard actions in upper view.
-        let notify = NotificationCenter.default
-        notify.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        notify.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     @objc override func preferredContentSizeChanged(note: NSNotification) {
         super.preferredContentSizeChanged(note: note)
 
         tableView.reloadData() // updates preferred font size in table
-    }
-    
-    @objc func keyboardWillShow(note: NSNotification) {
-        if let keyboardInfo: Dictionary = note.userInfo {
-            if let keyboardRect: CGRect = keyboardInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-                let keyboardTop = keyboardRect.minY
-                let bounds = self.view.bounds
-                self.tableView.frame = CGRect(x: 0.0, y: 0.0, width: bounds.width, height: keyboardTop)
-            }
-        }
-        self.tableView.scrollToRow(at: IndexPath(item: 0, section: self.availableSection), at: .top,
-                                   animated: true)
-        if self.editModeOnOff {
-            self.editHandler(sender: nil)
-        }
-    }
-    
-    @objc func keyboardWillHide(note: NSNotification) {
-        self.tableView.frame = self.view.bounds
-        if self.editModeOnOff {
-            self.saveHandler(sender: nil)
-        }
-    }
-
-    @objc func editHandler(sender: UIBarButtonItem?) {
-        self.setEditing(true, animated: true)
-        self.tableView.setEditing(true, animated: true)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
-                                                                 action: #selector(saveHandler))
-    }
-    
-    @objc func saveHandler(sender: UIBarButtonItem?) {
-        self.setEditing(false, animated: true)
-        self.tableView.setEditing(false, animated: true)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
-                                                                 action: #selector(editHandler))
     }
 }
 
