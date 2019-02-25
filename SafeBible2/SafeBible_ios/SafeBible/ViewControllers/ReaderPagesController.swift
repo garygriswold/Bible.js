@@ -15,6 +15,8 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
     static let NEW_REFERENCE = NSNotification.Name("new-reference")
     // This event occurs when a web page is loaded.
     static let WEB_LOAD_DONE = NSNotification.Name("web-load-done")
+    // This event occurs when a new bible and language are selected for compare view
+    //static let NEW_BIBLE_LANG = NSNotification.Name("new-bible-lang")
     
     //var pageViewController: PageViewController!
     var pageViewController: UIPageViewController!

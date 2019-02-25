@@ -58,6 +58,10 @@ class CompareViewController: AppTableViewController, UITableViewDataSource {
         
         self.tableView.register(CompareVerseCell.self, forCellReuseIdentifier: "compareVerseCell")
         self.tableView.dataSource = self
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(newBibleAndLangSelected(note:)),
+                                               name: ReaderPagesController.NEW_REFERENCE, object: nil)
+        
     }
     
     @objc func addBibleHandler(sender: UIBarButtonItem) {
@@ -66,6 +70,15 @@ class CompareViewController: AppTableViewController, UITableViewDataSource {
     
     @objc func doneHandler(sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func newBibleAndLangSelected(note: NSNotification) {
+        let reference = note.object as! Reference
+        // Add Bible to data Model
+        self.dataModel.selected.append(reference.bible)
+        self.tableView.reloadData()
+        // ? Should I also remove it from available
+        // ? Should I add language
     }
     //
     // DataSource
