@@ -60,7 +60,7 @@ class CompareViewController: AppTableViewController, UITableViewDataSource {
         self.tableView.dataSource = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(newBibleAndLangSelected(note:)),
-                                               name: ReaderPagesController.NEW_REFERENCE, object: nil)
+                                               name: ReaderPagesController.NEW_COMPARE, object: nil)
         
     }
     
@@ -73,12 +73,9 @@ class CompareViewController: AppTableViewController, UITableViewDataSource {
     }
     
     @objc func newBibleAndLangSelected(note: NSNotification) {
-        let reference = note.object as! Reference
-        // Add Bible to data Model
-        self.dataModel.selected.append(reference.bible)
+        let bible = note.object as! Bible
+        self.dataModel.selected.append(bible)
         self.tableView.reloadData()
-        // ? Should I also remove it from available
-        // ? Should I add language
     }
     //
     // DataSource

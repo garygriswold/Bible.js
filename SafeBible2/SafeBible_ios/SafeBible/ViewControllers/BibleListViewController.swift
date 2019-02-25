@@ -42,7 +42,7 @@ class BibleListViewController: AppSettingsViewController {
         self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
         self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
         self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
-        self.tableView.dataSource = self
+
         self.tableView.setEditing(true, animated: false)
     }
     
@@ -65,6 +65,7 @@ class BibleListViewController: AppSettingsViewController {
                                         language: self.oneLanguage,
                                         selectedOnly: false)
         }
+        self.tableView.dataSource = self
     }
     
     //
@@ -144,16 +145,22 @@ class BibleListViewController: AppSettingsViewController {
             self.navigationController?.popToRootViewController(animated: true)
         }
         else if indexPath.section >= self.availableSection {
+            let isCompare = AppDelegate.findRootController(controller: self) is CompareViewController
             let section = indexPath.section - self.availableSection
             if let bible = self.dataModel!.getAvailableBible(section: section, row: indexPath.row) {
-                HistoryModel.shared.changeBible(bible: bible)
+                if isCompare {
+                    NotificationCenter.default.post(name: ReaderPagesController.NEW_COMPARE,
+                                                    object: bible)
+                } else {
+                    HistoryModel.shared.changeBible(bible: bible)
+                    NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                                    object: HistoryModel.shared.current())
+                }
             }
             self.insertRow(tableView: tableView, indexPath: indexPath)
             // Ensure the language is selected, is added when a Bible is added
             let model = self.dataModel as? BibleModel
             model?.settingsAdapter.ensureLanguageAdded(language: model?.oneLanguage)
-            NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
-                                            object: HistoryModel.shared.current())
             self.navigationController?.popToRootViewController(animated: true)
         }
     }

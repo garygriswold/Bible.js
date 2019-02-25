@@ -38,7 +38,6 @@ class LanguageListViewController: AppSettingsViewController {
         self.navigationItem.title = NSLocalizedString("Languages", comment: "Languages view page title")
         self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
         self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
-        self.tableView.dataSource = self
         
         // prevent searchBar from holding onto focus
         self.definesPresentationContext = true
@@ -59,7 +58,7 @@ class LanguageListViewController: AppSettingsViewController {
         self.tableView.tableHeaderView = label
         
         self.dataModel = LanguageModel(availableSection: self.availableSection)
-
+        self.tableView.dataSource = self
         
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(keyboardWillShow),

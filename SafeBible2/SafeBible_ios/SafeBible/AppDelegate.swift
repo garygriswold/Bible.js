@@ -59,5 +59,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let controller = UIApplication.shared.keyWindow?.rootViewController
         controller?.present(alert, animated: true, completion: nil)
     }
+    
+    // This is placed here, because it looks fragile and could be effected by OS changes.
+    static func findRootController(controller: UIViewController) -> UIViewController? {
+        if let nav = controller.parent as? UINavigationController {
+            return nav.viewControllers[0]
+        } else {
+            return nil
+        }
+    }
 }
 
