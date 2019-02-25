@@ -140,7 +140,7 @@ class LanguageListViewController: AppSettingsViewController, UITableViewDataSour
         } else {
             language = self.dataModel!.getAvailableLanguage(row: indexPath.row)
         }
-        SettingsViewController.push(settingsViewType: .oneLang, controller: self,
+        BibleListViewController.push(settingsViewType: .oneLang, controller: self,
                                     language: language)
     }
   

@@ -10,14 +10,14 @@ import UIKit
 
 class SettingsViewDataSource : NSObject, UITableViewDataSource {
     
-    private weak var controller: SettingsViewController?
+    private weak var controller: BibleListViewController?
     private let dataModel: SettingsModel?
     private let settingsViewType: SettingsViewType
     private let selectedSection: Int
     private let availableSection: Int
     private let searchController: SettingsSearchController?
     
-    init(controller: SettingsViewController, selectionViewSection: Int, searchController: SettingsSearchController?) {
+    init(controller: BibleListViewController, selectionViewSection: Int, searchController: SettingsSearchController?) {
         self.controller = controller
         self.dataModel = controller.dataModel
         self.searchController = searchController

@@ -10,7 +10,7 @@ import UIKit
 
 class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
-    private weak var controller: SettingsViewController?
+    private weak var controller: BibleListViewController?
     private weak var navController: UINavigationController?
     private weak var dataSource: SettingsViewDataSource?
     private let dataModel: SettingsModel?
@@ -18,7 +18,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     private let selectedSection: Int
     private let availableSection: Int
     
-    init(controller: SettingsViewController, selectionViewSection: Int) {
+    init(controller: BibleListViewController, selectionViewSection: Int) {
         self.controller = controller
         self.navController = controller.navigationController
         self.dataSource = controller.dataSource

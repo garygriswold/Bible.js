@@ -10,10 +10,10 @@ enum SettingsViewType {
     case oneLang
 }
 
-class SettingsViewController: AppViewController {
+class BibleListViewController: AppViewController {
     
     static func push(settingsViewType: SettingsViewType, controller: UIViewController?, language: Language?) {
-        let bibleController = SettingsViewController(settingsViewType: settingsViewType)
+        let bibleController = BibleListViewController(settingsViewType: settingsViewType)
         bibleController.oneLanguage = language
         controller?.navigationController?.pushViewController(bibleController, animated: true)
     }

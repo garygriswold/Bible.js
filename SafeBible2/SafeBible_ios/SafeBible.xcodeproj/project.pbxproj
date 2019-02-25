@@ -72,7 +72,7 @@
 		E4C2E978211B70F500B71CC5 /* AppFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E977211B70F500B71CC5 /* AppFont.swift */; };
 		E4C2E97F211B711C00B71CC5 /* BibleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E97C211B711C00B71CC5 /* BibleModel.swift */; };
 		E4C2E980211B711C00B71CC5 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E97D211B711C00B71CC5 /* FeedbackViewController.swift */; };
-		E4C2E98A211B712D00B71CC5 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E981211B712C00B71CC5 /* SettingsViewController.swift */; };
+		E4C2E98A211B712D00B71CC5 /* BibleListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E981211B712C00B71CC5 /* BibleListViewController.swift */; };
 		E4C2E98B211B712D00B71CC5 /* SettingsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E982211B712C00B71CC5 /* SettingsAdapter.swift */; };
 		E4C2E98C211B712D00B71CC5 /* LanguageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E983211B712C00B71CC5 /* LanguageModel.swift */; };
 		E4C2E98D211B712D00B71CC5 /* SettingsViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E984211B712C00B71CC5 /* SettingsViewDataSource.swift */; };
@@ -282,7 +282,7 @@
 		E4C2E977211B70F500B71CC5 /* AppFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFont.swift; sourceTree = "<group>"; };
 		E4C2E97C211B711C00B71CC5 /* BibleModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BibleModel.swift; sourceTree = "<group>"; };
 		E4C2E97D211B711C00B71CC5 /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
-		E4C2E981211B712C00B71CC5 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		E4C2E981211B712C00B71CC5 /* BibleListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BibleListViewController.swift; sourceTree = "<group>"; };
 		E4C2E982211B712C00B71CC5 /* SettingsAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsAdapter.swift; sourceTree = "<group>"; };
 		E4C2E983211B712C00B71CC5 /* LanguageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanguageModel.swift; sourceTree = "<group>"; };
 		E4C2E984211B712C00B71CC5 /* SettingsViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewDataSource.swift; sourceTree = "<group>"; };
@@ -363,7 +363,7 @@
 				E404A3B92176BAA100340395 /* ReaderViewController.swift */,
 				E4467D7221F4290B00E60A1A /* MenuViewController.swift */,
 				E4289B4B22238C7400C344F7 /* LanguageListViewController.swift */,
-				E4C2E981211B712C00B71CC5 /* SettingsViewController.swift */,
+				E4C2E981211B712C00B71CC5 /* BibleListViewController.swift */,
 				E4C2E984211B712C00B71CC5 /* SettingsViewDataSource.swift */,
 				E4C2E989211B712D00B71CC5 /* SettingsViewDelegate.swift */,
 				E4F66862217C377600E998CC /* TOCBooksViewController.swift */,
@@ -666,7 +666,7 @@
 				E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */,
 				E40D60612180EEA700A06B54 /* VersionsDB.swift in Sources */,
 				E4D5A6D321C8A291008476D0 /* NotesListViewController.swift in Sources */,
-				E4C2E98A211B712D00B71CC5 /* SettingsViewController.swift in Sources */,
+				E4C2E98A211B712D00B71CC5 /* BibleListViewController.swift in Sources */,
 				E4D5A6CF21C8563E008476D0 /* NotesDB.swift in Sources */,
 				E4C2E990211B712D00B71CC5 /* ReaderViewNavigator.swift in Sources */,
 				E4C2E97F211B711C00B71CC5 /* BibleModel.swift in Sources */,

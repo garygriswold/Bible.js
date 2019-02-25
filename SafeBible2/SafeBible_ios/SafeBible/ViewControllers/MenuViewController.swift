@@ -218,7 +218,7 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
         case 2:
             switch indexPath.row {
             case 0:
-                SettingsViewController.push(settingsViewType: .bible, controller: self, language: nil)
+                BibleListViewController.push(settingsViewType: .bible, controller: self, language: nil)
             case 1:
                 LanguageListViewController.push(controller: self)
             default: fatalError("Unknown row \(indexPath.row) in section 1")

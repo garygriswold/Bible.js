@@ -52,7 +52,7 @@ class BiblesActionSheet : UIAlertController {
         
         let moreBiblesText = NSLocalizedString("+ More Bibles", comment: "Title on action sheet")
         let moreBibles = UIAlertAction(title: moreBiblesText, style: .default, handler: { _ in
-            SettingsViewController.push(settingsViewType: .bible, controller: self.controller, language: nil)
+            BibleListViewController.push(settingsViewType: .bible, controller: self.controller, language: nil)
         })
         self.addAction(moreBibles)
         
