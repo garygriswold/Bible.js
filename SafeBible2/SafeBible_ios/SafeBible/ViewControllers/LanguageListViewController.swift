@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LanguageListViewController: AppSettingsViewController, UITableViewDataSource {
+class LanguageListViewController: AppSettingsViewController {
     
     static func push(controller: UIViewController?) {
         let langController = LanguageListViewController()
@@ -38,6 +38,7 @@ class LanguageListViewController: AppSettingsViewController, UITableViewDataSour
         self.navigationItem.title = NSLocalizedString("Languages", comment: "Languages view page title")
         self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
         self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
+        self.tableView.dataSource = self
         
         // prevent searchBar from holding onto focus
         self.definesPresentationContext = true
@@ -58,7 +59,7 @@ class LanguageListViewController: AppSettingsViewController, UITableViewDataSour
         self.tableView.tableHeaderView = label
         
         self.dataModel = LanguageModel(availableSection: self.availableSection)
-        self.tableView.dataSource = self
+
         
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(keyboardWillShow),
@@ -104,7 +105,7 @@ class LanguageListViewController: AppSettingsViewController, UITableViewDataSour
     }
     
     // Return the number of rows for each section in your static table
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0: return self.dataModel!.selectedCount
         case 1:
@@ -118,7 +119,7 @@ class LanguageListViewController: AppSettingsViewController, UITableViewDataSour
     }
     
     // Return the row cell for the corresponding section and row
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
             return self.dataModel!.selectedCell(tableView: tableView, indexPath: indexPath)

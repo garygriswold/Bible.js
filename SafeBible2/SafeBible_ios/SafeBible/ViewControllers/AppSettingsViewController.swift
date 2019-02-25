@@ -8,8 +8,8 @@
 
 import UIKit
 
-class AppSettingsViewController : AppTableViewController {
-    
+class AppSettingsViewController : AppTableViewController, UITableViewDataSource {
+
     var dataModel: SettingsModel!
     
     let selectedSection: Int
@@ -36,13 +36,21 @@ class AppSettingsViewController : AppTableViewController {
     // DataSource
     //
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        fatalError("Must override numberOfRowsInSection.")
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        fatalError("Must override cellForRowAt.")
+    }
+    
     // Return true for each row that can be edited
-    @nonobjc func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
     // Commit data row change to the data source
-    @nonobjc func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle,
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle,
                    forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCell.EditingStyle.delete {
             self.deleteRow(tableView: tableView, indexPath: indexPath)
@@ -79,12 +87,12 @@ class AppSettingsViewController : AppTableViewController {
     }
     
     // Return true for each row that can be moved
-    @nonobjc func tableView(_ tableView: UITableView, canMoveRowAt: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canMoveRowAt: IndexPath) -> Bool {
         return (canMoveRowAt.section == self.selectedSection)
     }
     
     // Commit the row move in the data source
-    @nonobjc func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath,
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath,
                    to destinationIndexPath: IndexPath) {
         self.dataModel!.moveSelected(source: sourceIndexPath.row, destination: destinationIndexPath.row)
     }
@@ -151,7 +159,7 @@ class AppSettingsViewController : AppTableViewController {
     
     // Keeps non-editable rows from indenting
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt: IndexPath) -> Bool {
-        return (shouldIndentWhileEditingRowAt.section >= self.selectedSection)
+        return true
     }
     
     // Limit the movement of rows

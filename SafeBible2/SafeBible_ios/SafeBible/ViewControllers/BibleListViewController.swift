@@ -10,7 +10,7 @@ enum SettingsViewType {
     case oneLang
 }
 
-class BibleListViewController: AppViewController {
+class BibleListViewController: AppSettingsViewController {
     
     static func push(settingsViewType: SettingsViewType, controller: UIViewController?, language: Language?) {
         let bibleController = BibleListViewController(settingsViewType: settingsViewType)
@@ -19,65 +19,30 @@ class BibleListViewController: AppViewController {
     }
     
     let settingsViewType: SettingsViewType
-    var dataModel: SettingsModel!
-    var tableView: UITableView!
     var oneLanguage: Language? // Used only when settingsViewType == .oneLang
-    var recentContentOffset: CGPoint // Used to restore position when returning to view
-    var editModeOnOff = false // Set to true in order to have edit button in top right
-    
-    private let selectedSection: Int
-    private let availableSection: Int
-    var dataSource: SettingsViewDataSource!
-    private var delegate: SettingsViewDelegate!
     
     init(settingsViewType: SettingsViewType) {
         self.settingsViewType = settingsViewType
-        self.selectedSection = 0
-        self.availableSection = self.selectedSection + 1
-        self.recentContentOffset = CGPoint(x:0, y: 0)
-        
-        super.init(nibName: nil, bundle: nil)
+        super.init(selectedSection: 0)
     }
     
     required init?(coder: NSCoder) {
-        fatalError("SettingsViewController(coder:) is not implemented.")
+        fatalError("BibleListViewController(coder:) is not implemented.")
     }
     
     deinit {
-        print("**** deinit SettingsViewController \(settingsViewType) ******")
+        print("**** deinit BibleListViewController \(settingsViewType) ******")
     }
 
     override func loadView() {
         super.loadView()
- 
-        // create Table view
-        self.tableView = UITableView(frame: self.view.bounds, style: UITableView.Style.grouped)
-        self.tableView.backgroundColor = AppFont.groupTableViewBackground
         self.tableView.allowsSelectionDuringEditing = true
-        let barHeight = self.navigationController?.navigationBar.frame.height ?? 44
-        self.recentContentOffset = CGPoint(x:0, y: -1 * barHeight)
-        self.view.addSubview(self.tableView)
-        
-        self.tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let margins = view.safeAreaLayoutGuide
-        self.tableView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
-        self.tableView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
-        self.tableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
-        self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
         
         let width = self.view.bounds.width
-        switch self.settingsViewType {
-        case .bible:
-            self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
-            self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
-        case .oneLang:
-            /// This should be a pre- translated language name
-            self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
-            self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
-        }
+        self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
+        self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
         self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
-        
+        self.tableView.dataSource = self
         self.tableView.setEditing(true, animated: false)
     }
     
@@ -91,8 +56,6 @@ class BibleListViewController: AppViewController {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 1.0))
         self.tableView.tableHeaderView = label
         
-        self.tableView.contentOffset = self.recentContentOffset
-        
         switch self.settingsViewType {
         case .bible:
             self.dataModel = BibleModel(availableSection: self.availableSection, language: nil,
@@ -102,22 +65,121 @@ class BibleListViewController: AppViewController {
                                         language: self.oneLanguage,
                                         selectedOnly: false)
         }
-        self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: self.selectedSection,
-                                                 searchController: nil)
-        self.delegate = SettingsViewDelegate(controller: self, selectionViewSection: self.selectedSection)
-        self.tableView.dataSource = self.dataSource
-        self.tableView.delegate = self.delegate
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        self.recentContentOffset = self.tableView.contentOffset;
-        super.viewWillDisappear(animated)
+    //
+    // DataSource
+    //
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        switch self.settingsViewType {
+        case .bible: return 1 + self.dataModel!.locales.count
+        case .oneLang: return 2
+        }
     }
     
-    @objc override func preferredContentSizeChanged(note: NSNotification) {
-        super.preferredContentSizeChanged(note: note)
-
-        tableView.reloadData() // updates preferred font size in table
+    // Return the number of rows for each section in your static table
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch self.settingsViewType {
+        case .bible:
+            switch section {
+            case 0: return self.dataModel!.selectedCount
+            default:
+                let index = section - 1
+                if let bibleModel = self.dataModel as? BibleModel {
+                    return bibleModel.getAvailableBibleCount(section: index)
+                } else {
+                    return 0
+                }
+            }
+        case .oneLang:
+            switch section {
+            case 0: return self.dataModel!.selectedCount
+            case 1:
+                if let bibleModel = self.dataModel as? BibleModel {
+                    return bibleModel.getAvailableBibleCount(section: 0)
+                } else {
+                    return 0
+                }
+            default: fatalError("Unknown section \(section) in .oneLang")
+            }
+        }
+    }
+    
+    // Return the row cell for the corresponding section and row
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch self.settingsViewType {
+        case .bible:
+            switch indexPath.section {
+            case 0:
+                return self.dataModel!.selectedCell(tableView: tableView, indexPath: indexPath)
+            default:
+                return self.dataModel!.availableCell(tableView: tableView, indexPath: indexPath,
+                                                     inSearch: false)
+            }
+        case .oneLang:
+            switch indexPath.section {
+            case 0:
+                return self.dataModel!.selectedCell(tableView: tableView, indexPath: indexPath)
+            case 1:
+                return self.dataModel!.availableCell(tableView: tableView, indexPath: indexPath,
+                                                     inSearch: false)
+            default: fatalError("Unknown section \(indexPath.section) in .oneLang")
+            }
+        }
+    }
+    
+    //
+    // Delegate
+    //
+    
+    // Handle row selection.
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == self.selectedSection {
+            if let bible = self.dataModel!.getSelectedBible(row: indexPath.row) {
+                HistoryModel.shared.changeBible(bible: bible)
+            }
+            NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                            object: HistoryModel.shared.current())
+            self.navigationController?.popToRootViewController(animated: true)
+        }
+        else if indexPath.section >= self.availableSection {
+            let section = indexPath.section - self.availableSection
+            if let bible = self.dataModel!.getAvailableBible(section: section, row: indexPath.row) {
+                HistoryModel.shared.changeBible(bible: bible)
+            }
+            self.insertRow(tableView: tableView, indexPath: indexPath)
+            // Ensure the language is selected, is added when a Bible is added
+            let model = self.dataModel as? BibleModel
+            model?.settingsAdapter.ensureLanguageAdded(language: model?.oneLanguage)
+            NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                            object: HistoryModel.shared.current())
+            self.navigationController?.popToRootViewController(animated: true)
+        }
+    }
+    
+    override func titleForHeaderInSection(section: Int) -> String? {
+        switch self.settingsViewType {
+        case .bible:
+            if section == self.selectedSection {
+                return NSLocalizedString("My Bibles", comment: "Section heading for User selected Bibles")
+            }
+            else if section >= self.availableSection {
+                let index = section - self.availableSection
+                let locale = self.dataModel!.locales[index]
+                let lang = Locale.current.localizedString(forLanguageCode: locale.languageCode ?? "en")
+                return lang
+            }
+            else { return nil }
+        case .oneLang:
+            if section == self.selectedSection {
+                return NSLocalizedString("My Bibles", comment: "Section heading for User selected Bibles")
+            } else {
+                let model = self.dataModel as? BibleModel
+                return model?.oneLanguage?.name
+            }
+        }
     }
 }
+
 
