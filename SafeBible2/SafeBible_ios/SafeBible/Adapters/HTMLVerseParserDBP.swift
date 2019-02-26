@@ -37,8 +37,8 @@ class HTMLVerseParserDBP : NSObject, XMLParserDelegate {
             self.parser = XMLParser(data: data)
             self.parser!.delegate = self
             self.parser!.shouldProcessNamespaces = false
-            let ok = self.parser!.parse()
-            print("DBP VerseParser DONE \(ok)")
+            _ = self.parser!.parse()
+            print("DBP VerseParser DONE")
         }
         return result.joined().trimmingCharacters(in: .whitespacesAndNewlines)
     }
@@ -82,8 +82,9 @@ class HTMLVerseParserDBP : NSObject, XMLParserDelegate {
     }
     
     func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
-        print("ERROR: \(parseError)")
-        //parser.lineNumber
-        //parser.columnNumber
+        let err = parseError as NSError
+        if err.code != 512 {
+            print("ERROR: \(parseError)")
+        }
     }
 }
