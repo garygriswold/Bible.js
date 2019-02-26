@@ -23,6 +23,7 @@ class HTMLVerseParserSS : NSObject, XMLParserDelegate {
     private var insideFootnote: Int
     private var stack: [String]
     private var result: [String]
+    private var parser: XMLParser?
     
     init(html: String, startVerse: Int, endVerse: Int) {
         self.html = html.replacingOccurrences(of: "&nbsp;", with: "&#160;")
@@ -37,10 +38,10 @@ class HTMLVerseParserSS : NSObject, XMLParserDelegate {
     
     func parseVerses() -> String {
         if let data = self.html.data(using: .utf8) {
-            let parser = XMLParser(data: data)
-            parser.delegate = self
-            parser.shouldProcessNamespaces = false
-            let ok = parser.parse()
+            self.parser = XMLParser(data: data)
+            self.parser!.delegate = self
+            self.parser!.shouldProcessNamespaces = false
+            let ok = self.parser!.parse()
             print("SS VerseParser DONE \(ok)")
         }
         return result.joined().trimmingCharacters(in: .whitespacesAndNewlines)
@@ -55,12 +56,12 @@ class HTMLVerseParserSS : NSObject, XMLParserDelegate {
         if elementName == "span" {
             if let id:String = attributeDict["id"] {
                 let parts = id.split(separator: ":")
-                if let verse = (parts.count > 2) ? Int(parts[2]) : nil {
+                if let verse = (parts.count > 2) ? Int(parts[2].split(separator: "-")[0]) : nil {
                     if !self.insideVerses && verse == self.startVerse {
                         self.insideVerses = true
                     }
-                    if self.insideVerses && verse == self.endVerse {
-                        self.insideVerses = false
+                    if self.insideVerses && verse >= self.endVerse {
+                        self.parser!.abortParsing()
                     }
                 }
             }
