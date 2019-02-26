@@ -17,15 +17,16 @@ import UIKit
 class HTMLVerseParserDBP : NSObject, XMLParserDelegate {
     
     private let html: String
-    private let startVerse: String
-    private let endVerse: String
+    private let startVerse: Int
+    private let endVerse: Int
     private var insideVerses: Bool
     private var result: [String]
+    private var parser: XMLParser?
     
     init(html: String, startVerse: Int, endVerse: Int) {
         self.html = html
-        self.startVerse = "verse\(startVerse) "
-        self.endVerse = "verse\(endVerse + 1) "
+        self.startVerse = startVerse
+        self.endVerse = endVerse + 1
         self.insideVerses = false
         self.result = []
         super.init()
@@ -33,10 +34,10 @@ class HTMLVerseParserDBP : NSObject, XMLParserDelegate {
     
     func parseVerses() -> String {
         if let data = self.html.data(using: .utf8) {
-            let parser = XMLParser(data: data)
-            parser.delegate = self
-            parser.shouldProcessNamespaces = false
-            let ok = parser.parse()
+            self.parser = XMLParser(data: data)
+            self.parser!.delegate = self
+            self.parser!.shouldProcessNamespaces = false
+            let ok = self.parser!.parse()
             print("DBP VerseParser DONE \(ok)")
         }
         return result.joined().trimmingCharacters(in: .whitespacesAndNewlines)
@@ -46,15 +47,28 @@ class HTMLVerseParserDBP : NSObject, XMLParserDelegate {
                 namespaceURI: String?, qualifiedName qName: String?,
                 attributes attributeDict: [String : String] = [:]) {
         if let clas = attributeDict["class"] {
-            if !self.insideVerses && clas.contains(self.startVerse) {
-                self.insideVerses = true
-            }
-            if self.insideVerses {
-                if clas.contains(self.endVerse) || clas == "footnote" || clas == "footer" {
-                    self.insideVerses = false
+            if let verse = self.getVerseNum(clas: clas) {
+                if !self.insideVerses && verse == self.startVerse {
+                    self.insideVerses = true
+                }
+                if self.insideVerses {
+                    if verse >= self.endVerse || clas == "footnote" || clas == "footer" {
+                        self.parser!.abortParsing()
+                        
+                    }
                 }
             }
         }
+    }
+    
+    private func getVerseNum(clas: String) -> Int? {
+        if clas.starts(with: "verse") {
+            let versePart = clas.split(separator: " ")[0]
+            let index = versePart.index(versePart.startIndex, offsetBy: 5)
+            let part = versePart[index...]
+            return Int(part)
+        }
+        return nil
     }
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
