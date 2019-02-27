@@ -103,15 +103,15 @@ class AudioBibleView {
         }
         
         self.playButton = UIButton(type: .custom)
-        self.playUpImg = UIImage(named: "UIPlayUPButton90.png")
+        self.playUpImg = UIImage(named: "UIPlayUPButton30.png")
         self.playButton.setImage(self.playUpImg, for: UIControl.State.normal)
-        self.playDnImg = UIImage(named: "UIPlayDNButton90.png")
+        self.playDnImg = UIImage(named: "UIPlayDNButton30.png")
         self.playButton.setImage(self.playDnImg, for: UIControl.State.highlighted)
         self.playButton.isEnabled = false
         self.audioPanel.addSubview(self.playButton)
         
-        self.pauseUpImg = UIImage(named: "UIPauseUPButton90.png")
-        self.pauseDnImg = UIImage(named: "UIPauseDNButton90.png")
+        self.pauseUpImg = UIImage(named: "UIPauseUPButton30.png")
+        self.pauseDnImg = UIImage(named: "UIPauseDNButton30.png")
         
         let scrub = UISlider()
         scrub.isContinuous = true
