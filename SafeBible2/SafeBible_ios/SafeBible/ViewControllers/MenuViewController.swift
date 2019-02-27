@@ -186,7 +186,7 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
         cell.textLabel?.textColor = AppFont.textColor
         cell.backgroundColor = AppFont.backgroundColor
         cell.accessoryView = nil
-        var image = UIImage(named: "www/images/" + icon)
+        var image = UIImage(named: icon)
         image = image?.withRenderingMode(.alwaysTemplate)
         cell.imageView?.tintColor = UIColor.gray
         cell.imageView?.image = image

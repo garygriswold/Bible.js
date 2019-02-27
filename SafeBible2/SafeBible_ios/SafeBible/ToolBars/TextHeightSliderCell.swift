@@ -38,7 +38,7 @@ class TextHeightSliderCell : UITableViewCell {
         
         self.backgroundColor = AppFont.backgroundColor
         
-        var image = UIImage(named: "www/images/typ-height.png")
+        var image = UIImage(named: "typ-height.png")
         image = image?.withRenderingMode(.alwaysTemplate)
         self.imageView!.tintColor = UIColor.gray
         self.imageView!.image = image

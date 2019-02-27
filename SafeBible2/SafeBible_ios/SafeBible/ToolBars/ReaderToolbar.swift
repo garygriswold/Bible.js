@@ -38,13 +38,13 @@ class ReaderToolbar {
         
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         
-        let menuImage = UIImage(named: "www/images/ui-menu.png")
+        let menuImage = UIImage(named: "ui-menu.png")
         let menu = UIBarButtonItem(image: menuImage, style: .plain, target: self,
                                    action: #selector(menuTapHandler))
         items.append(menu)
         items.append(spacer)
         
-        let priorImage = UIImage(named: "www/images/ios-previous.png")
+        let priorImage = UIImage(named: "ios-previous.png")
         self.historyBack = UIBarButtonItem(image: priorImage, style: .plain, target: self,
                                            action: #selector(historyTapHandler))
         self.historyBack.isEnabled = HistoryModel.shared.hasBack()
@@ -66,21 +66,21 @@ class ReaderToolbar {
         items.append(version)
         items.append(spacer)
         
-        let audioImage = UIImage(named: "www/images/mus-vol-med.png")
+        let audioImage = UIImage(named: "mus-vol-med.png")
         self.audioPlayer = UIBarButtonItem(image: audioImage, style: .plain, target: self,
                                            action: #selector(audioTapHandler))
         self.audioPlayer.isEnabled = self.audioBookIdSet.contains(Substring(reference.bookId))
         items.append(self.audioPlayer)
         items.append(spacer)
         
-        let composeImage = UIImage(named: "www/images/ios-new.png")
+        let composeImage = UIImage(named: "ios-new.png")
         let compose = UIBarButtonItem(image: composeImage, style: .plain, target: self,
                                       action: #selector(composeTapHandler))
         items.append(compose)
         items.append(spacer)
  /*
  Disabled until search is developed
-        let searchImage = UIImage(named: "www/images/ios-search.png")
+        let searchImage = UIImage(named: "ios-search.png")
         let search = UIBarButtonItem(image: searchImage, style: .plain, target: self,
                                      action: #selector(searchTapHandler))
         items.append(search)
