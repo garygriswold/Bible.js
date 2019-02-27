@@ -12,13 +12,9 @@ import WebKit
 
 class AudioBibleView {
     
+    // This needs to be removed
     private static var instance: AudioBibleView?
-    static func shared(view: UIView, audioBible: AudioBible) -> AudioBibleView {
-        if (AudioBibleView.instance == nil) {
-            AudioBibleView.instance = AudioBibleView(view: view, audioBible: audioBible)
-        }
-        return AudioBibleView.instance!
-    }
+    // This needs to be fixed in order to enable text moving with verse.
     static var webview: WKWebView? {
         get {
             if let singleton = instance {
@@ -56,7 +52,7 @@ class AudioBibleView {
     private var verseNum: Int = 0
     private var isAudioViewActive: Bool = false
     
-    private init(view: UIView, audioBible: AudioBible) {
+    init(view: UIView, audioBible: AudioBible) {
         self.view = view
         self.audioBible = audioBible
         self.scrubSliderDuration = CMTime.zero

@@ -67,7 +67,7 @@ public class AudioBibleController {
     */
     public func present(view: UIView, book: String, chapterNum: Int, complete: @escaping (_ error:Error?) -> Void) {
         self.audioBible = AudioBible.shared(controller: self)
-        self.audioBibleView = AudioBibleView.shared(view: view, audioBible: self.audioBible!)
+        self.audioBibleView = AudioBibleView(view: view, audioBible: self.audioBible!)
         self.audioSession = AudioSession.shared(audioBibleView: self.audioBibleView!)
         self.completionHandler = complete
         
