@@ -48,8 +48,7 @@ class AudioBibleView {
     private let panelHeight: NSLayoutConstraint
     private let panelBottom: NSLayoutConstraint
     // Precomputed for positionVersePopup
-    private let sliderRange: CGFloat
-    private let sliderOrigin: CGFloat
+    private let thumbWidth: CGFloat
     // Transient State Variables
     private var scrubSliderDuration: CMTime
     private var scrubSliderDrag: Bool
@@ -125,7 +124,7 @@ class AudioBibleView {
         self.scrubSlider = scrub
         
         self.scrubSlider.translatesAutoresizingMaskIntoConstraints = false
-        self.scrubSlider.topAnchor.constraint(equalTo: self.audioPanel.topAnchor, constant: 30.0).isActive = true
+        self.scrubSlider.topAnchor.constraint(equalTo: self.audioPanel.topAnchor, constant: 40.0).isActive = true
         self.scrubSlider.leadingAnchor.constraint(equalTo: self.audioPanel.leadingAnchor,
                                                   constant: 20.0).isActive = true
         self.scrubSlider.trailingAnchor.constraint(equalTo: self.audioPanel.trailingAnchor,
@@ -133,14 +132,13 @@ class AudioBibleView {
         
         self.playButton.translatesAutoresizingMaskIntoConstraints = false
         self.playButton.topAnchor.constraint(equalTo: self.scrubSlider.bottomAnchor,
-                                             constant: 5.0).isActive = true
+                                             constant: 0.0).isActive = true
         self.playButton.centerXAnchor.constraint(equalTo: self.audioPanel.centerXAnchor).isActive = true
         self.playButton.widthAnchor.constraint(equalToConstant: 40.0).isActive = true
         self.playButton.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
         
         // Precompute Values for positionVersePopup()
-        self.sliderRange = scrub.frame.size.width - (scrub.currentThumbImage?.size.width)!
-        self.sliderOrigin = scrub.frame.origin.x + ((scrub.currentThumbImage?.size.width)! / 2.0)
+        self.thumbWidth = (scrub.currentThumbImage?.size.width)!
         
         self.verseLabelYPos = 20
         let panelWidth = self.audioPanel.bounds.width
@@ -178,13 +176,14 @@ class AudioBibleView {
         self.positionLabel = position
 */
         // UI control shadows
+        
         self.playButton.layer.shadowOpacity = 0.5
         self.playButton.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
         verse.shadowOpacity = 0.5
         verse.shadowOffset = CGSize(width: 1.0, height: 0.5)
         scrub.layer.shadowOpacity = 0.5
         scrub.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
-        
+ 
         self.initNotifications()
         print("***** Init AudioBibleView *****")
     }
@@ -329,7 +328,10 @@ class AudioBibleView {
     private func positionVersePopup() -> CGPoint {
         let slider = self.scrubSlider
         let sliderPct: Float = (slider.value - slider.minimumValue) / (slider.maximumValue - slider.minimumValue)
-        let sliderValueToPixels: CGFloat = (CGFloat(sliderPct) * self.sliderRange) + self.sliderOrigin
+        
+        let sliderRange = slider.frame.size.width - self.thumbWidth
+        let sliderOrigin = slider.frame.origin.x + (self.thumbWidth / 2.0)
+        let sliderValueToPixels: CGFloat = (CGFloat(sliderPct) * sliderRange) + sliderOrigin
         return CGPoint(x: sliderValueToPixels, y: self.verseLabelYPos)
     }
     
