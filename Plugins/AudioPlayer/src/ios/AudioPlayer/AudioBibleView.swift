@@ -72,7 +72,7 @@ class AudioBibleView {
                                                                   constant: panelInsetX)
         self.panelRight = self.audioPanel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
                                                                     constant: -panelInsetX)
-        self.panelHeight = self.audioPanel.heightAnchor.constraint(equalToConstant: 110.0)
+        self.panelHeight = self.audioPanel.heightAnchor.constraint(equalToConstant: 115.0)
         self.panelBottom = self.audioPanel.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
                                                                    constant: -panelInsetY)
         if !UIAccessibility.isReduceTransparencyEnabled {
@@ -98,21 +98,21 @@ class AudioBibleView {
         }
         
         self.playButton = UIButton(type: .custom)
-        self.playUpImg = UIImage(named: "UIPlayUPButton30.png")
+        self.playUpImg = UIImage(named: "PlayUPButton44.png")
         self.playButton.setImage(self.playUpImg, for: UIControl.State.normal)
-        self.playDnImg = UIImage(named: "UIPlayDNButton30.png")
+        self.playDnImg = UIImage(named: "PlayDNButton44.png")
         self.playButton.setImage(self.playDnImg, for: UIControl.State.highlighted)
         self.playButton.isEnabled = false
         self.audioPanel.addSubview(self.playButton)
         
-        self.pauseUpImg = UIImage(named: "UIPauseUPButton30.png")
-        self.pauseDnImg = UIImage(named: "UIPauseDNButton30.png")
+        self.pauseUpImg = UIImage(named: "PauseUPButton44.png")
+        self.pauseDnImg = UIImage(named: "PauseDNButton44.png")
         
         let scrub = UISlider()
         scrub.isContinuous = true
-        let thumbUpImg = UIImage(named: "UIThumbUP30.png")
+        let thumbUpImg = UIImage(named: "ThumbUP30.png")
         scrub.setThumbImage(thumbUpImg, for: UIControl.State.normal)
-        let thumbDnImg = UIImage(named: "UIThumbDN30.png")
+        let thumbDnImg = UIImage(named: "ThumbDN30.png")
         scrub.setThumbImage(thumbDnImg, for: UIControl.State.highlighted)
         
         scrub.setValue(0.0, animated: false)
@@ -130,8 +130,8 @@ class AudioBibleView {
         self.playButton.topAnchor.constraint(equalTo: self.scrubSlider.bottomAnchor,
                                              constant: 0.0).isActive = true
         self.playButton.centerXAnchor.constraint(equalTo: self.audioPanel.centerXAnchor).isActive = true
-        self.playButton.widthAnchor.constraint(equalToConstant: 40.0).isActive = true
-        self.playButton.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
+        self.playButton.widthAnchor.constraint(equalToConstant: 44.0).isActive = true
+        self.playButton.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
         
         // Precompute Values for positionVersePopup()
         self.thumbWidth = (scrub.currentThumbImage?.size.width)!
@@ -172,7 +172,7 @@ class AudioBibleView {
         self.positionLabel = position
 */
         // UI control shadows
-        
+
         self.playButton.layer.shadowOpacity = 0.5
         self.playButton.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
         verse.shadowOpacity = 0.5
