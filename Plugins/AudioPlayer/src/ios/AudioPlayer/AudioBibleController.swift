@@ -42,6 +42,13 @@ public class AudioBibleController {
     }
     
     /**
+    * This function is called to see if Bible has changed, so that we need to reload meta data
+    */
+    public func isBibleChanged(bibleId: String) -> Bool {
+        return self.audioTOCBible == nil || self.audioTOCBible!.bibleId != bibleId
+    }
+    
+    /**
     * This function must be called before present, because it loads the metadata from the damId
     */
     public func findAudioVersion(bibleId: String, iso3: String,

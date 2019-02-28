@@ -31,9 +31,6 @@ class ReaderToolbar {
             nav.toolbar.barTintColor = AppFont.backgroundColor
         }
         
-        let reference = HistoryModel.shared.current()
-        self.audioBookIdSet = Set(self.findAudioVersion(ref: reference).split(separator: ","))
-        
         var items = [UIBarButtonItem]()
         
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -69,7 +66,6 @@ class ReaderToolbar {
         let audioImage = UIImage(named: "mus-vol-med.png")
         self.audioPlayer = UIBarButtonItem(image: audioImage, style: .plain, target: self,
                                            action: #selector(audioTapHandler))
-        self.audioPlayer.isEnabled = self.audioBookIdSet.contains(Substring(reference.bookId))
         items.append(self.audioPlayer)
         items.append(spacer)
         
@@ -105,6 +101,9 @@ class ReaderToolbar {
         self.tocChapLabel.text = String(reference.chapter)
         self.versionLabel.text = reference.abbr
         self.historyBack.isEnabled = HistoryModel.shared.hasBack()
+        if AudioBibleController.shared.isBibleChanged(bibleId: reference.bibleId) {
+            self.audioBookIdSet = Set(self.findAudioVersion(ref: reference).split(separator: ","))
+        }
         self.audioPlayer.isEnabled = self.audioBookIdSet.contains(Substring(reference.bookId))
     }
     
