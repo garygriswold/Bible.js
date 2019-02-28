@@ -21,11 +21,14 @@ import WebKit
 
 struct BiblePageModel {
     
-    func loadPage(reference: Reference, webView: WKWebView) {
+    func loadPage(reference: Reference, webView: WKWebView, controller: UIViewController) {
         self.getChapter(reference: reference, view: webView, complete: { html in
             if html != nil {
                 let page = DynamicCSS.shared.wrapHTML(html: html!, reference: reference)
                 webView.loadHTMLString(page, baseURL: nil)
+            } else {
+                // Usually an error occurs because the book does not exist in this Bible
+                TOCBooksViewController.push(controller: controller)
             }
         })
     }
