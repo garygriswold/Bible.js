@@ -58,7 +58,7 @@ class VideoViewController: AppTableViewController, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "videoDescriptionCell", for: indexPath) as! VideoDescriptionCell
         cell.contentView.backgroundColor = AppFont.backgroundColor
         
-        if let image = UIImage(named: "www/images/\(video.mediaId).jpg") {
+        if let image = UIImage(named: "\(video.mediaId).jpg") {
             cell.photo.image = image
             let aspectRatio = (image.size.height / image.size.width)
             cell.photo.heightAnchor.constraint(equalTo: cell.photo.widthAnchor,
