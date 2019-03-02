@@ -62,7 +62,7 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: return 3
+        case 0: return 4
         case 1: return 4
         case 2: return 2
         case 3: return (UserMessageController.isAvailable()) ? 4 : 3
@@ -83,6 +83,10 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
                 return self.genericCell(view: tableView, indexPath: indexPath, title: histText,
                                         accessory: true, icon: "ios-previous.png")
             case 2:
+                let notesText = NSLocalizedString("Notes", comment: "Notes Cell Title")
+                return self.genericCell(view: tableView, indexPath: indexPath, title: notesText,
+                                        accessory: true, icon: "ios-new.png")
+            case 3:
                 let videoText = NSLocalizedString("Videos", comment: "Videos Cell Title")
                 return self.genericCell(view: tableView, indexPath: indexPath, title: videoText,
                                         accessory: true, icon: "ios-films.png")
@@ -209,6 +213,8 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
             case 1:
                 HistoryViewController.push(controller: self)
             case 2:
+                NotesListViewController.push(controller: self)
+            case 3:
                 let bible = HistoryModel.shared.currBible
                 VideoViewController.push(iso3: bible.iso3, controller: self)
             default: fatalError("Unknown row \(indexPath.row) in section 0")
