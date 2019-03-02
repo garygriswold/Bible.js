@@ -155,8 +155,9 @@ struct Note {
         + "  var startClass = getClass(range.startContainer);\n"
         + "  var endClass = getClass(range.endContainer);\n"
         + "  var classes = startClass + '~' + endClass;\n"
-        + "  return paths + '|' + classes + '|' + range.toString();\n"
+        + "  return paths + '|' + classes + '|' + window.getSelection().toString();\n"
         + "}\n"
+        // Note: window.getSelection().toString() excludes display: none nodes
         + "function getXPathForNode(node) {\n"
         + "  var xpath = '';\n"
         + "  while(node && node.nodeName !== 'BODY') {\n"
