@@ -27,7 +27,7 @@ class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMe
         
         let configuration = WKWebViewConfiguration()
         configuration.preferences.javaScriptEnabled = true
-        let js = Note.decodeRange + Note.installEffect + Note.encodeRange
+        let js = Note.decodeRange + Note.installEffect + Note.encodeRange + Note.showHideSSFootnote
         let script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false)
         let contentController = WKUserContentController()
         contentController.addUserScript(script)
