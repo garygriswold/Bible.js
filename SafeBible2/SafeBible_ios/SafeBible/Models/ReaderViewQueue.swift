@@ -100,6 +100,15 @@ class ReaderViewQueue {
         }
     }
     
+    func reloadIfActive(reference: Reference) {
+        for reader in self.queue {
+            if reader.reference == reference {
+                reader.reloadReference()
+                return
+            }
+        }
+    }
+    
     private func appendAfter() -> ReaderViewController {
         let reference = self.queue.last!.reference!
         let controller = self.getUnused(reference: reference.nextChapter())

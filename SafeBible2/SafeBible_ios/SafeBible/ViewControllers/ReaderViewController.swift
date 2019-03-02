@@ -62,6 +62,11 @@ class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMe
         let biblePage = BiblePageModel()
         biblePage.loadPage(reference: _reference, webView: self.webView, controller: self)
     }
+    
+    func reloadReference() {
+        let biblePage = BiblePageModel()
+        biblePage.loadPage(reference: _reference, webView: self.webView, controller: self)
+    }
  
     func clearWebView() {
         if self.webView != nil {

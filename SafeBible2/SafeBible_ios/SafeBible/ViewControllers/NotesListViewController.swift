@@ -105,6 +105,8 @@ class NotesListViewController : AppTableViewController, UITableViewDataSource {
             self.notes.remove(at: indexPath.row)
             NotesDB.shared.deleteNote(noteId: note.noteId)
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+            // Remove Note from current pages if present.
+            ReaderViewQueue.shared.reloadIfActive(reference: note.getReference())
         }
     }
     
