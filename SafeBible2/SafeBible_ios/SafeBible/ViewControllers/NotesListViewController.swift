@@ -36,6 +36,9 @@ class NotesListViewController : AppTableViewController, UITableViewDataSource {
         let notes = NSLocalizedString("Notes", comment: "Notes list view page title")
         self.navigationItem.title = (self.reference.book?.name ?? "") + " " + notes
         
+        self.tableView.rowHeight = UITableView.automaticDimension;
+        self.tableView.estimatedRowHeight = 50.0; // set to whatever your "average" cell height i
+        
         self.tableView.register(NoteCell.self, forCellReuseIdentifier: "notesCell")
         self.tableView.dataSource = self
     }
