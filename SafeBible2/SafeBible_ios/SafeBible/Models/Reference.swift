@@ -13,27 +13,17 @@ struct Reference : Equatable {
     let bibleId: String
     let bookId: String
     let chapter: Int
-    let verse: Int?
-    
-    init(bibleId: String, bookId: String, chapter: Int, verse: Int?) {
-        self.bibleId = bibleId
-        self.bookId = bookId
-        self.chapter = chapter
-        self.verse = verse
-    }
     
     init(bibleId: String, bookId: String, chapter: Int) {
         self.bibleId = bibleId
         self.bookId = bookId
         self.chapter = chapter
-        self.verse = nil
     }
     
     static func == (lhs: Reference, rhs: Reference) -> Bool {
         return lhs.bibleId == rhs.bibleId &&
             lhs.bookId == rhs.bookId &&
-            lhs.chapter == rhs.chapter &&
-            lhs.verse == rhs.verse
+            lhs.chapter == rhs.chapter
     }
     
     var abbr: String {
@@ -94,11 +84,7 @@ struct Reference : Equatable {
     }
     
     func description() -> String {
-        if self.verse != nil {
-            return "\(self.bookName) \(self.chapter):\(self.verse!)"
-        } else {
-            return "\(self.bookName) \(self.chapter)"
-        }
+        return "\(self.bookName) \(self.chapter)"
     }
     
     func description(startVerse: Int, endVerse: Int) -> String {
@@ -111,10 +97,6 @@ struct Reference : Equatable {
     }
     
     func toString() -> String {
-        if self.verse != nil {
-            return "\(self.bibleId) \(self.bookId):\(self.chapter):\(self.verse!)"
-        } else {
-            return "\(self.bibleId) \(self.bookId):\(self.chapter)"
-        }
+        return "\(self.bibleId) \(self.bookId):\(self.chapter)"
     }
 }

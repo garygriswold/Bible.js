@@ -48,8 +48,7 @@ struct HistoryModel {
 
     mutating func changeBible(bible: Bible) {
         let curr = self.current()
-        let ref = Reference(bibleId: bible.bibleId, bookId: curr.bookId,
-                            chapter: curr.chapter, verse: curr.verse)
+        let ref = Reference(bibleId: bible.bibleId, bookId: curr.bookId, chapter: curr.chapter)
         self.add(reference: ref)
     }
     

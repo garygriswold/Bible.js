@@ -88,12 +88,12 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
+            // Note that verse is being ignored here
             let sql = "SELECT bibleId, bookId, chapter, verse" +
                     " FROM History ORDER BY datetime asc limit 100"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let history = resultSet.map {
-                Reference(bibleId: $0[0]!, bookId: $0[1]!, chapter: Int($0[2]!) ?? 1,
-                          verse: ($0[3] != nil) ? Int($0[3]!) : nil)
+                Reference(bibleId: $0[0]!, bookId: $0[1]!, chapter: Int($0[2]!) ?? 1)
             }
             return history
         } catch {
@@ -109,7 +109,7 @@ struct SettingsDB {
                     " datetime) VALUES (?,?,?,?,?)"
             let datetime = Date().description
             let values: [Any?] = [reference.bibleId, reference.bookId,
-                                 reference.chapter, reference.verse, datetime]
+                                 reference.chapter, nil, datetime]
             _ = try db.executeV1(sql: sql, values: values)
         } catch let err {
             print("ERROR SettingsDB.storeHistory \(err)")
