@@ -61,8 +61,8 @@ class VideoViewController: AppTableViewController, UITableViewDataSource {
         if let image = UIImage(named: "\(video.mediaId).jpg") {
             cell.photo.image = image
             let aspectRatio = (image.size.height / image.size.width)
-            cell.photo.heightAnchor.constraint(equalTo: cell.photo.widthAnchor,
-                                               multiplier: aspectRatio).isActive = true
+            cell.photoHeight = cell.photo.heightAnchor.constraint(equalTo: cell.photo.widthAnchor,
+                                               multiplier: aspectRatio)
         } else {
             cell.photo.image = nil
         }
@@ -101,6 +101,7 @@ class VideoDescriptionCell : UITableViewCell {
     let photo = UIImageView()
     let title = UILabel()
     let descr = UILabel()
+    var photoHeight: NSLayoutConstraint!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
@@ -121,6 +122,9 @@ class VideoDescriptionCell : UITableViewCell {
         self.photo.topAnchor.constraint(equalTo: vue.topAnchor, constant: inset).isActive = true
         self.photo.leadingAnchor.constraint(equalTo: vue.leadingAnchor, constant: inset).isActive = true
         self.photo.trailingAnchor.constraint(equalTo: vue.trailingAnchor, constant: -inset).isActive = true
+        self.photoHeight = self.photo.heightAnchor.constraint(equalTo: self.photo.widthAnchor,
+                                                              multiplier: 0.5)
+        self.photoHeight.isActive = true
 
         self.title.translatesAutoresizingMaskIntoConstraints = false
         self.title.topAnchor.constraint(equalTo: self.photo.bottomAnchor, constant: inset).isActive = true
