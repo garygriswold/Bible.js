@@ -139,7 +139,14 @@ class TOCBooksViewController : AppTableViewController, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let book = self.dataModel.getBook(row: indexPath.row) {
             tableView.deselectRow(at: indexPath, animated: true)
-            TOCChaptersViewController.push(book: book, controller: self)
+            if book.lastChapter > 0 {
+                TOCChaptersViewController.push(book: book, controller: self)
+            } else {
+                HistoryModel.shared.changeReference(book: book, chapter: 0)
+                NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                                object: HistoryModel.shared.current())
+                self.navigationController?.popToRootViewController(animated: true)
+            }
         }
     }
 }

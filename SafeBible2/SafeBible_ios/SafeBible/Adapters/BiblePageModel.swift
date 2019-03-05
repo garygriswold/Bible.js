@@ -143,7 +143,11 @@ struct BiblePageModel {
                         result.append(id2)
                     }
                 case "C": // chapter number, not zero filled
-                    result.append(String(reference.chapter))
+                    if reference.chapter > 0 {
+                        result.append(String(reference.chapter))
+                    } else {
+                        result.removeLast() // remove the underscore that would preceed chapter
+                    }
                 case "d": // chapter number, 2 char zero filled, Psalms 3 char
                     var chapStr = String(reference.chapter)
                     if chapStr.count == 1 {

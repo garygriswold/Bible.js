@@ -92,7 +92,7 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         for index in 0..<bookIds.count {
             let bookId = bookIds[index]
             let book = Book(bookId: bookId, ordinal: index, name: names[index],
-                            lastChapter: chapters[bookId] ?? 1)
+                            lastChapter: chapters[bookId] ?? 0)
             books.append(book)
         }
         return books

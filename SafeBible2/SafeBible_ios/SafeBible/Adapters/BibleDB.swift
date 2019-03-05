@@ -21,7 +21,7 @@ struct BibleDB {
             let sql = "SELECT bookId, ordinal, name, lastChapter FROM TableContents ORDER BY ordinal"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let toc = resultSet.map {
-                Book(bookId: $0[0]!, ordinal: Int($0[1]!) ?? 0, name: $0[2]!, lastChapter: Int($0[3]!) ?? 1)
+                Book(bookId: $0[0]!, ordinal: Int($0[1]!) ?? 0, name: $0[2]!, lastChapter: Int($0[3]!) ?? 0)
             }
             return toc
         } catch let err {
