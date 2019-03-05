@@ -168,17 +168,18 @@ class TableContentsModel { // class is used to permit self.contents inside closu
     }
     
     func nextChapter(reference: Reference) -> Reference {
-        if let book = self.getBook(bookId: reference.bookId) {
+        if var book = self.getBook(bookId: reference.bookId) {
             if reference.chapter < book.lastChapter {
                 return Reference(bibleId: reference.bibleId, bookId: reference.bookId,
                                  chapter: reference.chapter + 1)
             } else {
                 if let next = self.getBook(row: book.ordinal + 1) {
-                    return Reference(bibleId: reference.bibleId, bookId: next.bookId, chapter: 1)
+                    book = next
                 } else {
-                    let first = self.getBook(row: 0)!
-                    return Reference(bibleId: reference.bibleId, bookId: first.bookId, chapter: 1)
+                    book = self.getBook(row: 0)!
                 }
+                let chapter = (book.lastChapter > 0) ? 1 : 0
+                return Reference(bibleId: reference.bibleId, bookId: book.bookId, chapter: chapter)
             }
         } else {
             return TableContentsDefault.nextChapter(reference: reference)
