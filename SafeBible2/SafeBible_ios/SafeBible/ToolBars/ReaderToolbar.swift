@@ -44,7 +44,7 @@ class ReaderToolbar {
         let priorImage = UIImage(named: "ios-previous.png")
         self.historyBack = UIBarButtonItem(image: priorImage, style: .plain, target: self,
                                            action: #selector(historyTapHandler))
-        self.historyBack.isEnabled = HistoryModel.shared.hasBack()
+        self.historyBack.isEnabled = HistoryModel.shared.hasHistory()
         items.append(self.historyBack)
         items.append(spacer)
         
@@ -90,6 +90,7 @@ class ReaderToolbar {
         }
         let background = AppFont.nightMode ? UIColor(white: 0.20, alpha: 1.0) :
             UIColor(white: 0.95, alpha: 1.0)
+        self.historyBack.isEnabled = HistoryModel.shared.hasHistory()
         self.tocBookLabel.backgroundColor = background
         self.tocChapLabel.backgroundColor = background
         self.versionLabel.backgroundColor = background
@@ -100,7 +101,7 @@ class ReaderToolbar {
         self.tocBookLabel.text = reference.bookName
         self.tocChapLabel.text = String(reference.chapter)
         self.versionLabel.text = reference.abbr
-        self.historyBack.isEnabled = HistoryModel.shared.hasBack()
+        self.historyBack.isEnabled = HistoryModel.shared.hasHistory()
         if AudioBibleController.shared.isBibleChanged(bibleId: reference.bibleId) {
             self.audioBookIdSet = Set(self.findAudioVersion(ref: reference).split(separator: ","))
         }

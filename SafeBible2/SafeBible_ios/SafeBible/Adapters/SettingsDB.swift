@@ -84,16 +84,17 @@ struct SettingsDB {
     //
     // History Table
     //
-    func getHistory() -> [Reference] {
+    func getHistory() -> [History] {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
             // Note that verse is being ignored here
-            let sql = "SELECT bibleId, bookId, chapter, verse" +
+            let sql = "SELECT datetime, bibleId, bookId, chapter, verse" +
                     " FROM History ORDER BY datetime asc limit 100"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let history = resultSet.map {
-                Reference(bibleId: $0[0]!, bookId: $0[1]!, chapter: Int($0[2]!) ?? 1)
+                History(reference: Reference(bibleId: $0[1]!, bookId: $0[2]!, chapter: Int($0[3]!) ?? 0),
+                        datetime: CFAbsoluteTime($0[0]!)!)
             }
             return history
         } catch {
@@ -101,15 +102,14 @@ struct SettingsDB {
         }
     }
     
-    func storeHistory(reference: Reference) {
+    func storeHistory(history: History) {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "INSERT INTO History (bibleId, bookId, chapter, verse," +
-                    " datetime) VALUES (?,?,?,?,?)"
-            let datetime = Date().description
-            let values: [Any?] = [reference.bibleId, reference.bookId,
-                                 reference.chapter, nil, datetime]
+            let sql = "REPLACE INTO History (datetime, bibleId, bookId, chapter, verse)" +
+                    " VALUES (?,?,?,?,?)"
+            let ref = history.reference
+            let values: [Any?] = [history.datetime, ref.bibleId, ref.bookId, ref.chapter, nil]
             _ = try db.executeV1(sql: sql, values: values)
         } catch let err {
             print("ERROR SettingsDB.storeHistory \(err)")
@@ -134,15 +134,15 @@ struct SettingsDB {
             db = try Sqlite3.findDB(dbname: dbname)
         } catch Sqlite3Error.databaseNotOpenError {
             db = try Sqlite3.openDB(dbname: dbname, copyIfAbsent: false)
-            let create1 = "CREATE TABLE IF NOT EXISTS Settings(" +
-                " name TEXT PRIMARY KEY NOT NULL, value TEXT NULL)"
+            let create1 = "CREATE TABLE IF NOT EXISTS Settings("
+                + " name TEXT PRIMARY KEY NOT NULL, value TEXT NULL)"
             _ = try db?.executeV1(sql: create1, values: [])
-            let create2 = "CREATE TABLE IF NOT EXISTS History(" +
-                " bibleId TEXT NOT NULL," +
-                " bookId TEXT NOT NULL," +
-                " chapter INT NOT NULL," +
-                " verse INT NULL," +
-                " datetime TEXT NOT NULL)" ///// ??? The datetime should be primary key
+            let create2 = "CREATE TABLE IF NOT EXISTS History("
+                + " datetime REAL NOT NULL PRIMARY KEY,"
+                + " bibleId TEXT NOT NULL,"
+                + " bookId TEXT NOT NULL,"
+                + " chapter INT NOT NULL,"
+                + " verse INT NULL)"
             _ = try db?.executeV1(sql: create2, values: [])
         }
         return db!

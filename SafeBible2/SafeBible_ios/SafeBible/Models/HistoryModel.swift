@@ -5,25 +5,62 @@
 //  Created by Gary Griswold on 10/18/18.
 //  Copyright © 2018 ShortSands. All rights reserved.
 //
+import Foundation
+import UIKit
+
+struct History : Equatable {
+    let reference: Reference
+    let datetime:  CFAbsoluteTime
+    
+    // Used when creating a History item
+    init(reference: Reference) {
+        self.reference = reference
+        self.datetime = CFAbsoluteTimeGetCurrent()
+    }
+    
+    // Used when retrieving a History item from the Database
+    init(reference: Reference, datetime: CFAbsoluteTime) {
+        self.reference = reference
+        self.datetime = datetime
+    }
+    
+    static func == (lhs: History, rhs: History) -> Bool {
+        return lhs.reference == rhs.reference
+    }
+}
+
+class HistoryHelper {
+
+    @objc static func saveCurrentAtTerminate(note: NSNotification) {
+        SettingsDB.shared.storeHistory(history: HistoryModel.shared.currentHistory())
+    }
+}
+
 
 struct HistoryModel {
     
     static var shared = HistoryModel()
+    private static let SAVE_ON_DELAY = 10.0 // sec
     
-    private var history = [Reference]()
-    private var index = 0
+    private var _current: History
+    private var _history = [History]()
     
     init() {
-        self.history = SettingsDB.shared.getHistory()
-        self.index = self.history.count - 1
-        if self.history.count < 1 {
+        self._history = SettingsDB.shared.getHistory()
+        if self._history.count < 1 {
             let bibleModel = BibleModel(availableSection: 0, language: nil, selectedOnly: true)
             let bible = bibleModel.getSelectedBible(row: 0)! /// unsafe should be used to for Reference
             let reference = Reference(bibleId: bible.bibleId, bookId: "JHN", chapter: 3)
-            self.history.append(reference)
-            self.index = 0
-            SettingsDB.shared.storeHistory(reference: self.history[0])
+            self._history.append(History(reference: reference))
+            SettingsDB.shared.storeHistory(history: self._history[0])
         }
+        self._current = self._history.last!
+
+        NotificationCenter.default.addObserver(HistoryHelper.self,
+            selector: #selector(HistoryHelper.saveCurrentAtTerminate(note:)),
+            //name: UIApplication.willTerminateNotification,
+            name: UIApplication.willResignActiveNotification,
+            object: nil)
     }
     
     var currBible: Bible {
@@ -39,11 +76,11 @@ struct HistoryModel {
     }
     
     var historyCount: Int {
-        get { return self.history.count }
+        get { return self._history.count }
     }
     
     func getHistory(row: Int) -> Reference {
-        return (row >= 0 && row < self.history.count) ? self.history[row] : self.history[0]
+        return (row >= 0 && row < self._history.count) ? self._history[row].reference : self._current.reference
     }
 
     mutating func changeBible(bible: Bible) {
@@ -63,50 +100,30 @@ struct HistoryModel {
     }
     
     mutating func clear() {
-        let top = self.current()
-        self.history.removeAll()
-        self.index = -1
+        self._history.removeAll()
         SettingsDB.shared.clearHistory()
-        self.add(reference: top)
     }
     
     private mutating func add(reference: Reference) {
-        if self.history.count == 0 || reference != self.current() {
-            self.history.append(reference)
-            self.index += 1
-            SettingsDB.shared.storeHistory(reference: reference)
+        let newItem = History(reference: reference)
+        if newItem.datetime - self._current.datetime > HistoryModel.SAVE_ON_DELAY
+            && self._current != self._history.last {
+            self._history.append(self._current)
+            SettingsDB.shared.storeHistory(history: self._current)
         }
+        self._current = newItem
     }
     
     func current() -> Reference {
-        return self.history[self.index]
+        return self._current.reference
     }
     
-    func hasBack() -> Bool {
-        let idx = self.index - 1
-        return idx >= 0 && idx < self.history.count
+    func currentHistory() -> History {
+        return self._current
     }
     
-    func hasForward() -> Bool {
-        let idx = self.index + 1
-        return idx >= 0 && idx < self.history.count
-    }
-    
-    mutating func back() -> Reference? {
-        if self.hasBack() {
-            self.index -= 1
-            return self.history[self.index]
-        } else {
-            return nil
-        }
-    }
-    
-    mutating func forward() -> Reference? {
-        if self.hasForward() {
-            self.index += 1
-            return self.history[self.index]
-        } else {
-            return nil
-        }
+    func hasHistory() -> Bool {
+        print("History count \(self._history.count)")
+        return self._history.count > 0
     }
 }
