@@ -104,8 +104,9 @@ class AppSettingsViewController : AppTableViewController, UITableViewDataSource 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if let heading = titleForHeaderInSection(section: section) {
             let font = AppFont.sansSerif(style: .subheadline)
-            let rect = CGRect(x: 0, y: font.lineHeight, width: tableView.frame.size.width - 10, height: font.lineHeight)
-            let label = UILabel(frame: rect)
+            let label = UILabel()
+            //let rect = CGRect(x: 0, y: font.lineHeight, width: tableView.frame.size.width - 10, height: font.lineHeight)
+            //let label = UILabel(frame: rect)
             label.font = font
             label.textAlignment = .center
             label.textColor = UIColor.darkGray
@@ -125,6 +126,7 @@ class AppSettingsViewController : AppTableViewController, UITableViewDataSource 
         return 3 * font.lineHeight
     }
     
+    /** This only draws a lightGray line at the bottom of any section. */
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let rect = CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 0.4)
         let label = UILabel(frame: rect)
