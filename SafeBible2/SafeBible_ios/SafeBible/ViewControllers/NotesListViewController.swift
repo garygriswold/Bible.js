@@ -31,8 +31,6 @@ class NotesListViewController : AppTableViewController, UITableViewDataSource {
         
         self.toolBar = NotesListToolbar(book: reference.book!, controller: self)
         
-        self.notes = NotesDB.shared.getNotes(bookId: reference.bookId, note: true, lite: true, book: true)
-        
         let notes = NSLocalizedString("Notes", comment: "Notes list view page title")
         self.navigationItem.title = (self.reference.book?.name ?? "") + " " + notes
         
@@ -47,14 +45,17 @@ class NotesListViewController : AppTableViewController, UITableViewDataSource {
         super.viewWillAppear(animated)
         
         self.navigationController?.isToolbarHidden = false
+        
+        self.notes = NotesDB.shared.getNotes(bookId: reference.bookId, note: true, lite: true, book: true)
+        self.tableView.reloadData()
     }
-    
-    // This method is called by NotesListToolbar
+
+    // This method is called by NotesListToolbar, when user changes what is to be included
     func refresh(note: Bool, lite: Bool, book: Bool) {
         self.notes = NotesDB.shared.getNotes(bookId: reference.bookId, note: note, lite: lite, book: book)
         self.tableView.reloadData()
     }
-    
+
     //
     // Data Source
     //

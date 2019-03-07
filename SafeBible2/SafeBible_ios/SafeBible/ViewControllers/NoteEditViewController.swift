@@ -137,9 +137,7 @@ class NoteEditViewController : AppViewController, UITextViewDelegate {
     @objc func saveHandler(sender: UIBarButtonItem) {
         self.note.text = self.textView.text
         NotesDB.shared.storeNote(note: self.note)
-        if self.listController != nil {
-            self.listController?.refresh(note: true, lite: true, book: true)
-        }
+        // Notes are always refreshed when the list appears, no need to refresh it here.
         self.cancelHandler(sender: sender)
     }
     
