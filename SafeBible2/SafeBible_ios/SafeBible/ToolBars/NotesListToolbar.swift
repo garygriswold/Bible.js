@@ -47,10 +47,12 @@ class NotesListToolbar {
         items.append(select)
         items.append(spacer)
         
-        self.files = UIBarButtonItem(barButtonSystemItem: .organize, target: self,
-                                     action: #selector(filesHandler))
-        items.append(self.files)
-        items.append(spacer)
+        if NotesDB.shared.countDB() > 1 {
+            self.files = UIBarButtonItem(barButtonSystemItem: .organize, target: self,
+                                         action: #selector(filesHandler))
+            items.append(self.files)
+            items.append(spacer)
+        }
         
         let export = UIBarButtonItem(barButtonSystemItem: .action, target: self,
                                      action: #selector(exportHandler))

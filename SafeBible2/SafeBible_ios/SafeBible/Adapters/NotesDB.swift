@@ -264,6 +264,23 @@ struct NotesDB {
         return resultURL
     }
     
+    func countDB() -> Int {
+        var count = 0
+        let manager = FileManager.default
+        do {
+            let files = try manager.contentsOfDirectory(at: self.getDirectory(),
+                                                        includingPropertiesForKeys: [], options: [])
+            for file in files {
+                if file.path.hasSuffix(".notes") {
+                    count += 1
+                }
+            }
+        } catch let err {
+            print("ERROR NotesDB.countDB \(err)")
+        }
+        return count
+    }
+    
     func listDB() -> [String: URLResourceValues] {
         var results = [String: URLResourceValues]()
         let manager = FileManager.default
