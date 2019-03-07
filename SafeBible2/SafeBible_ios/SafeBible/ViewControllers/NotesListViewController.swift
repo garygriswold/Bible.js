@@ -84,6 +84,7 @@ class NotesListViewController : AppTableViewController, UITableViewDataSource {
         }
         else if note.bookmark {
             cell!.iconGlyph.text = Note.bookIcon//"\u{1F516}"
+            cell!.noteText.text = nil
             cell!.accessoryType = .none
         }
         else if note.note {
