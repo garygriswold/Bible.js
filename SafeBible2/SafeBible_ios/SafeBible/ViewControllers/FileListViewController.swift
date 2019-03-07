@@ -82,9 +82,8 @@ class FileListViewController : AppTableViewController, UITableViewDataSource {
     //
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let dbname = self.dbnames[indexPath.row]
-        NotesDB.shared.currentDB = dbname
-        tableView.reloadData()
+        NotesDB.shared.currentDB = self.dbnames[indexPath.row]
+        self.navigationController?.popViewController(animated: true)
     }
 }
 
