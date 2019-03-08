@@ -90,7 +90,7 @@ struct SettingsDB {
             db = try self.getSettingsDB()
             // Note that verse is being ignored here
             let sql = "SELECT datetime, bibleId, bookId, chapter, verse" +
-                    " FROM History ORDER BY datetime asc limit 100"
+                    " FROM History2 ORDER BY datetime asc limit 100"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let history = resultSet.map {
                 History(reference: Reference(bibleId: $0[1]!, bookId: $0[2]!, chapter: Int($0[3]!) ?? 0),
@@ -106,7 +106,7 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "REPLACE INTO History (datetime, bibleId, bookId, chapter, verse)" +
+            let sql = "REPLACE INTO History2 (datetime, bibleId, bookId, chapter, verse)" +
                     " VALUES (?,?,?,?,?)"
             let ref = history.reference
             let values: [Any?] = [history.datetime, ref.bibleId, ref.bookId, ref.chapter, nil]
@@ -120,7 +120,7 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "DELETE FROM History"
+            let sql = "DELETE FROM History2"
             _ = try db.executeV1(sql: sql, values: [])
         } catch let err {
             print("ERROR SettingsDB.clearHistory \(err)")
@@ -137,7 +137,7 @@ struct SettingsDB {
             let create1 = "CREATE TABLE IF NOT EXISTS Settings("
                 + " name TEXT PRIMARY KEY NOT NULL, value TEXT NULL)"
             _ = try db?.executeV1(sql: create1, values: [])
-            let create2 = "CREATE TABLE IF NOT EXISTS History("
+            let create2 = "CREATE TABLE IF NOT EXISTS History2("
                 + " datetime REAL NOT NULL PRIMARY KEY,"
                 + " bibleId TEXT NOT NULL,"
                 + " bookId TEXT NOT NULL,"
