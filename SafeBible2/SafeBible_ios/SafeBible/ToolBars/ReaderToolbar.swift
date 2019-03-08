@@ -127,7 +127,7 @@ class ReaderToolbar {
     }
     
     @objc func versionTapHandler(sender: UIBarButtonItem) {
-        BiblesActionSheet.present(controller: self.controller)
+        BiblesActionSheet.present(controller: self.controller, view: self.versionLabel)
     }
     
     @objc func audioTapHandler(sender: UIBarButtonItem) {

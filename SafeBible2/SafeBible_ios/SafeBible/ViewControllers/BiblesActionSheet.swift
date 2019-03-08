@@ -10,10 +10,14 @@ import UIKit
 
 class BiblesActionSheet : UIAlertController {
     
-    static func present(controller: UIViewController?) {
+    static func present(controller: UIViewController?, view: UIView) {
         if let ctrl = controller {
             let biblesAlert = BiblesActionSheet(controller: ctrl)
+            biblesAlert.modalPresentationStyle = UIModalPresentationStyle.popover
             ctrl.present(biblesAlert, animated: true, completion: nil)
+            // popoverPresentationController exists in iPad, not iPhone
+            biblesAlert.popoverPresentationController?.sourceView = view
+            
         }
     }
     
