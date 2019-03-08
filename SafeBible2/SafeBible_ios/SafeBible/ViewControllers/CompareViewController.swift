@@ -65,7 +65,7 @@ class CompareViewController: AppTableViewController, UITableViewDataSource {
     }
     
     @objc func addBibleHandler(sender: UIBarButtonItem) {
-        CompareActionSheet.present(controller: self, bibleModel: self.dataModel)
+        CompareActionSheet.present(controller: self, bibleModel: self.dataModel, button: sender)
     }
     
     @objc func doneHandler(sender: UIBarButtonItem) {

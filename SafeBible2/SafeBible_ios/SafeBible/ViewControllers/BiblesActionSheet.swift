@@ -17,7 +17,6 @@ class BiblesActionSheet : UIAlertController {
             ctrl.present(biblesAlert, animated: true, completion: nil)
             // popoverPresentationController exists in iPad, not iPhone
             biblesAlert.popoverPresentationController?.sourceView = view
-            
         }
     }
     

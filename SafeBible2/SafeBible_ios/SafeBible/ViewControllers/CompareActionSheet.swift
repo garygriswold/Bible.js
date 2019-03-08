@@ -10,9 +10,11 @@ import UIKit
 
 class CompareActionSheet : UIAlertController {
     
-    static func present(controller: CompareViewController, bibleModel: BibleModel) {
+    static func present(controller: CompareViewController, bibleModel: BibleModel, button: UIBarButtonItem) {
         let biblesAlert = CompareActionSheet(controller: controller, bibleModel: bibleModel)
+        biblesAlert.modalPresentationStyle = UIModalPresentationStyle.popover
         controller.present(biblesAlert, animated: true, completion: nil)
+        biblesAlert.popoverPresentationController?.barButtonItem = button
     }
     
     private weak var controller: CompareViewController?
