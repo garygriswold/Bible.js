@@ -18,7 +18,7 @@ struct BibleDB {
         let db: Sqlite3
         do {
             db = try self.getBibleDB(bibleId: bibleId)
-            let sql = "SELECT bookId, ordinal, name, lastChapter FROM TableContents ORDER BY ordinal"
+            let sql = "SELECT code, chapterRowId, name, lastChapter FROM TableContents ORDER BY chapterRowId"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let toc = resultSet.map {
                 Book(bookId: $0[0]!, ordinal: Int($0[1]!) ?? 0, name: $0[2]!, lastChapter: Int($0[3]!) ?? 0)
@@ -39,7 +39,8 @@ struct BibleDB {
             }
             do {
                 db = try self.getBibleDB(bibleId: bibleId)
-                let sql = "REPLACE INTO TableContents (bookId, ordinal, name, lastChapter) VALUES (?,?,?,?)"
+                let sql = "REPLACE INTO TableContents (code, chapterRowId, name, lastChapter)"
+                    + " VALUES (?,?,?,?)"
                 _ = try db.bulkExecuteV1(sql: sql, values: values)
             } catch let err {
                 print("ERROR BibleDB.storeTableContents \(err)")
@@ -80,11 +81,11 @@ struct BibleDB {
             db = try Sqlite3.findDB(dbname: bibleId)
         } catch Sqlite3Error.databaseNotOpenError {
             db = try Sqlite3.openDB(dbname: bibleId, copyIfAbsent: false) // No more embedded Bibles
-            let create1 = "CREATE TABLE IF NOT EXISTS TableContents(" +
-                " bookId TEXT PRIMARY KEY NOT NULL," +
-                " ordinal INT NOT NULL," +
-                " name TEXT NOT NULL," +
-                " lastChapter INT NOT NULL)"
+            let create1 = "CREATE TABLE IF NOT EXISTS TableContents("
+                + " code TEXT PRIMARY KEY NOT NULL,"
+                + " name TEXT NOT NULL,"
+                + " lastChapter INT NOT NULL,"
+                + " chapterRowId INT NOT NULL)"
             _ = try db?.executeV1(sql: create1, values: [])
             let create2 = "CREATE TABLE IF NOT EXISTS Chapters("
                 + " reference TEXT NOT NULL PRIMARY KEY,"
