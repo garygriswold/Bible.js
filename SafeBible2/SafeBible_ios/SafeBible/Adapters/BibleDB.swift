@@ -51,8 +51,8 @@ struct BibleDB {
         let db: Sqlite3
         do {
             db = try self.getBibleDB(bibleId: reference.bibleId)
-            let sql = "SELECT html FROM Chapters WHERE bookId = ? AND chapter = ?"
-            let resultSet = try db.queryHTMLv0(sql: sql, values: [reference.bookId, reference.chapter])
+            let sql = "SELECT html FROM Chapters WHERE reference = ?"
+            let resultSet = try db.queryHTMLv0(sql: sql, values: [reference.nodeId()])
             return (resultSet.count > 0) ? resultSet : nil
         } catch let err {
             print("ERROR BibleDB.getBiblePage \(err)")
@@ -60,19 +60,13 @@ struct BibleDB {
         }
     }
     
-    // Could be optimized?
-    func hasBiblePage(reference: Reference) -> Bool {
-        let result = self.getBiblePage(reference: reference)
-        return (result != nil)
-    }
-    
     func storeBiblePage(reference: Reference, html: String) {
         DispatchQueue.main.async(execute: {
             let db: Sqlite3
-            let values: [Any] = [reference.bookId, reference.chapter, html]
+            let values: [Any] = [reference.nodeId(), html]
             do {
                 db = try self.getBibleDB(bibleId: reference.bibleId)
-                let sql = "REPLACE INTO Chapters (bookId, chapter, html) VALUES (?,?,?)"
+                let sql = "REPLACE INTO Chapters (reference, html) VALUES (?,?)"
                 _ = try db.executeV1(sql: sql, values: values)
             } catch let err {
                 print("ERROR BibleDB.storeBiblePage \(err)")
@@ -92,11 +86,9 @@ struct BibleDB {
                 " name TEXT NOT NULL," +
                 " lastChapter INT NOT NULL)"
             _ = try db?.executeV1(sql: create1, values: [])
-            let create2 = "CREATE TABLE IF NOT EXISTS Chapters(" +
-                " bookId TEXT NOT NULL," +
-                " chapter INT NOT NULL," +
-                " html TEXT NOT NULL," +
-                " PRIMARY KEY (bookId, chapter))"
+            let create2 = "CREATE TABLE IF NOT EXISTS Chapters("
+                + " reference TEXT NOT NULL PRIMARY KEY,"
+                + " html TEXT NOT NULL)"
             _ = try db?.executeV1(sql: create2, values: [])
         }
         return db!

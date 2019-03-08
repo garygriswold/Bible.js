@@ -123,7 +123,6 @@ struct HistoryModel {
     }
     
     func hasHistory() -> Bool {
-        print("History count \(self._history.count)")
         return self._history.count > 0
     }
 }
