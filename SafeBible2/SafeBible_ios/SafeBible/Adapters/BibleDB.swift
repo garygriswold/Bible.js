@@ -16,12 +16,15 @@ struct BibleDB {
     
     func getTableContents(bibleId: String) -> [Book] {
         let db: Sqlite3
+        var toc = [Book]()
         do {
             db = try self.getBibleDB(bibleId: bibleId)
-            let sql = "SELECT code, chapterRowId, name, lastChapter FROM TableContents ORDER BY chapterRowId"
+            let sql = "SELECT code, name, lastChapter FROM TableContents ORDER BY rowid"
             let resultSet = try db.queryV1(sql: sql, values: [])
-            let toc = resultSet.map {
-                Book(bookId: $0[0]!, ordinal: Int($0[1]!) ?? 0, name: $0[2]!, lastChapter: Int($0[3]!) ?? 0)
+            for index in 0..<resultSet.count {
+                let row = resultSet[index]
+                toc.append(Book(bookId: row[0]!, ordinal: index, name: row[1]!,
+                                lastChapter: Int(row[2]!) ?? 0))
             }
             return toc
         } catch let err {
@@ -35,11 +38,11 @@ struct BibleDB {
             let db: Sqlite3
             var values = [[Any]]()
             for book in books {
-                values.append([book.bookId, book.ordinal, book.name, book.lastChapter])
+                values.append([book.bookId, (book.ordinal + 1), book.name, book.lastChapter])
             }
             do {
                 db = try self.getBibleDB(bibleId: bibleId)
-                let sql = "REPLACE INTO TableContents (code, chapterRowId, name, lastChapter)"
+                let sql = "REPLACE INTO TableContents (code, rowid, name, lastChapter)"
                     + " VALUES (?,?,?,?)"
                 _ = try db.bulkExecuteV1(sql: sql, values: values)
             } catch let err {
@@ -84,8 +87,7 @@ struct BibleDB {
             let create1 = "CREATE TABLE IF NOT EXISTS TableContents("
                 + " code TEXT PRIMARY KEY NOT NULL,"
                 + " name TEXT NOT NULL,"
-                + " lastChapter INT NOT NULL,"
-                + " chapterRowId INT NOT NULL)"
+                + " lastChapter INT NOT NULL)"
             _ = try db?.executeV1(sql: create1, values: [])
             let create2 = "CREATE TABLE IF NOT EXISTS Chapters("
                 + " reference TEXT NOT NULL PRIMARY KEY,"
