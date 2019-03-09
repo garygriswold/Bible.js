@@ -115,7 +115,7 @@ class TOCBooksViewController : AppTableViewController, UITableViewDataSource {
     // Data Source
     //
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.dataModel.bookCount
+        return self.dataModel.filteredBookCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -137,7 +137,7 @@ class TOCBooksViewController : AppTableViewController, UITableViewDataSource {
     // Delegate
     //
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let book = self.dataModel.getBook(row: indexPath.row) {
+        if let book = self.dataModel.getFilteredBook(row: indexPath.row) {
             tableView.deselectRow(at: indexPath, animated: true)
             if book.lastChapter > 0 {
                 TOCChaptersViewController.push(book: book, controller: self)

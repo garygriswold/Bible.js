@@ -23,17 +23,17 @@ class TableContentsModel { // class is used to permit self.contents inside closu
     
     private let bible: Bible
     private var books: [Book]
+    private var filtered: [Book] // Used for TOCBookView
     private var bookMap: [String:Book]
     private var index: [String]
-    private var filtered: [Book]
     
     init(bible: Bible) {
         print("****** init TableContentsModel \(bible.bibleId) ******")
         self.bible = bible
         self.books = [Book]()
+        self.filtered = self.books
         self.bookMap = [String:Book]()
         self.index = [String]()
-        self.filtered = [Book]()
         let start: Double = CFAbsoluteTimeGetCurrent()
         self.books = BibleDB.shared.getTableContents(bibleId: bible.bibleId)
         if self.books.count < 1 {
@@ -43,6 +43,7 @@ class TableContentsModel { // class is used to permit self.contents inside closu
                     if let data1 = data {
                         print(data1)
                         self.books = self.parseJSON(data: data1)
+                        self.filtered = self.books
                         self.bookMap = self.buildMap()
                         self.index = self.buildIndex()
                         _ = BibleDB.shared.storeTableContents(bibleId: bible.bibleId,
@@ -51,6 +52,7 @@ class TableContentsModel { // class is used to permit self.contents inside closu
                     }
             })
         } else {
+            self.filtered = self.books
             self.bookMap = self.buildMap()
             self.index = self.buildIndex()
         }
@@ -118,24 +120,20 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         get { return self.index }
     }
     
-    var bookCount: Int {
-        get { return (self.filtered.count > 0) ? self.filtered.count : self.books.count }
-    }
-    
-    func getBook(row: Int) -> Book? {
-        if self.filtered.count > 0 {
-            return (row >= 0 && row < self.filtered.count) ? self.filtered[row] : nil
-        } else {
-            return (row >= 0 && row < self.books.count) ? self.books[row] : nil
-        }
-    }
-
     func getBook(bookId: String) -> Book? {
         return self.bookMap[bookId]
     }
+    
+    var filteredBookCount: Int {
+        get { return self.filtered.count }
+    }
+
+    func getFilteredBook(row: Int) -> Book? {
+        return (row >= 0 && row < self.filtered.count) ? self.filtered[row] : nil
+    }
 
     func generateBookCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
-        let book = (self.filtered.count > 0) ? self.filtered[indexPath.row] : self.books[indexPath.row]
+        let book = self.filtered[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
         cell.textLabel?.font = AppFont.sansSerif(style: .subheadline)
         cell.textLabel?.text = book.name
@@ -152,19 +150,19 @@ class TableContentsModel { // class is used to permit self.contents inside closu
     }
     
     func filterBooks(letter: String) {
-        self.filtered = self.books.filter({ $0.name.prefix(1) == letter })
+        self.filtered = self.filtered.filter({ $0.name.prefix(1) == letter })
     }
     
     func clearFilteredBooks() {
-        self.filtered.removeAll()
+        self.filtered = self.books
     }
     
     func sortBooksTraditional() {
-        self.books = self.books.sorted(by: { $0.ordinal < $1.ordinal })
+        self.filtered = self.books.sorted(by: { $0.ordinal < $1.ordinal })
     }
     
     func sortBooksAlphabetical() {
-        self.books = self.books.sorted(by: { $0.name < $1.name })
+        self.filtered = self.books.sorted(by: { $0.name < $1.name })
     }
     
     func nextChapter(reference: Reference) -> Reference {
@@ -196,7 +194,7 @@ class TableContentsModel { // class is used to permit self.contents inside closu
                     return Reference(bibleId: reference.bibleId, bookId: prior.bookId,
                                      chapter: prior.lastChapter)
                 } else {
-                    let last = self.getBook(row: self.bookCount - 1)!
+                    let last = self.books.last!
                     return Reference(bibleId: reference.bibleId, bookId: last.bookId,
                                      chapter: last.lastChapter)
                 }
@@ -204,5 +202,9 @@ class TableContentsModel { // class is used to permit self.contents inside closu
                 return TableContentsDefault.priorChapter(reference: reference)
             }
         }
+    }
+    
+    private func getBook(row: Int) -> Book? {
+        return (row >= 0 && row < self.books.count) ? self.books[row] : nil
     }
 }
