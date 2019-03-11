@@ -20,7 +20,7 @@ class HTMLVerseParserSS : NSObject, XMLParserDelegate {
     private let startVerse: Int
     private let endVerse: Int
     private var insideVerses: Bool
-    private var insideFootnote: Int
+    private var insideFootnote: Bool
     private var stack: [String]
     private var result: [String]
     private var parser: XMLParser?
@@ -30,7 +30,7 @@ class HTMLVerseParserSS : NSObject, XMLParserDelegate {
         self.startVerse = startVerse
         self.endVerse = endVerse + 1
         self.insideVerses = false
-        self.insideFootnote = 0
+        self.insideFootnote = false
         self.stack = []
         self.result = []
         super.init()
@@ -42,7 +42,6 @@ class HTMLVerseParserSS : NSObject, XMLParserDelegate {
             self.parser!.delegate = self
             self.parser!.shouldProcessNamespaces = false
             _ = self.parser!.parse()
-            print("SS VerseParser DONE")
         }
         return result.joined().trimmingCharacters(in: .whitespacesAndNewlines)
     }
@@ -50,37 +49,39 @@ class HTMLVerseParserSS : NSObject, XMLParserDelegate {
     func parser(_ parser: XMLParser, didStartElement elementName: String,
                 namespaceURI: String?, qualifiedName qName: String?,
                 attributes attributeDict: [String : String] = [:]) {
-        self.stack.append(elementName)
-        if elementName == "span" {
-            if let id:String = attributeDict["id"] {
-                let parts = id.split(separator: ":")
-                if let verse = (parts.count > 2) ? Int(parts[2].split(separator: "-")[0]) : nil {
-                    if !self.insideVerses && verse == self.startVerse {
-                        self.insideVerses = true
-                    }
-                    if self.insideVerses && verse >= self.endVerse {
-                        self.parser!.abortParsing()
-                    }
-                }
+        let clas = attributeDict["class"]
+        if clas == "v" {
+            let id:String = attributeDict["id"] ?? "XXX:1:1"
+            self.stack.append(id)
+            let parts = id.split(separator: ":")
+            let verse = (parts.count > 2) ? parts[2].split(separator: "-") : ["0"]
+            let verse0: Int = Int(verse[0])!
+            let verse1: Int = (verse.count > 1) ? Int(verse[1])! : -1
+            if verse0 == self.startVerse || verse1 == self.startVerse {
+                self.insideVerses = true
             }
-            if let clas:String = attributeDict["class"] {
-                if clas == "topx" || clas == "topf" {
-                    self.insideFootnote = stack.count
-                }
+            if verse0 >= self.endVerse {
+                self.parser!.abortParsing()
             }
+        }
+        else if clas == "topx" || clas == "topf" {
+            self.stack.append(clas!)
+            self.insideFootnote = true
+        } else {
+            self.stack.append(elementName)
         }
     }
     
     func parser(_ parser: XMLParser, didEndElement elementName: String,
                 namespaceURI: String?, qualifiedName qName: String?) {
         let last = self.stack.popLast()
-        if last != elementName {
-            print("XML element mismatch error \(elementName)")
+        if last == "topf" || last == "topx" {
+            self.insideFootnote = false
         }
     }
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
-        if self.insideVerses && self.stack.count < self.insideFootnote {
+        if self.insideVerses && !self.insideFootnote {
             self.result.append(string)
         }
     }

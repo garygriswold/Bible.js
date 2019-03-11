@@ -57,8 +57,21 @@ struct BiblePageModel {
         })
     }
     
+    /** Used by HTMLVerseParserTest */
+    func testParse(reference: Reference, lastVerse: Int, complete: @escaping () -> Void) {
+        self.getChapter(reference: reference, view: nil, complete: { html in
+            for verse in 1..<(lastVerse + 1) {
+                let result = self.parse(html: html!, reference: reference, startVerse: verse,
+                                        endVerse: verse)
+                if result.count < 5 {
+                    print("PARSE ERROR \(reference):\(verse)  |\(result)|")
+                }
+            }
+            complete()
+        })
+    }
+    
     private func parse(html: String, reference: Reference, startVerse: Int, endVerse: Int) -> String {
-        print("Ref \(reference.bible.textBucket)")
         if reference.isShortsands {
             let parser = HTMLVerseParserSS(html: html, startVerse: startVerse, endVerse: endVerse)
             return parser.parseVerses()

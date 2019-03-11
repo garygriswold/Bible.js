@@ -38,7 +38,6 @@ class HTMLVerseParserDBP : NSObject, XMLParserDelegate {
             self.parser!.delegate = self
             self.parser!.shouldProcessNamespaces = false
             _ = self.parser!.parse()
-            print("DBP VerseParser DONE")
         }
         return result.joined().trimmingCharacters(in: .whitespacesAndNewlines)
     }
