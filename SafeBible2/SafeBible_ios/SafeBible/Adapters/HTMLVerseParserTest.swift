@@ -12,7 +12,7 @@ class HTMLVerseParserTest {
     
     static func test() {
         let test = HTMLVerseParserTest()
-        let dummyRef = Reference(bibleId: "ENGESV.db", bookId: "GEN", chapter: 1)
+        let dummyRef = Reference(bibleId: "ERV-ARB.db", bookId: "GEN", chapter: 1)
         test.bible = dummyRef.bible
         test.findVerseCount(bibleId: "ERV-ENG.db")
         test.populateChapters(bibleId: test.bible.bibleId)
@@ -45,7 +45,7 @@ class HTMLVerseParserTest {
     }
     
     private func populateChapters(bibleId: String) {
-        let endRef = Reference(bibleId: bibleId, bookId: "GEN", chapter: 1)
+        let endRef = Reference(bibleId: bibleId, bookId: "REV", chapter: 22)
         var ref = Reference(bibleId: bibleId, bookId: "MAT", chapter: 1)
         while(ref != endRef) {
             self.references.append(ref)

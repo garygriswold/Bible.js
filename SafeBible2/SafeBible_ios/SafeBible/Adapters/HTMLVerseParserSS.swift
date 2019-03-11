@@ -56,8 +56,11 @@ class HTMLVerseParserSS : NSObject, XMLParserDelegate {
             let parts = id.split(separator: ":")
             let verse = (parts.count > 2) ? parts[2].split(separator: "-") : ["0"]
             let verse0: Int = Int(verse[0])!
-            let verse1: Int = (verse.count > 1) ? Int(verse[1])! : -1
-            if verse0 == self.startVerse || verse1 == self.startVerse {
+            let verse1: Int? = (verse.count > 1) ? Int(verse[1])! : nil//-1
+            if verse0 == self.startVerse {
+                self.insideVerses = true
+            }
+            if verse1 != nil && verse1! >= self.startVerse && verse1! <= self.endVerse {
                 self.insideVerses = true
             }
             if verse0 >= self.endVerse {
