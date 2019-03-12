@@ -72,7 +72,10 @@ struct BiblePageModel {
     }
     
     private func parse(html: String, reference: Reference, startVerse: Int, endVerse: Int) -> String {
-        if reference.isShortsands {
+        if reference.isDownloaded {
+            return BibleDB.shared.getBibleVerses(reference: reference, startVerse: startVerse,
+                                                 endVerse: endVerse)
+        } else if reference.isShortsands {
             let parser = HTMLVerseParserSS(html: html, startVerse: startVerse, endVerse: endVerse)
             return parser.parseVerses()
         } else {

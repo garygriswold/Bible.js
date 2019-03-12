@@ -78,6 +78,40 @@ struct BibleDB {
         })
     }
     
+    func getBibleVerses(reference: Reference, startVerse: Int, endVerse: Int) -> String {
+        var result = [String]()
+        let db: Sqlite3
+        do {
+            db = try self.getBibleDB(bibleId: reference.bibleId)
+            for verse in startVerse...endVerse {
+                print("Verse = \(verse)")
+                let sql = "SELECT html FROM Verses WHERE reference = ?"
+                let resultSet = try db.queryV1(sql: sql, values: [reference.nodeId(verse: verse)])
+                if resultSet.count > 0 {
+                    result.append(resultSet[0][0] ?? "")
+                }
+            }
+        } catch let err {
+            print("ERROR getBibleVerses \(err)")
+        }
+        return result.joined(separator: "\n")
+    }
+    
+    func isDownloadedTest(bible: Bible) -> Bool {
+        let db: Sqlite3
+        do {
+            db = try self.getBibleDB(bibleId: bible.bibleId)
+            let sql = "SELECT count(*) FROM sqlite_master WHERE type='table' AND name IN"
+                + " ('verses', 'concordance', 'identity')"
+            let resultSet = try db.queryV1(sql: sql, values: [])
+            let count: Int = Int(resultSet[0][0]!) ?? 0
+            return (count == 3)
+        } catch let err {
+            print("ERROR isDownloadedTest \(err)")
+            return false
+        }
+    }
+    
     private func getBibleDB(bibleId: String) throws -> Sqlite3 {
         var db: Sqlite3?
         do {

@@ -30,10 +30,8 @@ struct Bible : Equatable {
     let audioBucket: String?// Name of bucket with audio Bible
     let otDamId: String?    // Old Testament DamId
     let ntDamId: String?    // New Testament DamId
-    //let direction: String // Text direction
-    //let script: String    // Text script
-    //let country: String   // Country code of Bible
     let locale: Locale      // The user locale that is associated
+    var isDownloaded: Bool?
     var tableContents: TableContentsModel?
     
     init(bibleId: String, abbr: String, iso3: String, name: String,
@@ -55,24 +53,6 @@ struct Bible : Equatable {
     
     static func == (lhs: Bible, rhs: Bible) -> Bool {
         return lhs.bibleId == rhs.bibleId
-    }
-    
-    var s3TextPrefix: String {
-        get {
-            return self.textId
-        }
-    }
-    
-    var s3AudioOTPrefix: String? {
-        get {
-            return self.otDamId
-        }
-    }
-    
-    var s3AudioNTPrefix: String? {
-        get {
-            return self.ntDamId
-        }
     }
 }
 

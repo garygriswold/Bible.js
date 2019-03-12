@@ -38,7 +38,7 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         self.books = BibleDB.shared.getTableContents(bibleId: bible.bibleId)
         if self.books.count < 1 {
             let s3 = (bible.textBucket.contains("shortsands")) ? AwsS3Manager.findSS() : AwsS3Manager.findDbp()
-            s3.downloadData(s3Bucket: self.bible.textBucket, s3Key: "\(self.bible.s3TextPrefix)/info.json",
+            s3.downloadData(s3Bucket: self.bible.textBucket, s3Key: "\(self.bible.textId)/info.json",
                 complete: { error, data in
                     if let data1 = data {
                         print(data1)
@@ -46,8 +46,7 @@ class TableContentsModel { // class is used to permit self.contents inside closu
                         self.filtered = self.books
                         self.bookMap = self.buildMap()
                         self.index = self.buildIndex()
-                        _ = BibleDB.shared.storeTableContents(bibleId: bible.bibleId,
-                                                              books: self.books)
+                        _ = BibleDB.shared.storeTableContents(bibleId: bible.bibleId, books: self.books)
                         print("*** TableContentsModel.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                     }
             })

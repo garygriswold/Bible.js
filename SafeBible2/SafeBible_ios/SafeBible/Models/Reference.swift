@@ -43,7 +43,7 @@ struct Reference : Equatable {
     }
     
     var s3TextPrefix: String {
-        get { return self.bible.s3TextPrefix }
+        get { return self.bible.textId }
     }
     
     var s3TextTemplate: String {
@@ -58,6 +58,19 @@ struct Reference : Equatable {
             bibl2.tableContents = TableContentsModel(bible: bibl2)
             Reference.bibleMap[self.bibleId] = bibl2
             return bibl2
+        }
+    }
+    
+    var isDownloaded: Bool {
+        get {
+            if self.bible.isDownloaded == nil {
+                let answer = BibleDB.shared.isDownloadedTest(bible: self.bible)
+                if var bible = Reference.bibleMap[self.bibleId] {
+                    bible.isDownloaded = answer
+                    Reference.bibleMap[self.bibleId] = bible
+                }
+            }
+            return self.bible.isDownloaded ?? false
         }
     }
     
