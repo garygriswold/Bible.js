@@ -49,6 +49,11 @@ class TOCBooksViewController : AppTableViewController, UITableViewDataSource {
         self.dataModel = HistoryModel.shared.currTableContents
         self.dataModel.clearFilteredBooks()
         self.navigationController?.isToolbarHidden = false
+        
+        if let index = HistoryModel.shared.current().book?.ordinal {
+            let indexPath = IndexPath(item: index, section: 0)
+            self.tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
+        }
     }
     
     override func viewWillTransition(to size: CGSize,
@@ -139,10 +144,11 @@ class TOCBooksViewController : AppTableViewController, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let book = self.dataModel.getFilteredBook(row: indexPath.row) {
             tableView.deselectRow(at: indexPath, animated: true)
-            if book.lastChapter > 0 {
+            if book.lastChapter > 1 {
                 TOCChaptersViewController.push(book: book, controller: self)
             } else {
-                HistoryModel.shared.changeReference(book: book, chapter: 0)
+                // book.lastChapter can be zero or one.  It is zero for GLO and FRT
+                HistoryModel.shared.changeReference(book: book, chapter: book.lastChapter)
                 NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
                                                 object: HistoryModel.shared.current())
                 self.navigationController?.popToRootViewController(animated: true)
