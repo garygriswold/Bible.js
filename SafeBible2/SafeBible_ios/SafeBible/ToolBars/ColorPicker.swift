@@ -19,6 +19,7 @@ class ColorPicker : UIView {
     private static let salmon = UIColor(displayP3Red: 0.76953, green: 0.37890, blue: 0.42578, alpha: 1.0) // C5 61 6D
     private static let clear = UIColor(displayP3Red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     
+    /** This method is called each time a color is picked. */
     static func toHEX(color: UIColor) -> String {
         var r:CGFloat = 0, g:CGFloat = 0, b:CGFloat = 0, a:CGFloat = 0
         color.getRed(&r, green: &g, blue: &b, alpha: &a)
@@ -27,6 +28,30 @@ class ColorPicker : UIView {
         let blu = Int(255.0 * b)
         let alf = Int(64.0 * a)
         return String(format: "#%02x%02x%02x%02x", red, gre, blu, alf)
+    }
+    
+    private static var colorMap = [String: UIColor]()
+    
+    static func toUIColor(hexColor: String) -> UIColor {
+        let color = colorMap[hexColor]
+        if (color != nil) {
+            return color!
+        }
+        var parts = [CGFloat]()
+        for index in 0..<4 {
+            let start = index * 2 + 1 // 1, 3, 5, 7
+            let end = start + 2 // 3, 5, 7, 9
+            let part = hexColor[hexColor.index(hexColor.startIndex, offsetBy: start)..<hexColor.index(hexColor.startIndex, offsetBy: end)]
+            let byte = UInt8(part, radix: 16)! // unsafe
+            if index < 3 {
+                parts.append(CGFloat(byte) / 255.0)
+            } else {
+                parts.append(CGFloat(byte) / 128.0)
+            }
+        }
+        let color2 = UIColor(red: parts[0], green: parts[1], blue: parts[2], alpha: parts[3])
+        colorMap[hexColor] = color2
+        return color2
     }
     
     private let webView: WKWebView
