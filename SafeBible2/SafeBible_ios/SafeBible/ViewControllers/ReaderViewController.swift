@@ -138,6 +138,7 @@ class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMe
                 if let err = error {
                     print("ERROR: bookmarkAlert delete \(err)")
                 }
+                NotesDB.shared.deleteNote(noteId: note.noteId)
             })
         })
         alert.addAction(delete)
