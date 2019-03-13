@@ -179,7 +179,7 @@ struct Note {
         + "  while(node && node.nodeName !== 'BODY') {\n"
         + "    if (node.nodeType === 1 && node.nodeName !== 'A') {\n"
         + "      var id = node.getAttribute('id');\n"
-        + "      if (id) {\n"
+        + "      if (id && (id.indexOf(':') > 0)) {\n"
         + "        return 'id=' + id;\n"
         + "      } else {\n"
         + "        var clas = node.getAttribute('class');\n"
