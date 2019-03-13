@@ -15,7 +15,9 @@ class NotesListToolbar {
     private var book: Book
     private var files: UIBarButtonItem!
     private var export: UIBarButtonItem!
-    private var selectControl: UISegmentedControl!
+    private let noteLabel = UILabel()
+    private let liteLabel = UILabel()
+    private let bookLabel = UILabel()
     private var includeNotes: Bool = true
     private var includeLites: Bool = true
     private var includeBooks: Bool = true
@@ -36,15 +38,13 @@ class NotesListToolbar {
         
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         items.append(spacer)
-       
-        let note = "  \(Note.noteIcon)   "
-        let lite = "  \(Note.liteIcon)   "
-        let book = "  \(Note.bookIcon)   "
-        self.selectControl = UISegmentedControl(items: [note, lite, book])
-        self.selectControl.isMomentary = true
-        self.selectControl.addTarget(self, action: #selector(selectHandler), for: .valueChanged)
-        let select = UIBarButtonItem(customView: self.selectControl)
-        items.append(select)
+        
+        items.append(self.itemSelector(label: self.noteLabel, icon: Note.noteIcon,
+                                       action: #selector(notesBtnHandler)))
+        items.append(self.itemSelector(label: self.liteLabel, icon: Note.liteIcon,
+                                       action: #selector(liteBtnHandler)))
+        items.append(self.itemSelector(label: self.bookLabel, icon: Note.bookIcon,
+                                       action: #selector(bookBtnHandler)))
         items.append(spacer)
         
         if NotesDB.shared.countDB() > 1 {
@@ -68,17 +68,22 @@ class NotesListToolbar {
         }
     }
     
-    @objc func selectHandler(sender: UIBarButtonItem) {
-        switch self.selectControl.selectedSegmentIndex {
-        case 0:
-            self.includeNotes = !self.includeNotes
-        case 1:
-            self.includeLites = !self.includeLites
-        case 2:
-            self.includeBooks = !self.includeBooks
-        default:
-            print("should never see this")
-        }
+    @objc func notesBtnHandler(sender: UIBarButtonItem) {
+        self.includeNotes = !self.includeNotes
+        self.noteLabel.backgroundColor = (self.includeNotes) ? AppFont.backgroundColor : UIColor.gray
+
+        self.controller?.refresh(note: self.includeNotes, lite: self.includeLites, book: self.includeBooks)
+    }
+    
+    @objc func liteBtnHandler(sender: UIBarButtonItem) {
+        self.includeLites = !self.includeLites
+        self.liteLabel.backgroundColor = (self.includeLites) ? AppFont.backgroundColor: UIColor.gray
+        self.controller?.refresh(note: self.includeNotes, lite: self.includeLites, book: self.includeBooks)
+    }
+    
+    @objc func bookBtnHandler(sender: UIBarButtonItem) {
+        self.includeBooks = !self.includeBooks
+        self.bookLabel.backgroundColor = (self.includeBooks) ? AppFont.backgroundColor: UIColor.gray
         self.controller?.refresh(note: self.includeNotes, lite: self.includeLites, book: self.includeBooks)
     }
     
@@ -88,5 +93,15 @@ class NotesListToolbar {
     
     @objc func filesHandler(sender: UIBarButtonItem) {
         FileListViewController.push(controller: self.controller)
+    }
+    
+    private func itemSelector(label: UILabel, icon: String, action: Selector) -> UIBarButtonItem {
+        label.text = " \(icon) "
+        label.backgroundColor = AppFont.backgroundColor
+        let gesture = UITapGestureRecognizer(target: self, action: action)
+        gesture.numberOfTapsRequired = 1
+        label.addGestureRecognizer(gesture)
+        label.isUserInteractionEnabled = true
+        return UIBarButtonItem(customView: label)
     }
 }
