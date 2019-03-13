@@ -84,11 +84,13 @@ class NotesListViewController : AppTableViewController, UITableViewDataSource {
         }
         else if note.bookmark {
             cell!.iconGlyph.text = Note.bookIcon//"\u{1F516}"
+            cell!.iconGlyph.backgroundColor = AppFont.backgroundColor
             cell!.noteText.text = nil
             cell!.accessoryType = .none
         }
         else if note.note {
             cell!.iconGlyph.text = Note.noteIcon//"\u{1F5D2}"
+            cell?.iconGlyph.backgroundColor = AppFont.backgroundColor
             cell!.noteText.text = note.text
             cell!.accessoryType = .disclosureIndicator
         }
