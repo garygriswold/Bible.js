@@ -233,7 +233,7 @@ struct Note {
         + "  var node = document.getElementById(nodeId);\n"
         + "  if (node) {\n"
         + "    node.setAttribute('onclick', \"bibleShowNoteClick('\" + nodeId + \"');\");\n"
-        + "    node.setAttribute('style', 'color: ##FFB4B5; background-color: #FFFFFF;');\n"
+        + "    node.setAttribute('style', 'color: #FFB4B5;');\n"
         + "    for (var i=0; i<node.children.length; i++) {\n"
         + "      node.children[i].setAttribute('style', 'display:none');\n"
         + "    }\n"
