@@ -116,4 +116,8 @@ struct Reference : Equatable {
     func toString() -> String {
         return "\(self.bibleId) \(self.bookId):\(self.chapter)"
     }
+    
+    func toString(verse: Int) -> String {
+        return "\(self.toString()):\(verse)"
+    }
 }

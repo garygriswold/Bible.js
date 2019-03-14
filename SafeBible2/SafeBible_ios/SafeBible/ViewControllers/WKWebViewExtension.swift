@@ -128,10 +128,12 @@ extension WKWebView {
                 }
             }
             else if note.bookmark {
-                self.installIcon(verse: note.startVerse, selectionUse: .bookmark, noteId: note.noteId)
+                self.installIcon(reference: reference, verse: note.startVerse, selectionUse: .bookmark,
+                                 noteId: note.noteId)
             }
             else if note.note {
-                self.installIcon(verse: note.startVerse, selectionUse: .note, noteId: note.noteId)
+                self.installIcon(reference: reference, verse: note.startVerse, selectionUse: .note,
+                                 noteId: note.noteId)
             }
         }
     }
@@ -178,21 +180,21 @@ extension WKWebView {
                     NoteEditViewController.present(note: note, webView: self)
                 }
                 if selectionUse == .bookmark || selectionUse == .note {
-                    self.installIcon(verse: note.startVerse, selectionUse: selectionUse, noteId: noteId)
+                    self.installIcon(reference: note.getReference(), verse: note.startVerse,
+                                     selectionUse: selectionUse, noteId: noteId)
                 }
             }
         })
     }
     
-    private func installIcon(verse: Int, selectionUse: SelectionUse, noteId: String) {
-        let currRef = HistoryModel.shared.current()
+    private func installIcon(reference: Reference, verse: Int, selectionUse: SelectionUse, noteId: String) {
         var source: String
         var verseId: String
         var type: String = ""
         var icon: String = ""
-        if currRef.isShortsands {
+        if reference.isShortsands {
             source = "SS"
-            verseId = currRef.nodeId(verse: verse)
+            verseId = reference.nodeId(verse: verse)
         } else {
             source = "DBP"
             verseId = "verse\(verse)"
@@ -207,7 +209,7 @@ extension WKWebView {
         let command = "installIcon('\(source)', '\(verseId)', '\(type)', '\(icon)', '\(noteId)');"
         self.evaluateJavaScript(command, completionHandler: { data, error in
             if let err = error {
-                print("ERROR: installIcon \(err)")
+                print("ERROR: installIcon \(source) \(reference.toString(verse: verse)) \(err)")
             }
         })
     }
