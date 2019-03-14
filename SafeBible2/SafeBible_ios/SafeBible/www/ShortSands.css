@@ -44,9 +44,13 @@ p.c {
     line-height: 1;
     font-weight: bold;
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 0.5rem;
     margin-right: 0.3rem; /* .2em */
+    margin-left: 0;
     font-family: avenir, helvetica;
+}
+p.c + p {
+    text-indent: 0;
 }
 
 /* article element is at beginning of each book */
@@ -121,11 +125,12 @@ p.ipi {
  Supporting this is a TBD */
 /* line 388, Verse Number Format */
 span.v {
+    font-weight: bold;
+    font-size: 0.7rem;
+    vertical-align: top;
+    color: #888888; /* non-std */
     font-family: sans-serif; /* non-std */
-    font-size: 0.66rem;
-    color: #777777; /* non-std */
     text-align: start;
-    vertical-align: text-top;
     /* white-space: nowrap; std, but meaningless, use &nbsp; */
 }
 /* line 412, Normal Paragraph Text */
