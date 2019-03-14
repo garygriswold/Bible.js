@@ -47,5 +47,6 @@ class AppViewController : UIViewController {
     @objc func preferredContentSizeChanged(note: NSNotification) {
         AppFont.userFontDelta = 1.0 // Reset App Text Slider to middle
         AppFont.updateSearchFontSize()
+        ReaderViewQueue.shared.updateCSS(css: DynamicCSS.shared.fontSize.genRule())
     }
 }

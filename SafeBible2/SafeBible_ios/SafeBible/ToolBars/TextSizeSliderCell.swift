@@ -132,7 +132,6 @@ class TextSizeSliderCell : UITableViewCell {
     }
     
     @objc func touchUpHandler(sender: UISlider) {
-        print("touch up \(sender.value)")
         AppFont.userFontDelta = CGFloat(sender.value)
         self.tableView!.reloadData()
         AppFont.updateSearchFontSize()

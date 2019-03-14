@@ -16,8 +16,4 @@ class LanguageCell : UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("LanguageCell(coder:) is not implemented.")
     }
-    
-    deinit {
-        print("**** deinit LanguageCell ******")
-    }
 }

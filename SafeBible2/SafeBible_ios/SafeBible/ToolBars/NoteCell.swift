@@ -46,10 +46,6 @@ class NoteCell : UITableViewCell {
         fatalError("NoteCell(coder:) is not implemented.")
     }
     
-    deinit {
-        print("**** deinit NoteCell ******")
-    }
-    
     override func layoutSubviews() {
         super.layoutSubviews()
 
