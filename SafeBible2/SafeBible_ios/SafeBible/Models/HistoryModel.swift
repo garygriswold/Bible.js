@@ -32,7 +32,7 @@ struct History : Equatable {
 class HistoryHelper {
 
     @objc static func saveCurrentAtTerminate(note: NSNotification) {
-        SettingsDB.shared.storeHistory(history: HistoryModel.shared.currentHistory())
+        HistoryModel.shared.changeReference(reference: nil) // Saves _current if necessary
         SettingsDB.shared.cleanUpHistory()
     }
 }
@@ -100,7 +100,7 @@ struct HistoryModel {
         self.add(reference: ref)
     }
     
-    mutating func changeReference(reference: Reference) {
+    mutating func changeReference(reference: Reference?) {
         self.add(reference: reference)
     }
     
@@ -109,14 +109,15 @@ struct HistoryModel {
         SettingsDB.shared.clearHistory()
     }
     
-    private mutating func add(reference: Reference) {
-        let newItem = History(reference: reference)
-        if newItem.datetime - self._current.datetime > HistoryModel.SAVE_ON_DELAY
+    private mutating func add(reference: Reference?) {
+        if CFAbsoluteTimeGetCurrent() - self._current.datetime > HistoryModel.SAVE_ON_DELAY
             && self._current != self._history.last {
             self._history.append(self._current)
             SettingsDB.shared.storeHistory(history: self._current)
         }
-        self._current = newItem
+        if reference != nil {
+            self._current = History(reference: reference!)
+        }
     }
     
     func current() -> Reference {
