@@ -33,6 +33,7 @@ class HistoryHelper {
 
     @objc static func saveCurrentAtTerminate(note: NSNotification) {
         SettingsDB.shared.storeHistory(history: HistoryModel.shared.currentHistory())
+        SettingsDB.shared.cleanUpHistory()
     }
 }
 
@@ -81,6 +82,10 @@ struct HistoryModel {
     
     func getHistory(row: Int) -> Reference {
         return (row >= 0 && row < self._history.count) ? self._history[row].reference : self._current.reference
+    }
+    
+    func getHistoryItem(row: Int) -> History? {
+         return (row >= 0 && row < self._history.count) ? self._history[row] : nil
     }
 
     mutating func changeBible(bible: Bible) {

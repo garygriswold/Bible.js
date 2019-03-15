@@ -11,6 +11,7 @@ import Utility
 struct SettingsDB {
     
     static var shared = SettingsDB()
+    private static let MAX_HISTORY: Int = 200
     
     private init() {}
     
@@ -90,7 +91,7 @@ struct SettingsDB {
             db = try self.getSettingsDB()
             // Note that verse is being ignored here
             let sql = "SELECT datetime, bibleId, bookId, chapter, verse" +
-                    " FROM History2 ORDER BY datetime asc limit 100"
+                    " FROM History2 ORDER BY datetime ASC"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let history = resultSet.map {
                 History(reference: Reference(bibleId: $0[1]!, bookId: $0[2]!, chapter: Int($0[3]!) ?? 0),
@@ -117,14 +118,34 @@ struct SettingsDB {
     }
     
     func clearHistory() {
-        let db: Sqlite3
-        do {
-            db = try self.getSettingsDB()
-            let sql = "DELETE FROM History2"
-            _ = try db.executeV1(sql: sql, values: [])
-        } catch let err {
-            print("ERROR SettingsDB.clearHistory \(err)")
-        }
+        DispatchQueue.main.async(execute: {
+            let db: Sqlite3
+            do {
+                db = try self.getSettingsDB()
+                let sql = "DELETE FROM History2"
+                _ = try db.executeV1(sql: sql, values: [])
+            } catch let err {
+                print("ERROR SettingsDB.clearHistory \(err)")
+            }
+        })
+    }
+    
+    func cleanUpHistory() {
+        DispatchQueue.main.async(execute: {
+            let total = HistoryModel.shared.historyCount
+            if total > SettingsDB.MAX_HISTORY {
+                if let history = HistoryModel.shared.getHistoryItem(row: (total - SettingsDB.MAX_HISTORY)) {
+                    let db: Sqlite3
+                    do {
+                        db = try self.getSettingsDB()
+                        let sql = "DELETE FROM History2 WHERE datetime < ?"
+                        _ = try db.executeV1(sql: sql, values: [history.datetime])
+                    } catch let err {
+                        print("ERROR SettingsDB.cleanUpHistory \(err)")
+                    }
+                }
+            }
+        })
     }
 
     private func getSettingsDB() throws -> Sqlite3 {
