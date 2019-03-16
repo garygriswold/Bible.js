@@ -178,8 +178,11 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
     
     @objc func verseSwitchHandler(sender: UISwitch) {
         AppFont.verseNumbers = sender.isOn
-        let cssRules = DynamicCSS.shared.verseNumbersSS.genRule() + DynamicCSS.shared.verseNumbersDBP.genRule()
-        ReaderViewQueue.shared.updateCSS(css: cssRules)
+        if HistoryModel.shared.current().isShortsands {
+             ReaderViewQueue.shared.updateCSS(css: DynamicCSS.shared.verseNumbersSS.genRule())
+        } else {
+             ReaderViewQueue.shared.updateCSS(css: DynamicCSS.shared.verseNumbersDBP.genRule())
+        }
     }
     
     private func genericCell(view: UITableView, indexPath: IndexPath, title: String,

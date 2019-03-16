@@ -387,7 +387,7 @@ public class Sqlite3 {
     * parseInt(v), parseFloat(v), (v === 'true'), strings are not converted, and I am not sure how to handle blob.
     * When the string data that is returned is going to be displayed in an HTML view, there is no need to
     * unescape the HTML entity, the webview will do that.
-    * Null is represented by by a zero length string.  Unfortunately, this means that we cannot distinguish
+    * Null is represented by a zero length string.  Unfortunately, this means that we cannot distinguish
     * between a null in the database and the string "" in the database, but in JS they both return false on
     * an if (str) test.
     *
