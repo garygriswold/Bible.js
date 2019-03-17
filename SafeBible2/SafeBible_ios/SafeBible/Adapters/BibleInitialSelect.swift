@@ -211,7 +211,7 @@ struct BibleInitialSelect {
         for lang in languages {
             langScore[lang.iso3] = lang.score
         }
-        let sql = "SELECT bibleId, abbr, iso3, name, script, country" +
+        let sql = "SELECT bibleId, abbr, iso3, localizedName, script, country" +
                 " FROM Bible WHERE iso3" + self.adapter.genQuest(array: languages)
 
         var bibles = [BibleScore]()
