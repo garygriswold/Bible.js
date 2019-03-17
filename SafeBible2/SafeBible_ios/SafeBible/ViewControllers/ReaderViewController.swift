@@ -87,9 +87,6 @@ class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMe
             if let err = error {
                 print("jsCallbackError \(err)")
             }
-            if let resp = data {
-                print("jsCallback has a response \(resp)")
-            }
         })
     }
 
