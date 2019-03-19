@@ -13,7 +13,7 @@ class BibleModel : SettingsModel {
     let locales: [Locale]
     var selected: [Bible]
     var available: [[Bible]]
-    var filtered: [Bible]
+    var filtered: [Bible] // deprecated, not used
     var oneLanguage: Language? // Used only when settingsViewType == .oneLang
     private let adapter: SettingsAdapter
     private let availableSection: Int
