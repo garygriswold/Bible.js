@@ -23,29 +23,35 @@ class BibleModel : SettingsModel {
         self.adapter = SettingsAdapter()
         self.availableSection = availableSection
         self.oneLanguage = language
-        self.locales = adapter.getLanguageSettings()
+        let prefLocales = adapter.getLanguageSettings()
         self.selected = [Bible]()
         var bibles: [String] = adapter.getBibleSettings()
         if bibles.count > 0 {
-            self.selected = adapter.getBiblesSelected(locales: self.locales, selectedBibles: bibles)
+            self.selected = adapter.getBiblesSelected(locales: prefLocales, selectedBibles: bibles)
         } else {
             let initial = BibleInitialSelect(adapter: adapter)
-            self.selected = initial.getBiblesSelected(locales: locales)
+            self.selected = initial.getBiblesSelected(locales: prefLocales)
             bibles = selected.map { $0.bibleId }
             adapter.updateSettings(bibles: self.selected)
         }
+        let selectedLocales = Set(self.selected.map { $0.locale })
+        var tempLocales = [Locale]()
         self.available = [[Bible]]()
         if !selectedOnly {
             if self.oneLanguage != nil {
                 let avail = adapter.getBiblesAvailable(locale: oneLanguage!.locale, selectedBibles: bibles)
                 self.available.append(avail)
             } else {
-                for locale in self.locales {
+                for locale in prefLocales {
                     let available1 = adapter.getBiblesAvailable(locale: locale, selectedBibles: bibles)
-                    self.available.append(available1)
+                    if available1.count > 0 || selectedLocales.contains(locale) {
+                        tempLocales.append(locale)
+                        self.available.append(available1)
+                    }
                 }
             }
         }
+        self.locales = tempLocales
         self.filtered = [Bible]()
         print("*** BibleModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
     }

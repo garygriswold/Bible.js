@@ -74,7 +74,7 @@ class BibleListViewController: AppSettingsViewController {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         switch self.settingsViewType {
-        case .bible: return 1 + self.dataModel!.locales.count
+        case .bible: return 1 + self.dataModel!.availableCount
         case .oneLang: return 2
         }
     }
