@@ -154,6 +154,7 @@
 		E40D6064218252CA00A06B54 /* BiblePageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblePageModel.swift; sourceTree = "<group>"; };
 		E41B8DC721D9AE4B0099A63D /* FileListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileListViewController.swift; sourceTree = "<group>"; };
 		E41B8DC921D9EA880099A63D /* FileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
+		E41E2A942241984B00CDFA88 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4289B4B22238C7400C344F7 /* LanguageListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageListViewController.swift; sourceTree = "<group>"; };
 		E4289B4F2223B90300C344F7 /* AppSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsViewController.swift; sourceTree = "<group>"; };
 		E428B7ED2138C297000AB2A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -699,6 +700,7 @@
 				E4BB144E2200C73500D5A704 /* tr */,
 				E4BB144F2200C76100D5A704 /* uk */,
 				E4BB14502200C77B00D5A704 /* vi */,
+				E41E2A942241984B00CDFA88 /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
