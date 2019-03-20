@@ -239,8 +239,108 @@ struct Note {
         + "    }\n"
         + "  }\n"
         + "}\n"
+    
+    static let testWalkPage1 = "result = [];\n"
+        + "walkPage(document.body);\n"
+        + "result.join('');\n"
+        + "function walkPage(node) {\n"
+        + "  if (node.hasChildNodes()) {\n"
+        + "    for (var i=0; i<node.childNodes.length; i++) {\n"
+        //+ "    for(var i=(node.childNodes.length - 1); i>=0; i--) {\n"
+        + "      child = node.childNodes[i];\n"
+        + "      result.push(displayNode(child));\n"
+        + "      walkPage(child);\n"
+        + "    }\n"
+        + "  }\n"
+        + "}\n"
+        + "function displayNode(node) {\n"
+        + "  switch(node.nodeType) {\n"
+        + "  case 1: return '<' + node.tagName + '>';\n"
+        + "  case 3: return node.nodeValue;\n"
+        + "  default: return 'Other'\n"
+        + "  }\n"
+        + "}\n"
+    static let testWalkPage2 = "result = [];\n"
+        + "walkPage(document.body);\n"
+        + "result.join('');\n"
+        + "function walkPage(node) {\n"
+        + "  if (node.hasChildNodes()) {\n"
+        + "  var next = node.nextSibling;\n"
+        + "  if (next != null && next.hasChildNodes()) {\n"
+        //+ "  if (node.hasChildNodes()) {\n"
+        + "    for (var i=0; i<next.childNodes.length; i++) {\n"
+        //+ "    for(var i=(node.childNodes.length - 1); i>=0; i--) {\n"
+        + "      child = next.childNodes[i];\n"
+        + "      result.push(child.nodeName);\n"
+        + "      walkPage(child);\n"
+        + "    }\n"
+        + "  }\n"
+        + "}\n"
 }
 
-struct NotesModel {
-    
+class NotesModel {
+
 }
+
+import Foundation
+import UIKit
+import WebKit
+
+class TestWebViewController : UIViewController, WKNavigationDelegate {
+    
+    private var webView: WKWebView!
+    private var reference: Reference!
+    
+    func test() {
+        let reference = Reference(bibleId: "ERV-SPA.db", bookId: "PSA", chapter: 1)
+        self.loadReference(reference: reference)
+    }
+    
+    deinit {
+        print("deinit TestWebViewController")
+    }
+    
+    override func loadView() {
+        super.loadView()
+        
+        let configuration = WKWebViewConfiguration()
+        configuration.preferences.javaScriptEnabled = true
+        let js = Note.decodeRange + Note.installEffect + Note.encodeRange + Note.showHideSSFootnote
+        let script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+        let contentController = WKUserContentController()
+        contentController.addUserScript(script)
+        configuration.userContentController = contentController
+        self.webView = WKWebView(frame: self.view.bounds, configuration: configuration)
+        self.view.addSubview(self.webView)
+        
+        self.webView.navigationDelegate = self
+    }
+    
+    func loadReference(reference: Reference) {
+        self.reference = reference
+        self.loadViewIfNeeded()
+        let biblePage = BiblePageModel()
+        biblePage.loadPage(reference: reference, webView: self.webView, controller: self)
+    }
+  
+    func execJavascript(message: String) {
+        self.webView.evaluateJavaScript(message, completionHandler: { data, error in
+            if let err = error {
+                print("jsCallbackError \(err)")
+            }
+            if data != nil {
+                print("jsCallback Response \(data!)")
+            }
+        })
+    }
+    
+    func webView(_: WKWebView, didFinish: WKNavigation!) {
+        print("Test Web page loaded \(reference.toString())")
+        self.execJavascript(message: Note.testWalkPage1)
+    }
+    
+    func webView(_: WKWebView, didFail: WKNavigation!, withError: Error) {
+        print("ERROR: Test Web page load error \(withError)")
+    }
+}
+

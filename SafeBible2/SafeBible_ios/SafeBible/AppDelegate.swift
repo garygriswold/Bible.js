@@ -12,6 +12,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private static let NO = NSLocalizedString("No", comment: "No option on an alert")
 
     var window: UIWindow?
+    let tester = TestWebViewController()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -22,6 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.rootViewController = navController
         self.window!.rootViewController!.view.backgroundColor = AppFont.backgroundColor
         self.window!.makeKeyAndVisible()
+        
+        tester.test()
         
         return true
     }
