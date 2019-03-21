@@ -239,7 +239,7 @@ struct Note {
         + "    }\n"
         + "  }\n"
         + "}\n"
-    
+    /*
     static let findVerseNum = "var verseNum = null;\n"
         + "function getClass(startNode, findNode) {\n"
         + "  walkNodes(startNode, findNode);\n"
@@ -267,6 +267,15 @@ struct Note {
         + "  }\n"
         + "  return null;\n"
         + "}\n"
+        + "function displayNode(node) {\n"
+        + "  switch(node.nodeType) {\n"
+        + "    case 1: return '<' + node.nodeName + '>';\n"
+        + "    case 3: return node.nodeValue;\n"
+        + "    default: return 'Other(' + node.nodeType + ')';\n"
+        + "  }\n"
+        + "}\n"
+ */
+    static let findVerseNum = ""
 }
 
 class NotesModel {
@@ -330,11 +339,11 @@ class TestWebViewController : UIViewController, WKNavigationDelegate {
     
     func webView(_: WKWebView, didFinish: WKNavigation!) {
         print("Test Web page loaded \(reference.toString())")
-        let message = "var find = document.getElementsByTagName('p')[16];\n"
-            + "find = find.nextSibling;"
-            + "getClass(document.body, find);\n"
+        let message = "var find = document.getElementsByTagName('p')[11];\n"
+            //+ "find = find.nextSibling;"
+            + "getClass(find);\n"
         //let message = "getClass(document.body, document.body);\n"
-        self.execJavascript(message: message)
+        //self.execJavascript(message: message)
     }
     
     func webView(_: WKWebView, didFail: WKNavigation!, withError: Error) {
