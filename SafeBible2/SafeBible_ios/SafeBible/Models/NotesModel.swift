@@ -262,15 +262,17 @@ struct Note {
         + "}\n"
     static let testWalkPage2 = "result = [];\n"
         + "walkPage(document.body);\n"
-        + "result.join('');\n"
+        + "result.join('|');\n"
         + "function walkPage(node) {\n"
-        + "  result.push(displayNode(node));\n"
-        + "  node = node.firstChild;\n"
+        + "  var verse = findVerseNum(node);\n"
+        + "  if (verse) { result.push(verse); }\n"
+        + "  node = node.lastChild;\n"
         + "  while(node) {\n"
         + "    walkPage(node);\n"
-        + "    node = node.nextSibling;\n"
+        + "    node = node.previousSibling;\n"
         + "  }\n"
         + "}\n"
+        
         + "function displayNode(node) {\n"
         + "  if (node) {\n"
         + "    switch(node.nodeType) {\n"
@@ -279,6 +281,21 @@ struct Note {
         + "    default: return 'Other'\n"
         + "    }\n"
         + "  }\n"
+        + "}\n"
+
+        + "function findVerseNum(node) {\n"
+        + "  if (node.nodeType === 1 && node.nodeName !== 'A') {\n"
+        + "    var id = node.getAttribute('id');\n"
+        + "    if (id && (id.lastIndexOf(':') > 3)) {\n"
+        + "      return 'id=' + id;\n"
+        + "    } else {\n"
+        + "      var clas = node.getAttribute('class');\n"
+        + "      if (clas && (clas.startsWith('v ') || clas.startsWith('verse'))) {\n"
+        + "        return 'cl=' + clas;\n"
+        + "      }\n"
+        + "    }\n"
+        + "  }\n"
+        + "  return null;\n"
         + "}\n"
 }
 
@@ -296,7 +313,7 @@ class TestWebViewController : UIViewController, WKNavigationDelegate {
     private var reference: Reference!
     
     func test() {
-        let reference = Reference(bibleId: "ERV-SPA.db", bookId: "PSA", chapter: 1)
+        let reference = Reference(bibleId: "ERV-SPA.db", bookId: "GEN", chapter: 1)
         self.loadReference(reference: reference)
     }
     
