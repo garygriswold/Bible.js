@@ -240,9 +240,11 @@ struct Note {
         + "  }\n"
         + "}\n"
     
-    static let testWalkPage2 = "var verseNum = null;\n"
-        + "walkNodes(document.body);\n"
-        + "verseNum;\n"
+    static let findVerseNum = "var verseNum = null;\n"
+        + "function getClass(node) {\n"
+        + "  walkNodes(node);\n"
+        + "  return verseNum;\n"
+        + "}\n"
         + "function walkNodes(node) {\n"
         + "  verseNum = findVerseNum(node);\n"
         + "  node = node.lastChild;\n"
@@ -251,7 +253,6 @@ struct Note {
         + "    node = node.previousSibling;\n"
         + "  }\n"
         + "}\n"
-
         + "function findVerseNum(node) {\n"
         + "  if (node.nodeType === 1 && node.nodeName !== 'A') {\n"
         + "    var id = node.getAttribute('id');\n"
@@ -282,7 +283,7 @@ class TestWebViewController : UIViewController, WKNavigationDelegate {
     private var reference: Reference!
     
     func test() {
-        let reference = Reference(bibleId: "ERV-SPA.db", bookId: "GEN", chapter: 3)
+        let reference = Reference(bibleId: "ERV-SPA.db", bookId: "GEN", chapter: 4)
         self.loadReference(reference: reference)
     }
     
@@ -296,6 +297,7 @@ class TestWebViewController : UIViewController, WKNavigationDelegate {
         let configuration = WKWebViewConfiguration()
         configuration.preferences.javaScriptEnabled = true
         let js = Note.decodeRange + Note.installEffect + Note.encodeRange + Note.showHideSSFootnote
+            + Note.findVerseNum
         let script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false)
         let contentController = WKUserContentController()
         contentController.addUserScript(script)
@@ -326,7 +328,8 @@ class TestWebViewController : UIViewController, WKNavigationDelegate {
     
     func webView(_: WKWebView, didFinish: WKNavigation!) {
         print("Test Web page loaded \(reference.toString())")
-        self.execJavascript(message: Note.testWalkPage2)
+        let message = "getClass(document.body);\n"
+        self.execJavascript(message: message)
     }
     
     func webView(_: WKWebView, didFail: WKNavigation!, withError: Error) {
