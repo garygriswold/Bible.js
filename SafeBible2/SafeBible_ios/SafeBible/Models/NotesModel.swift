@@ -241,15 +241,15 @@ struct Note {
         + "}\n"
     
     static let findVerseNum = "var verseNum = null;\n"
-        + "function getClass(node) {\n"
-        + "  walkNodes(node);\n"
+        + "function getClass(startNode, findNode) {\n"
+        + "  walkNodes(startNode, findNode);\n"
         + "  return verseNum;\n"
         + "}\n"
-        + "function walkNodes(node) {\n"
+        + "function walkNodes(node, findNode) {\n"
         + "  verseNum = findVerseNum(node) || verseNum;\n"
         + "  node = node.firstChild;\n"
-        + "  while(node) {\n"
-        + "    walkNodes(node);\n"
+        + "  while(node && node !== findNode) {\n"
+        + "    walkNodes(node, findNode);\n"
         + "    node = node.nextSibling;\n"
         + "  }\n"
         + "}\n"
@@ -283,7 +283,7 @@ class TestWebViewController : UIViewController, WKNavigationDelegate {
     private var reference: Reference!
     
     func test() {
-        let reference = Reference(bibleId: "ERV-SPA.db", bookId: "GEN", chapter: 4)
+        let reference = Reference(bibleId: "ERV-SPA.db", bookId: "PSA", chapter: 1)
         self.loadReference(reference: reference)
     }
     
@@ -316,6 +316,7 @@ class TestWebViewController : UIViewController, WKNavigationDelegate {
     }
   
     func execJavascript(message: String) {
+        let measure = Measurement()
         self.webView.evaluateJavaScript(message, completionHandler: { data, error in
             if let err = error {
                 print("jsCallbackError \(err)")
@@ -323,12 +324,15 @@ class TestWebViewController : UIViewController, WKNavigationDelegate {
             if data != nil {
                 print("jsCallback Response \(data!)")
             }
+            measure.duration(location: "Done JS")
         })
     }
     
     func webView(_: WKWebView, didFinish: WKNavigation!) {
         print("Test Web page loaded \(reference.toString())")
-        let message = "getClass(document.body);\n"
+        let message = "var find = document.getElementsByTagName('p')[21];\n"
+            + "getClass(document.body, find);\n"
+        //let message = "getClass(document.body, document.body);\n"
         self.execJavascript(message: message)
     }
     
