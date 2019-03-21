@@ -248,7 +248,7 @@ struct Note {
         + "function walkNodes(node, findNode) {\n"
         + "  verseNum = findVerseNum(node) || verseNum;\n"
         + "  node = node.firstChild;\n"
-        + "  while(node && node !== findNode) {\n"
+        + "  while(node && !node.isSameNode(findNode)) {\n"
         + "    walkNodes(node, findNode);\n"
         + "    node = node.nextSibling;\n"
         + "  }\n"
@@ -330,7 +330,7 @@ class TestWebViewController : UIViewController, WKNavigationDelegate {
     
     func webView(_: WKWebView, didFinish: WKNavigation!) {
         print("Test Web page loaded \(reference.toString())")
-        let message = "var find = document.getElementsByTagName('p')[11];\n"
+        let message = "var find = document.getElementsByTagName('p')[16];\n"
             + "find = find.nextSibling;"
             + "getClass(document.body, find);\n"
         //let message = "getClass(document.body, document.body);\n"
