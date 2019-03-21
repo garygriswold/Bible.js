@@ -330,7 +330,8 @@ class TestWebViewController : UIViewController, WKNavigationDelegate {
     
     func webView(_: WKWebView, didFinish: WKNavigation!) {
         print("Test Web page loaded \(reference.toString())")
-        let message = "var find = document.getElementsByTagName('p')[21];\n"
+        let message = "var find = document.getElementsByTagName('p')[11];\n"
+            + "find = find.nextSibling;"
             + "getClass(document.body, find);\n"
         //let message = "getClass(document.body, document.body);\n"
         self.execJavascript(message: message)
