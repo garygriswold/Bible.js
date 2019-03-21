@@ -244,11 +244,11 @@ struct Note {
         + "walkPage(document.body);\n"
         + "result.join('');\n"
         + "function walkPage(node) {\n"
+        + "  result.push(displayNode(node));\n"
         + "  if (node.hasChildNodes()) {\n"
         + "    for (var i=0; i<node.childNodes.length; i++) {\n"
         //+ "    for(var i=(node.childNodes.length - 1); i>=0; i--) {\n"
         + "      child = node.childNodes[i];\n"
-        + "      result.push(displayNode(child));\n"
         + "      walkPage(child);\n"
         + "    }\n"
         + "  }\n"
@@ -264,15 +264,19 @@ struct Note {
         + "walkPage(document.body);\n"
         + "result.join('');\n"
         + "function walkPage(node) {\n"
-        + "  if (node.hasChildNodes()) {\n"
-        + "  var next = node.nextSibling;\n"
-        + "  if (next != null && next.hasChildNodes()) {\n"
-        //+ "  if (node.hasChildNodes()) {\n"
-        + "    for (var i=0; i<next.childNodes.length; i++) {\n"
-        //+ "    for(var i=(node.childNodes.length - 1); i>=0; i--) {\n"
-        + "      child = next.childNodes[i];\n"
-        + "      result.push(child.nodeName);\n"
-        + "      walkPage(child);\n"
+        + "  result.push(displayNode(node));\n"
+        + "  node = node.firstChild;\n"
+        + "  while(node) {\n"
+        + "    walkPage(node);\n"
+        + "    node = node.nextSibling;\n"
+        + "  }\n"
+        + "}\n"
+        + "function displayNode(node) {\n"
+        + "  if (node) {\n"
+        + "    switch(node.nodeType) {\n"
+        + "    case 1: return '<' + node.tagName + '>';\n"
+        + "    case 3: return node.nodeValue;\n"
+        + "    default: return 'Other'\n"
         + "    }\n"
         + "  }\n"
         + "}\n"
@@ -336,7 +340,7 @@ class TestWebViewController : UIViewController, WKNavigationDelegate {
     
     func webView(_: WKWebView, didFinish: WKNavigation!) {
         print("Test Web page loaded \(reference.toString())")
-        self.execJavascript(message: Note.testWalkPage1)
+        self.execJavascript(message: Note.testWalkPage2)
     }
     
     func webView(_: WKWebView, didFail: WKNavigation!, withError: Error) {
