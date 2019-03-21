@@ -240,15 +240,14 @@ struct Note {
         + "  }\n"
         + "}\n"
     
-    static let testWalkPage2 = "result = [];\n"
-        + "walkPage(document.body);\n"
-        + "result.join('|');\n"
-        + "function walkPage(node) {\n"
-        + "  var verse = findVerseNum(node);\n"
-        + "  if (verse) { result.push(verse); }\n"
+    static let testWalkPage2 = "var verseNum = null;\n"
+        + "walkNodes(document.body);\n"
+        + "verseNum;\n"
+        + "function walkNodes(node) {\n"
+        + "  verseNum = findVerseNum(node);\n"
         + "  node = node.lastChild;\n"
-        + "  while(node) {\n"
-        + "    walkPage(node);\n"
+        + "  while(node && verseNum === null) {\n"
+        + "    walkNodes(node);\n"
         + "    node = node.previousSibling;\n"
         + "  }\n"
         + "}\n"
@@ -283,7 +282,7 @@ class TestWebViewController : UIViewController, WKNavigationDelegate {
     private var reference: Reference!
     
     func test() {
-        let reference = Reference(bibleId: "ERV-SPA.db", bookId: "GEN", chapter: 1)
+        let reference = Reference(bibleId: "ERV-SPA.db", bookId: "GEN", chapter: 3)
         self.loadReference(reference: reference)
     }
     
