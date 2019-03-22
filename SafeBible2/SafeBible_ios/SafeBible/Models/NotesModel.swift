@@ -175,28 +175,7 @@ struct Note {
         + "  }\n"
         + "  return xpath;\n"
         + "}\n"
-        + "function getClass(node) {\n"
-        + "  while(node && node.nodeName !== 'BODY') {\n"
-        + "    if (node.nodeType === 1 && node.nodeName !== 'A') {\n"
-        + "      var id = node.getAttribute('id');\n"
-        + "      if (id && (id.indexOf(':') > 0)) {\n"
-        + "        return 'id=' + id;\n"
-        + "      } else {\n"
-        + "        var clas = node.getAttribute('class');\n"
-        + "        if (clas && (clas.startsWith('v ') || clas.startsWith('verse'))) {\n"
-        + "          return 'cl=' + clas;\n"
-        + "        }\n"
-        + "      }\n"
-        + "    }\n"
-        + "    var prior = node.previousSibling;\n"
-        + "    if (!prior) {\n"
-        + "      prior = node.parentNode;\n"
-        + "    }\n"
-        + "    node = prior;\n"
-        + "  }\n"
-        + "  return null;\n"
-        + "}\n"
-    
+        
     static let decodeRange = "function decodeRange(encoded) {\n"
         + "  var parts = encoded.split('~');\n"
         + "  if (parts.length !== 4) {\n"
@@ -239,19 +218,16 @@ struct Note {
         + "    }\n"
         + "  }\n"
         + "}\n"
-    /*
-    static let findVerseNum = "var verseNum = null;\n"
-        + "function getClass(startNode, findNode) {\n"
-        + "  walkNodes(startNode, findNode);\n"
-        + "  return verseNum;\n"
-        + "}\n"
-        + "function walkNodes(node, findNode) {\n"
-        + "  verseNum = findVerseNum(node) || verseNum;\n"
-        + "  node = node.firstChild;\n"
-        + "  while(node && !node.isSameNode(findNode)) {\n"
-        + "    walkNodes(node, findNode);\n"
-        + "    node = node.nextSibling;\n"
+    
+    static let findVerseNum = "function getClass(node) {\n"
+        + "  var iterator = document.createNodeIterator(document.body, NodeFilter.SHOW_ALL, null);"
+        + "  var verseNum = null;"
+        + "  var current;\n"
+        + "  while (current = iterator.nextNode()) {\n"
+        + "    verseNum = findVerseNum(current) || verseNum;\n"
+        + "    if (current.isSameNode(node)) return verseNum;\n"
         + "  }\n"
+        + "  return verseNum;\n"
         + "}\n"
         + "function findVerseNum(node) {\n"
         + "  if (node.nodeType === 1 && node.nodeName !== 'A') {\n"
@@ -267,15 +243,13 @@ struct Note {
         + "  }\n"
         + "  return null;\n"
         + "}\n"
-        + "function displayNode(node) {\n"
+        + "function displayNode(node) {\n" // Debug method
         + "  switch(node.nodeType) {\n"
         + "    case 1: return '<' + node.nodeName + '>';\n"
         + "    case 3: return node.nodeValue;\n"
         + "    default: return 'Other(' + node.nodeType + ')';\n"
         + "  }\n"
         + "}\n"
- */
-    static let findVerseNum = ""
 }
 
 class NotesModel {
@@ -340,10 +314,9 @@ class TestWebViewController : UIViewController, WKNavigationDelegate {
     func webView(_: WKWebView, didFinish: WKNavigation!) {
         print("Test Web page loaded \(reference.toString())")
         let message = "var find = document.getElementsByTagName('p')[11];\n"
-            //+ "find = find.nextSibling;"
+            + "find = find.nextSibling;"
             + "getClass(find);\n"
-        //let message = "getClass(document.body, document.body);\n"
-        //self.execJavascript(message: message)
+        self.execJavascript(message: message)
     }
     
     func webView(_: WKWebView, didFail: WKNavigation!, withError: Error) {
