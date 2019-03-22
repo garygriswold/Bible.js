@@ -10,21 +10,25 @@ import UIKit
 
 class NotesExportActionSheet : UIAlertController {
     
-    static func present(book: Book, controller: NotesListViewController?) {
+    static func present(book: Book, controller: NotesListViewController?, button: UIBarButtonItem) {
         if controller != nil {
-            let actions = NotesExportActionSheet(book: book, controller: controller!)
+            let actions = NotesExportActionSheet(book: book, controller: controller!, button: button)
+            actions.modalPresentationStyle = UIModalPresentationStyle.popover
             controller!.present(actions, animated: true, completion: nil)
+            actions.popoverPresentationController?.barButtonItem = button
         } else {
             print("ERROR: could not present NotesExportActionSheet")
         }
     }
     
     private weak var controller: NotesListViewController?
+    private weak var button: UIBarButtonItem?
     private let book: Book
     
-    init(book: Book, controller: NotesListViewController) {
+    init(book: Book, controller: NotesListViewController, button: UIBarButtonItem) {
         self.book = book
         self.controller = controller
+        self.button = button
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -40,13 +44,14 @@ class NotesExportActionSheet : UIAlertController {
         let notebook2Text = NSLocalizedString("Notebook to Text", comment: "Option on action sheet")
         let notes2TextTitle = "'\(self.book.name)' \(notebook2Text)"
         let notes2Text = UIAlertAction(title: notes2TextTitle, style: .default, handler: { _ in
-            NotesExportDocument.export(filename: self.book.name, bookId: self.book.bookId)
+            NotesExportDocument.export(filename: self.book.name, bookId: self.book.bookId,
+                                       button: self.button)
         })
         self.addAction(notes2Text)
         
         let notebooks2Text = NSLocalizedString("All Notebooks to Text", comment: "Option on action sheet")
         let all2Text = UIAlertAction(title: notebooks2Text, style: .default, handler: { _ in
-            NotesExportDocument.export(filename: "AllMine", bookId: nil)
+            NotesExportDocument.export(filename: "AllMine", bookId: nil, button: self.button)
         })
         self.addAction(all2Text)
         

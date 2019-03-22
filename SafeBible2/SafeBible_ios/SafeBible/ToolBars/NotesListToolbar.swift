@@ -88,7 +88,7 @@ class NotesListToolbar {
     }
     
     @objc func exportHandler(sender: UIBarButtonItem) {
-        NotesExportActionSheet.present(book: self.book, controller: self.controller)
+        NotesExportActionSheet.present(book: self.book, controller: self.controller, button: sender)
     }
     
     @objc func filesHandler(sender: UIBarButtonItem) {

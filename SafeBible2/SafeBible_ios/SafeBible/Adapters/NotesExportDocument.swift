@@ -11,8 +11,8 @@ import UIKit
 
 class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
     
-    static func export(filename: String, bookId: String?) {
-        let export = NotesExportDocument(filename: filename, bookId: bookId)
+    static func export(filename: String, bookId: String?, button: UIBarButtonItem?) {
+        let export = NotesExportDocument(filename: filename, bookId: bookId, button: button)
         export.save(to: export.fileURL, for: .forCreating, completionHandler: { (Bool) in
             print("file is saved \(export.fileURL)")
             export.share(url: export.fileURL)
@@ -20,11 +20,13 @@ class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
     }
     
     let bookId: String?
+    private weak var button: UIBarButtonItem?
     
-    init(filename: String, bookId: String?) {
+    init(filename: String, bookId: String?, button: UIBarButtonItem?) {
         let rootUrl = FileManager.default.temporaryDirectory
         let url = rootUrl.appendingPathComponent(filename + ".txt")
         self.bookId = bookId
+        self.button = button
         super.init(fileURL: url)
     }
     
@@ -55,7 +57,7 @@ class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
     
     func share(url: URL) {
         let share = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        //share.popoverPresentationController?.sourceView = self//.view // so that iPads won't crash
+        share.popoverPresentationController?.barButtonItem = self.button  // so that iPads won't crash
         //share.excludedActivityTypes = [.copyToPasteboard, .openInIBooks, .postToFacebook,
         //                               .postToTencentWeibo, .postToTwitter, .postToWeibo, .print,
         //                               .markupAsPDF]
