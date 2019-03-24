@@ -189,8 +189,16 @@ App Update
 Store Review
 1. Not sure how to test
 
-ReaderViewQueue
 NotesExportDocument
-NotesExportDatabase
+1. Verify each kind of export in iPhone and iPad
+2. Verify both kinds of database import in iPhone and iPad
+3. Verify the new file's presence in File List
+4. Verify that I can select file.
+
+Localize
+1. Change Language settings of device and Verify that App changes
+2. Verify that inital start of App is in language of device
+3. Verify that preferred languages are used in selection of initial Bibles.
+
 DynamicCSS
 AppFont
