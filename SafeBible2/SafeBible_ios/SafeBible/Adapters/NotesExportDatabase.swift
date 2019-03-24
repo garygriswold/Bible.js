@@ -47,7 +47,7 @@ class NotesExportDatabase : UIDocument, MFMailComposeViewControllerDelegate {
     //Override this method to return the document data to be saved.
     override func contents(forType typeName: String) throws -> Any {
         if self.bookId == nil {
-            let dbURL = NotesDB.shared.pathDB(dbname: "Notes")
+            let dbURL = NotesDB.shared.pathDB(dbname: NotesDB.shared.currentDB)
             let data = try Data(contentsOf: dbURL)
             return data
         } else {
