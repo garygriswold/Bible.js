@@ -64,7 +64,7 @@ guz|guz||Gusii
 gv|gv||Manx
 ha|ha||Hausa
 haw|haw||Hawaiian
-he|he||Hebrew       extra + missing iw Hebrew
+he|he||Hebrew
 hi|hi||Hindi
 hr|hr||Croatian
 hsb|hsb||Upper Sorbian
@@ -75,7 +75,7 @@ ig|ig||Igbo
 ii|ii||Sichuan Yi
 is|is||Icelandic
 it|it||Italian
-iu|iu||Inuktitut    extra
+iu|iu||Inuktitut
 ja|ja||Japanese
 jgo|jgo||Ngomba
 jmc|jmc||Machame

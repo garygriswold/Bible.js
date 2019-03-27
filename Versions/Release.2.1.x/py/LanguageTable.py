@@ -27,6 +27,7 @@ input1 = io.open("metadata/iso-639-3/iso-639-3-macrolanguages.txt", mode="r", en
 for line in input1:
     row = line.split("\t")
     macroMap[row[1]] = row[0]
+    macroMap[row[0]] = row[0]
 input1.close()
 
 iso1Map = {}
@@ -63,7 +64,6 @@ for line in input3:
 	iso1 = row[1]
 	script = row[2]
 	name = row[3].strip()
-	#print(row[0], row[1], row[2], row[3])
 	if len(iso1) == 2:
 		silData = iso1Map.get(iso1, None)
 		if silData == None:
