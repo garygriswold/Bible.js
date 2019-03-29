@@ -32,7 +32,6 @@ for line in input1:
 input1.close()
 
 iso1Map = {}
-iso3Map = {} # This is only needed for macro
 # Read in 639 table, lookup in macro table, add macro to table and create a map for ios1
 input2 = io.open("metadata/iso-639-3/iso-639-3.txt", mode="r", encoding="utf-8")
 for line in input2:
@@ -40,18 +39,19 @@ for line in input2:
 	iso3 = row[0]
 	if (iso3 != "Id"):
 		iso1 = row[3]
-		name = row[6]
-		macro = macroMap.get(iso3, "")
+		#name = row[6]
+		#macro = macroMap.get(iso3, None)
 		if (len(iso1) > 0):
 			iso1Map[iso3] = iso1
-		iso3Map[iso3] = macro
+		#if (macro != None):
+		#	iso3Map[iso3] = macro
 input2.close()
 
 out = io.open("sql/TestDBPBible_lang.sql", mode="w", encoding="utf-8")
 
-db = sqlite3.connect('TestDBPVersions.db')
+db = sqlite3.connect('Versions.db')
 cursor = db.cursor()
-sql = "SELECT bibleId, iso3, script FROM TestDBPBible ORDER BY bibleId"
+sql = "SELECT bibleId, iso3, script FROM Bible ORDER BY bibleId"
 values = ()
 cursor.execute(sql, values)
 rows = cursor.fetchall()
@@ -62,19 +62,13 @@ for row in rows:
 	# lookup iso1
 	iso1 = iso1Map.get(iso3, None)
 	if iso1 == None:
-		macro = iso3Map.get(iso3, None)
+		macro = macroMap.get(iso3, None)
 		if macro != None:
 			iso1 = iso1Map.get(macro, None)
-	if iso1 != None and script != None:
-		locale = iso1 + "_" + script
-	elif iso1 != None:
-		locale = iso1
-	elif script != None:
-		locale = iso3 + "_" + script
-	else:
-		locale = iso3
-	#print("%s  iso3=%s  iso1=%s  mac=%s  loc=%s" % (bibleId, iso3, iso1, macro, locale))
-	out.write("UPDATE TestDBPBible SET locale='%s' WHERE bibleId='%s';\n" % (locale, bibleId))
+	if iso1 == None:
+		iso1 = iso3
+	#print("%s  iso3=%s  iso1=%s  mac=%s" % (bibleId, iso3, iso1, macro))
+	out.write("UPDATE Bible SET iso1='%s' WHERE bibleId='%s';\n" % (iso1, bibleId))
 out.close()
 
 

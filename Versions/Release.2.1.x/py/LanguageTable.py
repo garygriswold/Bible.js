@@ -51,6 +51,8 @@ out = io.open("sql/language.sql", mode="w", encoding="utf-8")
 out.write(u"DROP TABLE IF EXISTS Language;\n")
 out.write(u"CREATE TABLE Language (\n")
 out.write(u"  locale TEXT NOT NULL PRIMARY KEY,\n")
+out.write(u"  iso1 TEXT NOT NULL,\n")
+out.write(u"  script TEXT NULL,\n")
 out.write(u"  iso3 TEXT NOT NULL,\n")
 out.write(u"  macro TEXT NULL,\n")
 out.write(u"  name TEXT NOT NULL);\n")
@@ -62,7 +64,7 @@ for line in input3:
 	row = line.split("|")
 	locale = row[0]
 	iso1 = row[1]
-	script = row[2]
+	script = "'" + row[2] + "'" if (row[2] != None and row[2] != '') else 'null'
 	name = row[3].strip()
 	if len(iso1) == 2:
 		silData = iso1Map.get(iso1, None)
@@ -73,11 +75,11 @@ for line in input3:
 		if silData == None:
 			exit()
 	iso3 = silData[0]
-	macro = "'" + silData[1] + "'" if (silData[1] != None) else 'null'
+	macro = "'" + silData[1] + "'" if (silData[1] != None and silData[1] != '') else 'null'
 	nameSIL = silData[2]
-	print(locale, iso3, iso1, macro, script, name)
+	#print(locale, iso3, iso1, macro, script, name)
 
-	out.write("%s ('%s', '%s', %s, '%s');\n" % (prefix, locale, iso3, macro, name))
+	out.write("%s ('%s', '%s', %s, '%s', %s, '%s');\n" % (prefix, locale, iso1, script, iso3, macro, name))
 
 input3.close()
 out.close()
