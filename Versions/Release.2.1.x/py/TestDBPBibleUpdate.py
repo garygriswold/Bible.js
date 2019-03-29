@@ -35,8 +35,6 @@ for row in rows:
 			#if bid != bibleId:
 			#	print("bibleId and internal id not equal", bibleId, bid)
 
-			direction = "'" + bible["dir"] + "'" if bible["dir"] != None else "null"
-
 			# convert script to iso 15924 code
 			script = bible['script']
 
@@ -65,8 +63,8 @@ for row in rows:
 			country = bible['countryCode']
 			country = "'" + country.upper() + "'" if len(country) > 0 else 'null'
 
-			sql = "UPDATE TestDBPBible SET direction=%s, script=%s, country=%s WHERE bibleId='%s';\n"
-			out.write(sql % (direction, script, country, bibleId))
+			sql = "UPDATE TestDBPBible SET script=%s, country=%s WHERE bibleId='%s';\n"
+			out.write(sql % (script, country, bibleId))
 
 		except Exception, err:
 			print "Could not parse info.json", filename, str(err)

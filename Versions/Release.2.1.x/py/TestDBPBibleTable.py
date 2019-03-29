@@ -28,11 +28,12 @@ out.write(u"  keyTemplate TEXT NOT NULL,\n")							# %I_%O_%B_%C.html
 out.write(u"  audioBucket TEXT NULL,\n")								# bible.json filesets
 out.write(u"  otDamId TEXT NULL,\n")									# bible.json abbr/id
 out.write(u"  ntDamId TEXT NULL,\n")									# bible.json abbr/id
-out.write(u"  direction TEXT NULL CHECK (direction IN('ltr','rtl')),\n")# TBD
+out.write(u"  database TEXT NOT NULL,\n")								# bibleId + .db
 out.write(u"  script TEXT NULL,\n")										# TBD
-out.write(u"  country TEXT NULL REFERENCES Country(code));\n")			# TBD
+out.write(u"  country TEXT NULL REFERENCES Country(code),\n")			# TBD
+out.write(u"  locale TEXT NULL);\n")									# TBD
 
-prefix2 = "INSERT INTO TestDBPBible (bibleId, abbr, iso3, name, englishName, textBucket, textId, keyTemplate, audioBucket, otDamId, ntDamId) VALUES"
+prefix2 = "INSERT INTO TestDBPBible (bibleId, abbr, iso3, name, englishName, textBucket, textId, keyTemplate, audioBucket, otDamId, ntDamId, database) VALUES"
 
 # read and process bible.json file created by Bibles query from DBPv4
 input = io.open(os.environ['HOME'] + "/ShortSands/DBL/FCBH/bible.json", mode="r", encoding="utf-8")
@@ -99,9 +100,10 @@ for bible in bibles:
 		ntDamId = "null"
 
 	keyTemplate = "%I_%O_%B_%C.html"
+	database = bibleId + ".db"
 
-	out.write("%s ('%s', '%s', %s, %s, %s, %s, %s, '%s', %s, %s, %s);\n" % 
+	out.write("%s ('%s', '%s', %s, %s, %s, %s, %s, '%s', %s, %s, %s, '%s');\n" % 
 	(prefix2, bibleId, abbr, iso3, name, englishName, textBucket, textId, keyTemplate,
-		audioBucket, otDamId, ntDamId))
+		audioBucket, otDamId, ntDamId, database))
 
 out.close()
