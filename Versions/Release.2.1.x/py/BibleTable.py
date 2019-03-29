@@ -14,8 +14,8 @@ def checkNull(field):
 
 out = io.open("sql/bible.sql", mode="w", encoding="utf-8")
 
-out.write(u"DROP TABLE IF EXISTS Bible;\n")
-out.write(u"CREATE TABLE Bible (\n")
+out.write(u"DROP TABLE IF EXISTS TestDBPBible;\n")
+out.write(u"CREATE TABLE TestDBPBible (\n")
 out.write(u"  bibleId TEXT NOT NULL PRIMARY KEY,\n") 					# bible.json abbr
 out.write(u"  abbr TEXT NOT NULL,\n")									# bible.json abbr char 3-6
 out.write(u"  iso3 TEXT NOT NULL REFERENCES Language(iso3),\n")			# bible.json iso
@@ -32,7 +32,7 @@ out.write(u"  direction TEXT NULL CHECK (direction IN('ltr','rtl')),\n")# TBD
 out.write(u"  script TEXT NULL,\n")										# TBD
 out.write(u"  country TEXT NULL REFERENCES Country(code));\n")			# TBD
 
-prefix2 = "INSERT INTO Bible (bibleId, abbr, iso3, name, englishName, textBucket, textId, keyTemplate, audioBucket, otDamId, ntDamId) VALUES"
+prefix2 = "INSERT INTO TestDBPBible (bibleId, abbr, iso3, name, englishName, textBucket, textId, keyTemplate, audioBucket, otDamId, ntDamId) VALUES"
 
 # read and process bible.json file created by Bibles query from DBPv4
 input = io.open("metadata/FCBH/bible.json", mode="r", encoding="utf-8")
