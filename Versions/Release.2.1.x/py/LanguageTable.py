@@ -49,7 +49,7 @@ input2.close()
 out = io.open("sql/language.sql", mode="w", encoding="utf-8")
 
 out.write(u"DROP TABLE IF EXISTS Language;\n")
-out.write(u"CREATE TABLE LanguageTemp (\n")
+out.write(u"CREATE TABLE Language (\n")
 out.write(u"  locale TEXT NOT NULL PRIMARY KEY,\n")
 out.write(u"  iso3 TEXT NOT NULL,\n")
 out.write(u"  macro TEXT NULL,\n")
@@ -90,4 +90,14 @@ out.close()
 
 ## ?? Skip Population For Now.  If, I use locale matching logic in iOS, I might be able to 
 ## totally rewrite InitialBibleSelect
+
+#========
+
+# For Processing Bibles, I would be sure to get their iso3 code and their script.
+# Then I would lookup their iso3 codes to get the iso1 codes
+# I should use the iso-639-3 table to do that translation,
+# I would also need to use the meta code to make sure that I could translate each one.
+#
+# This makes it seem like meta code and iso3 are not needed for the Language Table
+# Try writing the bare bones of a Bible table using json.info.
 
