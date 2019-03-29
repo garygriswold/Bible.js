@@ -9,11 +9,11 @@ import json
 BUCKET = "dbp-prod"
 source = "/Users/garygriswold/ShortSands/DBL/FCBH_info/"
 
-out = io.open("sql/bible_update.sql", mode="w", encoding="utf-8")
+out = io.open("sql/TestDBPbible_update.sql", mode="w", encoding="utf-8")
 
-db = sqlite3.connect('Versions.db')
+db = sqlite3.connect('TestDBPVersions.db')
 cursor = db.cursor()
-sql = "SELECT bibleId, textBucket, textId FROM Bible ORDER BY bibleId"
+sql = "SELECT bibleId, textBucket, textId FROM TestDBPBible ORDER BY bibleId"
 values = ()
 cursor.execute(sql, values)
 rows = cursor.fetchall()
@@ -65,7 +65,7 @@ for row in rows:
 			country = bible['countryCode']
 			country = "'" + country.upper() + "'" if len(country) > 0 else 'null'
 
-			sql = "UPDATE Bible SET direction=%s, script=%s, country=%s WHERE bibleId='%s';\n"
+			sql = "UPDATE TestDBPBible SET direction=%s, script=%s, country=%s WHERE bibleId='%s';\n"
 			out.write(sql % (direction, script, country, bibleId))
 
 		except Exception, err:

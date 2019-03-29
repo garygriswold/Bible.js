@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS Language;
-CREATE TABLE LanguageTemp (
+CREATE TABLE Language (
   locale TEXT NOT NULL PRIMARY KEY,
   iso3 TEXT NOT NULL,
   macro TEXT NULL,

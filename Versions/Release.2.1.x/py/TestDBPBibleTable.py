@@ -12,7 +12,7 @@ def checkNull(field):
 	else:
 		return "'" + field.replace("'", "''") + "'"
 
-out = io.open("sql/bible.sql", mode="w", encoding="utf-8")
+out = io.open("sql/TestDBPbible.sql", mode="w", encoding="utf-8")
 
 out.write(u"DROP TABLE IF EXISTS TestDBPBible;\n")
 out.write(u"CREATE TABLE TestDBPBible (\n")
@@ -35,7 +35,7 @@ out.write(u"  country TEXT NULL REFERENCES Country(code));\n")			# TBD
 prefix2 = "INSERT INTO TestDBPBible (bibleId, abbr, iso3, name, englishName, textBucket, textId, keyTemplate, audioBucket, otDamId, ntDamId) VALUES"
 
 # read and process bible.json file created by Bibles query from DBPv4
-input = io.open("metadata/FCBH/bible.json", mode="r", encoding="utf-8")
+input = io.open(os.environ['HOME'] + "/ShortSands/DBL/FCBH/bible.json", mode="r", encoding="utf-8")
 data = input.read()
 try:
 	bibles = json.loads(data)['data']
