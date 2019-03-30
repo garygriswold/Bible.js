@@ -19,6 +19,7 @@ out.write(u"CREATE TABLE Bible (\n")
 out.write(u"  bibleId TEXT NOT NULL PRIMARY KEY,\n") 					# bible.json abbr
 out.write(u"  abbr TEXT NOT NULL,\n")									# bible.json abbr char 3-6
 out.write(u"  iso3 TEXT NOT NULL REFERENCES Language(iso3),\n")			# bible.json iso
+out.write(u"  versionPriority INT NOT NULL,\n")							# init to 1, manually revise
 out.write(u"  name TEXT NULL,\n")										# bible.json vname
 out.write(u"  englishName TEXT NULL,\n")								# bible.json name
 out.write(u"  localizedName TEXT NULL,\n")								# Google Translate API
@@ -28,12 +29,11 @@ out.write(u"  keyTemplate TEXT NOT NULL,\n")							# %I_%O_%B_%C.html
 out.write(u"  audioBucket TEXT NULL,\n")								# bible.json filesets
 out.write(u"  otDamId TEXT NULL,\n")									# bible.json abbr/id
 out.write(u"  ntDamId TEXT NULL,\n")									# bible.json abbr/id
-out.write(u"  database TEXT NOT NULL,\n")								# bibleId + .db
 out.write(u"  script TEXT NULL,\n")										# TBD
 out.write(u"  country TEXT NULL REFERENCES Country(code),\n")			# TBD
 out.write(u"  iso1 TEXT NULL);\n")										# TBD
 
-prefix2 = "INSERT INTO Bible (bibleId, abbr, iso3, name, englishName, textBucket, textId, keyTemplate, audioBucket, otDamId, ntDamId, database) VALUES"
+prefix2 = "INSERT INTO Bible (bibleId, abbr, iso3, versionPriority, name, englishName, textBucket, textId, keyTemplate, audioBucket, otDamId, ntDamId) VALUES"
 
 # read and process bible.json file created by Bibles query from DBPv4
 input = io.open(os.environ['HOME'] + "/ShortSands/DBL/FCBH/bible.json", mode="r", encoding="utf-8")
@@ -45,7 +45,7 @@ except Exception, err:
 input.close()
 
 for bible in bibles:
-	bibleId = bible["abbr"]
+	bibleId = bible["abbr"] + ".db"
 	abbr = bible["abbr"][3:]
 	iso3 = checkNull(bible["iso"])
 	name = checkNull(bible["vname"])
@@ -102,8 +102,8 @@ for bible in bibles:
 	keyTemplate = "%I_%O_%B_%C.html"
 	database = bibleId + ".db"
 
-	out.write("%s ('%s', '%s', %s, %s, %s, %s, %s, '%s', %s, %s, %s, '%s');\n" % 
+	out.write("%s ('%s', '%s', %s, 1, %s, %s, %s, %s, '%s', %s, %s, %s);\n" % 
 	(prefix2, bibleId, abbr, iso3, name, englishName, textBucket, textId, keyTemplate,
-		audioBucket, otDamId, ntDamId, database))
+		audioBucket, otDamId, ntDamId))
 
 out.close()

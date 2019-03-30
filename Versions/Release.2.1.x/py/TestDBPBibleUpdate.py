@@ -25,7 +25,8 @@ for row in rows:
 	if textBucket == BUCKET:
 
 		try:
-			filename = textKey = "text:" + bibleId + ":" + textId + ":info.json"
+			bibleId2 = bibleId.split('.')[0]
+			filename = textKey = "text:" + bibleId2 + ":" + textId + ":info.json"
 			#print("open", filename)
 			input = io.open(source + filename, mode="r", encoding="utf-8")
 			data = input.read()
