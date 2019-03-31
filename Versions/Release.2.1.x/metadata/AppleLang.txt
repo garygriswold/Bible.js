@@ -23,7 +23,7 @@ bs|bs||Bosnian
 bs_Cyrl|bs|Cyrl|Bosnian (Cyrillic)
 bs_Latn|bs||Bosnian (Latin)
 ca|ca||Catalan
-ccp|ccp||Chakma   extra
+ccp|ccp||Chakma
 ce|ce||Chechen
 cgg|cgg||Chiga
 chr|chr||Cherokee

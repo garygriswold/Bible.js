@@ -2,6 +2,7 @@
 # It reports any that it does not find.
 
 import io
+import os
 import sqlite3
 
 BUCKET = "dbp-prod"
@@ -10,8 +11,8 @@ output = io.open("PermissionsRequest.txt", mode="w", encoding="utf-8")
 
 textSet = set()
 audioSet = set()
-input = io.open("metadata/FCBH/dbp_prod.txt", mode="r", encoding="utf-8")
-#input = io.open("metadata/shortsands/us-west2.txt", mode="r", encoding="utf-8")
+#input = io.open("metadata/FCBH/dbp_prod.txt", mode="r", encoding="utf-8")
+input = io.open(os.environ['HOME'] + "/ShortSands/DBL/FCBH/dbp_prod.txt", mode="r", encoding="utf-8")
 for line in input:
 
 	parts = line.split("/")

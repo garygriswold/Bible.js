@@ -6,7 +6,6 @@ import io
 import sqlite3
 import json
 
-BUCKET = "dbp-prod"
 source = "/Users/garygriswold/ShortSands/DBL/FCBH_info/"
 
 out = io.open("sql/bible_update.sql", mode="w", encoding="utf-8")
@@ -22,55 +21,50 @@ for row in rows:
 	textBucket = row[1]
 	textId = row[2]
 
-	#if textBucket == BUCKET:
-	if 1 != 2:
+	try:
+		filename = textId.replace("/", ":") + ":info.json"
+		#filename = textKey = "text:" + bibleId + ":" + textId + ":info.json"
+		print("open", filename)
+		input = io.open(source + filename, mode="r", encoding="utf-8")
+		data = input.read()
+		bible = json.loads(data)
 
-		try:
-			filename = textId.replace("/", ":") + ":info.json"
-			#filename = textKey = "text:" + bibleId + ":" + textId + ":info.json"
-			print("open", filename)
-			input = io.open(source + filename, mode="r", encoding="utf-8")
-			data = input.read()
-			bible = json.loads(data)
+		#bid = bible["id"]
+		#if bid != bibleId:
+		#	print("bibleId and internal id not equal", bibleId, bid)
 
-			#bid = bible["id"]
-			#if bid != bibleId:
-			#	print("bibleId and internal id not equal", bibleId, bid)
+		# convert script to iso 15924 code
+		script = bible['script']
 
-			direction = "'" + bible["dir"] + "'" if bible["dir"] != None else "null"
+		validScripts = [None, 'Arab', 'Beng', 'Bugi', 'Cans', 'Cyrl', 'Deva', 'Ethi', 'Geor', 
+		'Hans', 'Hant', 'Java', 'Kore', 'Latn', 'Orya', 'Syrc', 'Taml', 'Thai' ]
 
-			# convert script to iso 15924 code
-			script = bible['script']
+		if script not in validScripts:
+			if script == 'Latin':
+				script = 'Latn'
+			elif script == 'Cyrillic':
+				script = 'Cyrl'
+			elif script == 'Arabic':
+				script = 'Arab'
+			elif script == 'Devangari':
+				script = 'Deva'
+			elif script == 'Devanagari (Nagari)':
+				script = 'Deva'
+			elif script == 'CJK':
+				script = None
+			elif script.strip() == '':
+				script = None
+			else:
+				print "ERROR: unknown script code", script, filename
+		script = script if script != None else ''
 
-			validScripts = [None, 'Arab', 'Beng', 'Bugi', 'Cans', 'Cyrl', 'Deva', 'Ethi', 'Geor', 
-			'Hans', 'Hant', 'Java', 'Kore', 'Latn', 'Orya', 'Syrc', 'Taml', 'Thai' ]
+		country = bible['countryCode']
+		country = "'" + country.upper() + "'" if len(country) > 0 else 'null'
 
-			if script not in validScripts:
-				if script == 'Latin':
-					script = 'Latn'
-				elif script == 'Cyrillic':
-					script = 'Cyrl'
-				elif script == 'Arabic':
-					script = 'Arab'
-				elif script == 'Devangari':
-					script = 'Deva'
-				elif script == 'Devanagari (Nagari)':
-					script = 'Deva'
-				elif script == 'CJK':
-					script = None
-				elif script.strip() == '':
-					script = None
-				else:
-					print "ERROR: unknown script code", script, filename
-			script = "'" + script + "'" if script != None else 'null'
+		sql = "UPDATE Bible SET script='%s', country=%s WHERE bibleId='%s';\n"
+		out.write(sql % (script, country, bibleId))
 
-			country = bible['countryCode']
-			country = "'" + country.upper() + "'" if len(country) > 0 else 'null'
-
-			sql = "UPDATE Bible SET direction=%s, script=%s, country=%s WHERE bibleId='%s';\n"
-			out.write(sql % (direction, script, country, bibleId))
-
-		except Exception, err:
-			print "Could not parse info.json", filename, str(err)
+	except Exception, err:
+		print "Could not parse info.json", filename, str(err)
 
 out.close()

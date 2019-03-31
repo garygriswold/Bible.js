@@ -25,7 +25,8 @@ bookNum = {
 	"TDX":"108", "NDX":"109" 
 	}
 
-#session = boto3.Session(profile_name='FCBH_BibleApp')
+dbpSession = boto3.Session(profile_name='FCBH_BibleApp')
+dbpClient = dbpSession.client('s3')
 ssSession = boto3.Session(profile_name='BibleApp')
 ssClient = ssSession.client('s3')
 
@@ -34,7 +35,10 @@ cursor = db.cursor()
 
 def validateText(bucket, textId):
 	try:
-		info = ssClient.get_object(Bucket=bucket, Key=textId + "/info.json")
+		if textBucket == 'dbp-prod':
+			info = dbpClient.get_object(Bucket=bucket, Key=textId + "/info.json")
+		else:
+			info = ssClient.get_object(Bucket=bucket, Key=textId + "/info.json")
 		info2 = json.load(info["Body"])
 		divisions = info2["divisions"]
 	except Exception as err:
@@ -49,7 +53,10 @@ def validateText(bucket, textId):
 			key = "%s/%s_%s_%s_1.html" % (textId, id2, seq, book)
 		try:
 			#print key
-			obj = ssClient.get_object(Bucket=textBucket, Key=key)
+			if textBucket == 'dbp-prod':
+				obj = dbpClient.get_object(Bucket=textBucket, Key=key)
+			else:
+				obj = ssClient.get_object(Bucket=textBucket, Key=key)
 		except Exception as err:
 			print "ERROR:", key, err	
 
