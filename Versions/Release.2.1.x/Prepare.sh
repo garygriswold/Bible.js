@@ -74,11 +74,14 @@ END_SQL3
 sqlite Versions.db <<END_SQL5
 UPDATE Bible SET country='RU' WHERE bibleId='ERV-RUS.db';
 UPDATE Bible SET country='IR' WHERE bibleId='NMV.db';
+UPDATE Bible SET country='GB' WHERE bibleId='KJVPD.db';
+UPDATE Bible SET country='ES' WHERE bibleId='ERV-SPA.db';
 END_SQL5
 
 # Use Google Translate to improve the Bible names
 python py/TranslateBibleNames.py
 sqlite Versions.db < sql/LocalizedBibleNames.sql
+
 sqlite Versions.db <<END_SQL6
 SELECT * FROM Bible WHERE localizedName is NULL;
 UPDATE Bible SET localizedName = name WHERE localizedName is NULL;
