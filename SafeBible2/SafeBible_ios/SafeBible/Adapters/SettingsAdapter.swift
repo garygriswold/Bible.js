@@ -20,7 +20,7 @@ struct SettingsAdapter {
     //
     // Settings methods
     //
-    func getLanguageSettings() -> [Locale] {
+    func getLanguageSettings() -> [Language] {
         var languages: [String]
         if let langs = SettingsDB.shared.getSettings(name: SettingsAdapter.LANGS_SELECTED) {
             languages = langs
@@ -28,7 +28,7 @@ struct SettingsAdapter {
             languages = Locale.preferredLanguages
             SettingsDB.shared.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: languages)
         }
-        let locales: [Locale] = languages.map { Locale(identifier: $0) }
+        let locales: [Language] = languages.map { Language(identifier: $0) }
         return locales
     }
     
@@ -43,9 +43,9 @@ struct SettingsAdapter {
     func ensureLanguageAdded(language: Language?) {
         if (language != nil) {
             var locales = self.getLanguageSettings()
-            if !locales.contains(language!.locale) {
-                locales.append(language!.locale)
-                let localeStrs = locales.map { $0.identifier }
+            if !locales.contains(language!) {
+                locales.append(language!)
+                let localeStrs = locales.map { $0.fullIdentifier }
                 SettingsDB.shared.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: localeStrs)
             }
         }
@@ -63,7 +63,7 @@ struct SettingsAdapter {
     }
     
     func updateSettings(languages: [Language]) {
-        let locales = languages.map { $0.locale.identifier }
+        let locales = languages.map { $0.fullIdentifier }
         SettingsDB.shared.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: locales)
     }
     
@@ -101,59 +101,42 @@ struct SettingsAdapter {
     //
     // Language Versions.db methods
     //
-    func getLanguagesSelected(selected: [Locale]) -> [Language] {
-        let sql =  "SELECT distinct iso1 FROM Language WHERE iso1" + genQuest(array: selected)
+    func getLanguagesSelected(selected: [Language]) -> [Language] {
+        let sql =  "SELECT iso1, script FROM Language WHERE iso1 || script" + genQuest(array: selected)
         let results = getLanguages(sql: sql, selected: selected)
         
-        // Sort results by selected list
-        var map = [String:Language]()
-        for result in results {
-            map[result.iso] = result
-        }
         var languages = [Language]()
-        for loc: Locale in selected {
-            if var found: Language = map[loc.languageCode ?? "??"] {
-                found.locale = loc
-                languages.append(found)
+        for loc in selected {
+            if let index: Int = results.index(of: loc) {
+                languages.append(results[index])
             }
         }
         return languages
     }
     
-    func getLanguagesAvailable(selected: [Locale]) -> [Language] {
-        let sql =  "SELECT distinct iso1 FROM Language WHERE iso1 NOT" + genQuest(array: selected)
+    func getLanguagesAvailable(selected: [Language]) -> [Language] {
+        let sql =  "SELECT iso1, script FROM Language WHERE iso1 || script NOT" + genQuest(array: selected)
         let available = getLanguages(sql: sql, selected: selected)
         return available.sorted{ $0.localized < $1.localized }
     }
     
-    private func getLanguages(sql: String, selected: [Locale]) -> [Language] {
-        var languages = [Language]()
+    private func getLanguages(sql: String, selected: [Language]) -> [Language] {
+        let langScript = selected.map { $0.langScript }
         do {
-            let isos: [String] = selected.map { $0.languageCode ?? "??" }
-            let currLocale = Locale.current
             let db: Sqlite3 = try VersionsDB.shared.getVersionsDB()
-            let resultSet: [[String?]] = try db.queryV1(sql: sql, values: isos)
-            for row in resultSet {
-                let iso: String = row[0]!
-                let locale = Locale(identifier: iso)
-                let name = locale.localizedString(forLanguageCode: iso)
-                let localized = currLocale.localizedString(forLanguageCode: iso)
-                if name != nil && localized != nil {
-                    languages.append(Language(iso: iso, locale: locale, name: name!, localized: localized!))
-                } else {
-                    print("Dropped language \(iso) because localizedString failed.")
-                }
-            }
+            let resultSet: [[String?]] = try db.queryV1(sql: sql, values: langScript )
+            let languages = resultSet.map { Language(iso: $0[0]!, script: $0[1]!) }
+            return languages
         } catch let err {
             print("ERROR: SettingsAdapter.getLanguages \(err)")
         }
-        return languages
+        return [Language]()
     }
     
     //
     // Bible Versions.db methods
     //
-    func getBiblesSelected(locales: [Locale], selectedBibles: [String]) -> [Bible] {
+    func getBiblesSelected(locales: [Language], selectedBibles: [String]) -> [Bible] {
         var results = [Bible]()
         for locale in locales {
             let some = self.getBiblesSelected(locale: locale, selectedBibles: selectedBibles)
@@ -173,61 +156,71 @@ struct SettingsAdapter {
         return bibles
     }
     
-    private func getBiblesSelected(locale: Locale, selectedBibles: [String]) -> [Bible] {
-        let sql = "SELECT bibleId, abbr, b.iso3, localizedName, textBucket, textId, keyTemplate,"
-            + " audioBucket, otDamId, ntDamId"
-            + " FROM Bible b, Language l WHERE b.iso3 = l.iso3"
-            + " AND b.bibleId" + genQuest(array: selectedBibles)
-            + " AND l.iso1 = ?"
-            + " AND b.localizedName IS NOT null"
+    private func getBiblesSelected(locale: Language, selectedBibles: [String]) -> [Bible] {
+        let sql = "SELECT bibleId, abbr, iso3, localizedName, textBucket, textId, keyTemplate,"
+            + " audioBucket, otDamId, ntDamId, iso1, script"
+            + " FROM Bible"
+            + " WHERE bibleId" + genQuest(array: selectedBibles)
+            + " AND iso1 || script = ?"
+            + " AND localizedName IS NOT null"
         return getBibles(sql: sql, locale: locale, selectedBibles: selectedBibles)
     }
     
-    func getBiblesAvailable(locale: Locale, selectedBibles: [String]) -> [Bible] {
-        let sql = "SELECT bibleId, abbr, b.iso3, localizedName, textBucket, textId, keyTemplate,"
-            + " audioBucket, otDamId, ntDamId"
-            + " FROM Bible b, Language l WHERE b.iso3 = l.iso3"
-            + " AND b.bibleId NOT" + genQuest(array: selectedBibles)
-            + " AND l.iso1 = ?"
-            + " AND b.localizedName IS NOT null"
-            + " ORDER BY b.localizedName"
+    func getBiblesAvailable(locale: Language, selectedBibles: [String]) -> [Bible] {
+        let sql = "SELECT bibleId, abbr, iso3, localizedName, textBucket, textId, keyTemplate,"
+            + " audioBucket, otDamId, ntDamId, iso1, script"
+            + " FROM Bible"
+            + " WHERE bibleId NOT" + genQuest(array: selectedBibles)
+            + " AND iso1 || script = ?"
+            + " AND localizedName IS NOT null"
+            + " ORDER BY localizedName"
         return getBibles(sql: sql, locale: locale, selectedBibles: selectedBibles)
     }
     
-    private func getBibles(sql: String, locale: Locale, selectedBibles: [String]) -> [Bible] {
-        var bibles = [Bible]()
-        let iso: String = locale.languageCode ?? "??"
+    private func getBibles(sql: String, locale: Language, selectedBibles: [String]) -> [Bible] {
         do {
             let db: Sqlite3 = try VersionsDB.shared.getVersionsDB()
-            let values = selectedBibles + [iso]
+            let values = selectedBibles + [locale.langScript]
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: values)
-            bibles = resultSet.map {
+            let bibles = resultSet.map {
                 Bible(bibleId: $0[0]!, abbr: $0[1]!, iso3: $0[2]!, name: $0[3]!,
                       textBucket: $0[4]!, textId: $0[5]!, s3TextTemplate: $0[6]!,
-                      audioBucket: $0[7], otDamId: $0[8], ntDamId: $0[9], locale: locale)
+                      audioBucket: $0[7], otDamId: $0[8], ntDamId: $0[9],
+                      iso: $0[10]!, script: $0[11]!)
             }
+            return bibles
         } catch let err {
             print("ERROR: SettingsAdapter.getBibles \(err)")
         }
-        return bibles
+        return [Bible]()
     }
     
     /**
-     * Deprecated: 8/30/18.  This method is only used by BibleInitialSelectExperiment.
+     * Used by BibleInitialSelect.
     */
-    func getAllBibles() -> [BibleDetail] {
-        var bibles = [BibleDetail]()
-        let sql = "SELECT bibleId, b.iso3, l.iso1, b.script, b.country FROM Bible b, Language l WHERE b.iso3 = l.iso3"
+    func getAllBibles() -> [Bible] {
+        let sql = "SELECT bibleId, abbr, iso3, localizedName, textBucket, textId, keyTemplate,"
+            + " audioBucket, otDamId, ntDamId, iso1, script"
+            + " FROM Bible"
+            + " WHERE localizedName IS NOT NULL"
+            + " AND textBucket IS NOT NULL"
+            + " AND textId IS NOT NULL"
+            + " AND versionPriority < 4"
+            + " ORDER BY iso1, versionPriority"
         do {
             let db: Sqlite3 = try VersionsDB.shared.getVersionsDB()
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: [])
-            bibles = resultSet.map {
-                BibleDetail(bibleId: $0[0]!, iso3: $0[1]!, iso1: $0[2], script: $0[3], country: $0[4])
+            let bibles = resultSet.map {
+                Bible(bibleId: $0[0]!, abbr: $0[1]!, iso3: $0[2]!, name: $0[3]!,
+                      textBucket: $0[4]!, textId: $0[5]!, s3TextTemplate: $0[6]!,
+                      audioBucket: $0[7], otDamId: $0[8], ntDamId: $0[9],
+                      iso: $0[10]!, script: $0[11]!)
             }
+            return bibles
         } catch let err {
             print("ERROR: SettingsAdapter.getAllBibles \(err)")
         }
-        return bibles
+        return [Bible]()
     }
     
     func genQuest(array: [Any]) -> String {

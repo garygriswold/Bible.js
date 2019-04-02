@@ -174,8 +174,7 @@ class BibleListViewController: AppSettingsViewController {
             else if section >= self.availableSection {
                 let index = section - self.availableSection
                 let locale = self.dataModel!.locales[index]
-                let lang = Locale.current.localizedString(forLanguageCode: locale.languageCode ?? "en")
-                return lang
+                return locale.localized
             }
             else { return nil }
         case .oneLang:

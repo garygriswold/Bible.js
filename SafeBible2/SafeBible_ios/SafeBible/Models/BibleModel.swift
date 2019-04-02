@@ -10,7 +10,7 @@ import UIKit
 
 class BibleModel : SettingsModel {
     
-    let locales: [Locale]
+    let locales: [Language]
     var selected: [Bible]
     var available: [[Bible]]
     var filtered: [Bible] // deprecated, not used
@@ -34,17 +34,17 @@ class BibleModel : SettingsModel {
             bibles = selected.map { $0.bibleId }
             adapter.updateSettings(bibles: self.selected)
         }
-        let selectedLocales = Set(self.selected.map { $0.locale })
-        var tempLocales = [Locale]()
+        let selectedLocales = Set(self.selected.map { $0.language.identifier })
+        var tempLocales = [Language]()
         self.available = [[Bible]]()
         if !selectedOnly {
             if self.oneLanguage != nil {
-                let avail = adapter.getBiblesAvailable(locale: oneLanguage!.locale, selectedBibles: bibles)
+                let avail = adapter.getBiblesAvailable(locale: oneLanguage!, selectedBibles: bibles)
                 self.available.append(avail)
             } else {
                 for locale in prefLocales {
                     let available1 = adapter.getBiblesAvailable(locale: locale, selectedBibles: bibles)
-                    if available1.count > 0 || selectedLocales.contains(locale) {
+                    if available1.count > 0 || selectedLocales.contains(locale.identifier) {
                         tempLocales.append(locale)
                         self.available.append(available1)
                     }
@@ -151,7 +151,7 @@ class BibleModel : SettingsModel {
         if self.oneLanguage != nil {
             localeIndex = 0
         } else {
-            localeIndex = self.findAvailableLocale(locale: bible.locale)
+            localeIndex = self.findAvailableLocale(locale: bible.language)
         }
         let bibleList = self.available[localeIndex]
         let searchName = bible.name
@@ -164,7 +164,7 @@ class BibleModel : SettingsModel {
         return IndexPath(item: bibleList.count, section: (localeIndex + self.availableSection))
     }
     
-    private func findAvailableLocale(locale: Locale) -> Int {
+    private func findAvailableLocale(locale: Language) -> Int {
         for index in 0..<locales.count {
             let loc = locales[index]
             if loc == locale {

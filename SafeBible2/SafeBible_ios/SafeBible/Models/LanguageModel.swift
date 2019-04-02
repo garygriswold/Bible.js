@@ -8,9 +8,82 @@
 
 import UIKit
 
+struct Language : Equatable {
+    let iso: String         // iso1 code or iso3 code if iso1 does not apply
+    let script: String?     // script code
+    let country: String?    // country code
+    let identifier: String  // This should be the iso_script identifer, country is ignored
+    
+    var fullIdentifier: String {
+        get {
+            return (self.country != nil) ? self.identifier + "-" + self.country! : self.identifier
+        }
+    }
+    
+    var englishName: String {
+        get {
+            return Locale(identifier: self.identifier).localizedString(forLanguageCode: "en")!
+        }
+    }
+    
+    var langScript: String {
+        get {
+            return (self.script != nil) ? self.iso + self.script! : self.iso
+        }
+    }
+    
+    var name: String {
+        get {
+            if let nam = Locale(identifier: self.identifier).localizedString(forIdentifier: self.identifier) {
+                return nam
+            } else {
+                print("ERROR: Lang name Localization in own locale failed for \(self.identifier)")
+                return self.englishName
+            }
+        }
+    }
+    
+    var localized: String {
+        get {
+            if let nam = Locale.current.localizedString(forIdentifier: self.identifier) {
+                return nam
+            } else {
+                print("ERROR: Lang name Localization in current locale failed for \(self.identifier)")
+                return self.englishName
+            }
+        }
+    }
+    
+    /** Used to populate Language from preferredLanguages */
+    init(identifier: String) {
+        let locale = Locale(identifier: identifier)
+        self.iso = locale.languageCode!
+        self.script = locale.scriptCode
+        self.country = locale.regionCode
+        self.identifier = (self.script != nil) ? self.iso + "-" + self.script! : self.iso
+    }
+    
+    /** Used to populate Language from Language table and from Bible table */
+    init(iso: String, script: String) {
+        self.iso = iso
+        self.script = (script.count > 0) ? script : nil
+        self.country = nil
+        self.identifier = (self.script != nil) ? iso + "-" + script : iso
+    }
+    
+    static func == (lhs: Language, rhs: Language) -> Bool {
+        return lhs.iso == rhs.iso && lhs.script == rhs.script
+    }
+    
+    static func === (lhs: Language, rhs: Language) -> Bool {
+        return lhs.iso == rhs.iso && lhs.script == rhs.script && lhs.country == rhs.country
+    }
+}
+
+
 class LanguageModel : SettingsModel {
     
-    let locales: [Locale]
+    let locales: [Language]
     var selected: [Language]
     var available: [Language]
     var filtered: [Language]

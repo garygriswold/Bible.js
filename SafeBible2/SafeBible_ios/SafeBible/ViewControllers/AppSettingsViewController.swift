@@ -80,7 +80,7 @@ class AppSettingsViewController : AppTableViewController, UITableViewDataSource 
         if let model = self.dataModel as? LanguageModel {
             if let language = model.getSelectedLanguage(row: destination.row) {
                 let initial = BibleInitialSelect(adapter: model.settingsAdapter)
-                let bibles = initial.getBiblesSelected(locales: [language.locale])
+                let bibles = initial.getBiblesSelected(locales: [language])
                 model.settingsAdapter.addBibles(bibles: bibles)
             }
         }

@@ -19,7 +19,7 @@ struct VersionsDB {
     //
     func getBible(bibleId: String) -> Bible {
         let sql = "SELECT bibleId, abbr, iso3, localizedName, textBucket, textId, keyTemplate,"
-            + " audioBucket, otDamId, ntDamId FROM Bible WHERE bibleId = ?"
+            + " audioBucket, otDamId, ntDamId, iso1, script FROM Bible WHERE bibleId = ?"
         do {
             let db: Sqlite3 = try self.getVersionsDB()
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: [bibleId])
@@ -28,7 +28,7 @@ struct VersionsDB {
                 return Bible(bibleId: row[0]!, abbr: row[1]!, iso3: row[2]!, name: row[3]!,
                              textBucket: row[4]!, textId: row[5]!, s3TextTemplate: row[6]!,
                              audioBucket: row[7], otDamId: row[8], ntDamId: row[9],
-                             locale: Locale.current)
+                             iso: row[10]!, script: row[11]!)
             }
         } catch let err {
             print("ERROR: VersionsDB.getBible \(err)")
@@ -38,7 +38,7 @@ struct VersionsDB {
         return Bible(bibleId: "ENGESV.db", abbr: "ESV", iso3: "eng", name: "English Standard",
                      textBucket: "text-us-east-1-shortsands", textId: "text/ENGESV/ENGESV",
                      s3TextTemplate: "%I_%O_%B_%C.html",
-                     audioBucket: nil, otDamId: nil, ntDamId: nil, locale: Locale.current)
+                     audioBucket: nil, otDamId: nil, ntDamId: nil, iso: "en", script: "")
     }
     
     //

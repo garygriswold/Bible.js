@@ -8,17 +8,6 @@
 
 import UIKit
 
-struct Language : Equatable {
-    let iso: String         // unique iso-1 and iso-3 for those with no iso-1
-    var locale: Locale      // Locale of language (languageCode, regionCode, scriptCode)
-    let name: String        // name in its own language
-    let localized: String   // name localized to user language
-    
-    static func == (lhs: Language, rhs: Language) -> Bool {
-        return lhs.iso == rhs.iso
-    }
-}
-
 struct Bible : Equatable {
     let bibleId: String     // FCBH 6 to 8 char code
     let abbr: String        // Version Abbreviation
@@ -30,14 +19,14 @@ struct Bible : Equatable {
     let audioBucket: String?// Name of bucket with audio Bible
     let otDamId: String?    // Old Testament DamId
     let ntDamId: String?    // New Testament DamId
-    let locale: Locale      // The user locale that is associated
+    let language: Language
     var isDownloaded: Bool?
     var tableContents: TableContentsModel?
     
     init(bibleId: String, abbr: String, iso3: String, name: String,
          textBucket: String, textId: String, s3TextTemplate: String,
          audioBucket: String?, otDamId: String?, ntDamId: String?,
-         locale: Locale) {
+         iso: String, script: String) {
         self.bibleId = bibleId
         self.abbr = abbr
         self.iso3 = iso3
@@ -48,7 +37,7 @@ struct Bible : Equatable {
         self.audioBucket = audioBucket
         self.otDamId = otDamId
         self.ntDamId = ntDamId
-        self.locale = locale
+        self.language = Language(iso: iso, script: script)
     }
     
     static func == (lhs: Bible, rhs: Bible) -> Bool {
@@ -59,7 +48,7 @@ struct Bible : Equatable {
 protocol SettingsModel {
  
     var settingsAdapter: SettingsAdapter { get }
-    var locales: [Locale] { get }
+    var locales: [Language] { get }
     var selectedCount: Int { get }
     var availableCount: Int { get }
     var filteredCount: Int { get }
