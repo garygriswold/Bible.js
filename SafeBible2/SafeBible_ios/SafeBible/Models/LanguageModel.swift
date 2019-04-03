@@ -56,10 +56,23 @@ struct Language : Equatable {
     
     /** Used to populate Language from preferredLanguages */
     init(identifier: String) {
-        let locale = Locale(identifier: identifier)
-        self.iso = locale.languageCode!
-        self.script = locale.scriptCode
-        self.country = locale.regionCode
+        let parts = identifier.split(separator: "-")
+        self.iso = String(parts[0])
+        var tmpScript: String? = nil
+        var tmpCountry: String? = nil
+        for index in 1..<parts.count {
+            let part = parts[index]
+            switch part.count {
+            case 2:
+                tmpCountry = String(part)
+            case 4:
+                tmpScript = String(part)
+            default:
+                print("ERROR: Unrecognized \(part) in \(identifier)")
+            }
+        }
+        self.script = tmpScript
+        self.country = tmpCountry
         self.identifier = (self.script != nil) ? self.iso + "-" + self.script! : self.iso
     }
     
