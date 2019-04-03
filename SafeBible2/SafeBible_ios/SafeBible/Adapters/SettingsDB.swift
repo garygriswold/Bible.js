@@ -19,8 +19,9 @@ struct SettingsDB {
     // Settings Table
     //
     func getSettings(name: String) -> [String]? {
-        if let value = self.getSetting(name: name) {
-            return value.components(separatedBy: ",")
+        let value = self.getSetting(name: name)
+        if value != nil && value!.count > 0 {
+            return value!.components(separatedBy: ",")
         } else {
             return nil
         }
