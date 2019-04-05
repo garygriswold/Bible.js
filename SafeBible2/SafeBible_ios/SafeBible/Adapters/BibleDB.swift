@@ -112,6 +112,20 @@ struct BibleDB {
         }
     }
     
+    func shouldDownloadTest(bible: Bible) -> Bool {
+        let db: Sqlite3
+        do {
+            db = try self.getBibleDB(bibleId: bible.bibleId)
+            let sql = "SELECT count(*) FROM Chapters"
+            let resultSet = try db.queryV1(sql: sql, values: [])
+            let count: Int = Int(resultSet[0][0]!) ?? 0
+            return (count > 20) // Should download if more than 20 chapters read.
+        } catch let err {
+            print("ERROR shouldDownloadTest \(err)")
+            return false
+        }
+    }
+    
     private func getBibleDB(bibleId: String) throws -> Sqlite3 {
         var db: Sqlite3?
         do {

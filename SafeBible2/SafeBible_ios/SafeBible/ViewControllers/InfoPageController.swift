@@ -55,9 +55,9 @@ class InfoPageController : AppViewController {
     }
     
     private func aboutInfo() -> String {
-        let message = "SafeBible - A free Bible App that protects your privacy.\n\n" +
+        let message = "The Bible. - A free Bible App that protects your privacy.\n\n" +
             "Privacy Policy\n\n" +
-            "The “SafeBible” App is designed to insure every reader’s anonymity." +
+            "“The Bible.” App is designed to insure every reader’s anonymity." +
             "  It collects no information about any user, or about any user’s device," +
             " or any user’s location.  Nor, does it perform any transactions over the" +
             " Internet that can be blocked or monitored by a government opposed to Christianity." +
@@ -66,11 +66,11 @@ class InfoPageController : AppViewController {
             "  The App does not collect any information about its readers. For example," +
             " it does not collect device serial numbers, or other device identifiers," +
             " or Internet addresses. It does not collect user’s GPS location.\n\n" +
-            "To best of our knowledge, “SafeBible” is the only Bible App, which provides" +
+            "To best of our knowledge, “The Bible.” is the only Bible App, which provides" +
             " users with this degree of privacy.\n\n" +
             "Some governments, who are opposed to Christianity, attempt to block access to the Bible." +
-            "  They are not able to block “SafeBible”.\n\n" +
-            "“SafeBible” is free and does not advertise in the App.  And, it does not use" +
+            "  They are not able to block “The Bible.”.\n\n" +
+            "“The Bible.” is free and does not advertise in the App.  And, it does not use" +
             " the App to sell other products or books.\n\n" +
             "Published by, Short Sands, LLC\n" +
             "Giving the world a free mobile Bible that is safe to use in any country.\n\n" +
