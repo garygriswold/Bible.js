@@ -1,5 +1,5 @@
 /* Title on action sheet */
-"+ More Bibles" = "+ Thêm Kinh Thánh";
+"+ More Bibles" = "+ Kinh thánh khác";
 
 /* Title on action sheet */
 "+ More Languages" = "+ Thêm ngôn ngữ";
@@ -90,7 +90,8 @@
 /* Notebook files in list */
 "Notebooks" = "Sổ ghi chép";
 
-/* Notes list view page title */
+/* Notes Cell Title
+   Notes list view page title */
 "Notes" = "Ghi chú";
 
 /* Default action in Alert */
@@ -109,6 +110,9 @@
 
 /* Menu option to share verse with others */
 "Share" = "Chia sẻ";
+
+/* Clickable cell title */
+"Share Bible App" = "Chia sẻ ứng dụng Kinh Thánh";
 
 /* Clickable cell title */
 "Share SafeBible" = "Chia sẻ SafeBible";

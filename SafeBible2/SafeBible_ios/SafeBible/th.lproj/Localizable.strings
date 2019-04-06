@@ -90,7 +90,8 @@
 /* Notebook files in list */
 "Notebooks" = "โน๊ตบุ๊ค";
 
-/* Notes list view page title */
+/* Notes Cell Title
+   Notes list view page title */
 "Notes" = "หมายเหตุ";
 
 /* Default action in Alert */
@@ -109,6 +110,9 @@
 
 /* Menu option to share verse with others */
 "Share" = "หุ้น";
+
+/* Clickable cell title */
+"Share Bible App" = "แชร์แอพพระคัมภีร์";
 
 /* Clickable cell title */
 "Share SafeBible" = "แบ่งปัน SafeBible";

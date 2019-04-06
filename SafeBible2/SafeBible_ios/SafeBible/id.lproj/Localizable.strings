@@ -90,7 +90,8 @@
 /* Notebook files in list */
 "Notebooks" = "Notebook";
 
-/* Notes list view page title */
+/* Notes Cell Title
+   Notes list view page title */
 "Notes" = "Catatan";
 
 /* Default action in Alert */
@@ -109,6 +110,9 @@
 
 /* Menu option to share verse with others */
 "Share" = "Bagikan";
+
+/* Clickable cell title */
+"Share Bible App" = "Bagikan Aplikasi Alkitab";
 
 /* Clickable cell title */
 "Share SafeBible" = "Bagikan SafeBible";

@@ -82,7 +82,7 @@
 "Note" = "Huomautus";
 
 /* Option on action sheet */
-"Notebook to Share" = "Jaettava kannettava tietokone";
+"Notebook to Share" = "Kannettavan tietokoneen jakaminen";
 
 /* Option on action sheet */
 "Notebook to Text" = "Notebook teksti";
@@ -90,7 +90,8 @@
 /* Notebook files in list */
 "Notebooks" = "muistikirjat";
 
-/* Notes list view page title */
+/* Notes Cell Title
+   Notes list view page title */
 "Notes" = "Huomautuksia";
 
 /* Default action in Alert */
@@ -109,6 +110,9 @@
 
 /* Menu option to share verse with others */
 "Share" = "Jaa";
+
+/* Clickable cell title */
+"Share Bible App" = "Jaa Raamatun sovellus";
 
 /* Clickable cell title */
 "Share SafeBible" = "Jaa SafeBible";

@@ -90,7 +90,8 @@
 /* Notebook files in list */
 "Notebooks" = "Φορητοί υπολογιστές";
 
-/* Notes list view page title */
+/* Notes Cell Title
+   Notes list view page title */
 "Notes" = "Σημειώσεις";
 
 /* Default action in Alert */
@@ -109,6 +110,9 @@
 
 /* Menu option to share verse with others */
 "Share" = "Μερίδιο";
+
+/* Clickable cell title */
+"Share Bible App" = "Κοινή χρήση της εφαρμογής Βίβλου";
 
 /* Clickable cell title */
 "Share SafeBible" = "Μοιραστείτε ασφαλείς";

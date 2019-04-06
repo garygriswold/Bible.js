@@ -90,7 +90,8 @@
 /* Notebook files in list */
 "Notebooks" = "ノートブック";
 
-/* Notes list view page title */
+/* Notes Cell Title
+   Notes list view page title */
 "Notes" = "ノート";
 
 /* Default action in Alert */
@@ -111,13 +112,16 @@
 "Share" = "シェア";
 
 /* Clickable cell title */
+"Share Bible App" = "聖書アプリを共有する";
+
+/* Clickable cell title */
 "Share SafeBible" = "SafeBibleを共有する";
 
 /* Table of Contents Title */
 "Table of Contents" = "目次";
 
 /* Bible books in traditional sequence */
-"Traditional" = "トラディショナル";
+"Traditional" = "伝統的な";
 
 /* Clickable cell title */
 "Verse Numbers" = "詩番号";

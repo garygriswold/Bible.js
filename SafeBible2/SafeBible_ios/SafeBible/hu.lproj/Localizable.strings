@@ -90,7 +90,8 @@
 /* Notebook files in list */
 "Notebooks" = "notebookok";
 
-/* Notes list view page title */
+/* Notes Cell Title
+   Notes list view page title */
 "Notes" = "Megjegyzések";
 
 /* Default action in Alert */
@@ -109,6 +110,9 @@
 
 /* Menu option to share verse with others */
 "Share" = "Részvény";
+
+/* Clickable cell title */
+"Share Bible App" = "Ossza meg a Bibliaalkalmazást";
 
 /* Clickable cell title */
 "Share SafeBible" = "Ossza meg a SafeBible-t";

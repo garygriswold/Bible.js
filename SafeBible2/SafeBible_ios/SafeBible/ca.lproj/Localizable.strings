@@ -1,5 +1,5 @@
 /* Title on action sheet */
-"+ More Bibles" = "+ Més Biblioteques";
+"+ More Bibles" = "+ Més Bíblies";
 
 /* Title on action sheet */
 "+ More Languages" = "+ Més idiomes";
@@ -8,10 +8,10 @@
 "About" = "Quant a";
 
 /* Option on action sheet */
-"All Notebooks to Share" = "Tots els blocs de notes per compartir";
+"All Notebooks to Share" = "Tots els quaderns a compartir";
 
 /* Option on action sheet */
-"All Notebooks to Text" = "Tots els blocs de notes al text";
+"All Notebooks to Text" = "Tots els quaderns a text";
 
 /* Bible books in alphabetical sequence */
 "Alphabetical" = "Alfabètic";
@@ -24,7 +24,7 @@
 "Bibles" = "Bíblies";
 
 /* Menu option to Bookmark verse */
-"Bookmark" = "Marcador";
+"Bookmark" = "Marcar";
 
 /* Table Contents view page title */
 "Books" = "Llibres";
@@ -34,16 +34,16 @@
 "Cancel" = "Cancel · lar";
 
 /* Menu option to see verse in multiple versions */
-"Compare" = "Compara";
+"Compare" = "Comparar";
 
 /* Delete bookmark action in Alert */
 "Delete" = "Suprimeix";
 
 /* Languages search bar */
-"Find Languages" = "Cerca idiomes";
+"Find Languages" = "Cerca de llengües";
 
 /* Menu option Highlight Text */
-"Highlight" = "Ressaltar";
+"Highlight" = "Ressalteu";
 
 /* Button to display History
    History Cell Title
@@ -54,13 +54,13 @@
 "I like it!" = "M'agrada!";
 
 /* Languages view page title */
-"Languages" = "Llengües";
+"Languages" = "Idiomes";
 
 /* Menu view page title */
 "Menu" = "Menú";
 
 /* Clickable cell title */
-"More Bibles" = "Més Bíblies";
+"More Bibles" = "Més bíblies";
 
 /* Clickable cell title
    Section heading for Other languages */
@@ -73,7 +73,7 @@
 "My Languages" = "Els meus idiomes";
 
 /* Clickable cell title */
-"Night Time" = "Temps nocturn";
+"Night Time" = "Nit";
 
 /* No option on an alert */
 "No" = "No";
@@ -85,12 +85,13 @@
 "Notebook to Share" = "Llibreta per compartir";
 
 /* Option on action sheet */
-"Notebook to Text" = "Quadern al text";
+"Notebook to Text" = "Quadern a text";
 
 /* Notebook files in list */
 "Notebooks" = "Quaderns";
 
-/* Notes list view page title */
+/* Notes Cell Title
+   Notes list view page title */
 "Notes" = "Notes";
 
 /* Default action in Alert */
@@ -101,14 +102,17 @@
 "Privacy Policy" = "Política de privacitat";
 
 /* Red Delete Button text */
-"Remove" = "Suprimeix";
+"Remove" = "Elimina";
 
 /* Clickable cell title
    Feedback view title */
-"Send Us Comments" = "Envia'ns comentaris";
+"Send Us Comments" = "Envieu-nos comentaris";
 
 /* Menu option to share verse with others */
 "Share" = "Compartir";
+
+/* Clickable cell title */
+"Share Bible App" = "Comparteix l'aplicació de la Bíblia";
 
 /* Clickable cell title */
 "Share SafeBible" = "Comparteix SafeBible";
@@ -120,7 +124,7 @@
 "Traditional" = "Tradicional";
 
 /* Clickable cell title */
-"Verse Numbers" = "Nombres de versos";
+"Verse Numbers" = "Números del vers";
 
 /* Title of Videos page
    Videos Cell Title */

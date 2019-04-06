@@ -1,5 +1,5 @@
 /* Title on action sheet */
-"+ More Bibles" = "+ Ďalšie biblie";
+"+ More Bibles" = "+ Viac Biblie";
 
 /* Title on action sheet */
 "+ More Languages" = "+ Ďalšie jazyky";
@@ -8,7 +8,7 @@
 "About" = "o";
 
 /* Option on action sheet */
-"All Notebooks to Share" = "Všetky prenosné počítače, ktoré chcete zdieľať";
+"All Notebooks to Share" = "Všetky notebooky na zdieľanie";
 
 /* Option on action sheet */
 "All Notebooks to Text" = "Všetky notebooky na text";
@@ -60,14 +60,14 @@
 "Menu" = "Ponuka";
 
 /* Clickable cell title */
-"More Bibles" = "Viac Bibli";
+"More Bibles" = "Viac Biblie";
 
 /* Clickable cell title
    Section heading for Other languages */
-"More Languages" = "Viac jazykov";
+"More Languages" = "Ďalšie jazyky";
 
 /* Section heading for User selected Bibles */
-"My Bibles" = "Moje biblie";
+"My Bibles" = "Moje Biblie";
 
 /* Section heading for User languages */
 "My Languages" = "Moje jazyky";
@@ -82,15 +82,16 @@
 "Note" = "Poznámka";
 
 /* Option on action sheet */
-"Notebook to Share" = "Notebook pre zdieľanie";
+"Notebook to Share" = "Poznámkový blok na zdieľanie";
 
 /* Option on action sheet */
-"Notebook to Text" = "Notebook na text";
+"Notebook to Text" = "Poznámkový blok na text";
 
 /* Notebook files in list */
 "Notebooks" = "notebooky";
 
-/* Notes list view page title */
+/* Notes Cell Title
+   Notes list view page title */
 "Notes" = "Poznámky";
 
 /* Default action in Alert */
@@ -105,10 +106,13 @@
 
 /* Clickable cell title
    Feedback view title */
-"Send Us Comments" = "Pošlite nám pripomienky";
+"Send Us Comments" = "Pošlite nám Komentáre";
 
 /* Menu option to share verse with others */
 "Share" = "zdieľam";
+
+/* Clickable cell title */
+"Share Bible App" = "Podiel Biblie App";
 
 /* Clickable cell title */
 "Share SafeBible" = "Zdieľajte SafeBible";
@@ -120,7 +124,7 @@
 "Traditional" = "tradičné";
 
 /* Clickable cell title */
-"Verse Numbers" = "Verše čísla";
+"Verse Numbers" = "Čísla veršov";
 
 /* Title of Videos page
    Videos Cell Title */

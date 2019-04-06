@@ -1,5 +1,5 @@
 /* Title on action sheet */
-"+ More Bibles" = "+ المزيد من الكتاب المقدس";
+"+ More Bibles" = "+ المزيد من الأناجيل";
 
 /* Title on action sheet */
 "+ More Languages" = "+ المزيد من اللغات";
@@ -60,17 +60,17 @@
 "Menu" = "قائمة طعام";
 
 /* Clickable cell title */
-"More Bibles" = "المزيد من الكتاب المقدس";
+"More Bibles" = "المزيد من الأناجيل";
 
 /* Clickable cell title
    Section heading for Other languages */
 "More Languages" = "المزيد من اللغات";
 
 /* Section heading for User selected Bibles */
-"My Bibles" = "بلدي الأناجيل";
+"My Bibles" = "بلدي الاناجيل";
 
 /* Section heading for User languages */
-"My Languages" = "لغاتي";
+"My Languages" = "لغتي";
 
 /* Clickable cell title */
 "Night Time" = "وقت الليل";
@@ -85,12 +85,13 @@
 "Notebook to Share" = "مفكرة للمشاركة";
 
 /* Option on action sheet */
-"Notebook to Text" = "مفكرة إلى نص";
+"Notebook to Text" = "دفتر الملاحظات إلى النص";
 
 /* Notebook files in list */
 "Notebooks" = "دفاتر الملاحظات";
 
-/* Notes list view page title */
+/* Notes Cell Title
+   Notes list view page title */
 "Notes" = "ملاحظات";
 
 /* Default action in Alert */
@@ -105,13 +106,16 @@
 
 /* Clickable cell title
    Feedback view title */
-"Send Us Comments" = "أرسل لنا التعليقات";
+"Send Us Comments" = "أرسل لنا تعليقات";
 
 /* Menu option to share verse with others */
 "Share" = "شارك";
 
 /* Clickable cell title */
-"Share SafeBible" = "شارك SafeBible";
+"Share Bible App" = "حصة الكتاب المقدس التطبيق";
+
+/* Clickable cell title */
+"Share SafeBible" = "مشاركة SafeBible";
 
 /* Table of Contents Title */
 "Table of Contents" = "جدول المحتويات";
@@ -120,7 +124,7 @@
 "Traditional" = "تقليدي";
 
 /* Clickable cell title */
-"Verse Numbers" = "الآية العدد";
+"Verse Numbers" = "أرقام الآية";
 
 /* Title of Videos page
    Videos Cell Title */

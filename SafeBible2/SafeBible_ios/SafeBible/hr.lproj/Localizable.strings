@@ -90,7 +90,8 @@
 /* Notebook files in list */
 "Notebooks" = "Prijenosna računala";
 
-/* Notes list view page title */
+/* Notes Cell Title
+   Notes list view page title */
 "Notes" = "Bilješke";
 
 /* Default action in Alert */
@@ -109,6 +110,9 @@
 
 /* Menu option to share verse with others */
 "Share" = "Udio";
+
+/* Clickable cell title */
+"Share Bible App" = "Podijelite Bibliju App";
 
 /* Clickable cell title */
 "Share SafeBible" = "Podijeli SafeBible";

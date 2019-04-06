@@ -90,7 +90,8 @@
 /* Notebook files in list */
 "Notebooks" = "Bärbara datorer";
 
-/* Notes list view page title */
+/* Notes Cell Title
+   Notes list view page title */
 "Notes" = "anteckningar";
 
 /* Default action in Alert */
@@ -109,6 +110,9 @@
 
 /* Menu option to share verse with others */
 "Share" = "Dela med sig";
+
+/* Clickable cell title */
+"Share Bible App" = "Dela bibelapp";
 
 /* Clickable cell title */
 "Share SafeBible" = "Dela SafeBible";

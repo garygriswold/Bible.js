@@ -8,7 +8,7 @@
 "About" = "O";
 
 /* Option on action sheet */
-"All Notebooks to Share" = "Wszystkie notebooki do udostępnienia";
+"All Notebooks to Share" = "Wszystkie notatniki do udostępniania";
 
 /* Option on action sheet */
 "All Notebooks to Text" = "Wszystkie notatniki do tekstu";
@@ -73,7 +73,7 @@
 "My Languages" = "Moje języki";
 
 /* Clickable cell title */
-"Night Time" = "Night Time";
+"Night Time" = "Noc";
 
 /* No option on an alert */
 "No" = "Nie";
@@ -82,7 +82,7 @@
 "Note" = "Uwaga";
 
 /* Option on action sheet */
-"Notebook to Share" = "Notatnik do udostępnienia";
+"Notebook to Share" = "Notatnik do udostępniania";
 
 /* Option on action sheet */
 "Notebook to Text" = "Notatnik do tekstu";
@@ -90,7 +90,8 @@
 /* Notebook files in list */
 "Notebooks" = "Notebooki";
 
-/* Notes list view page title */
+/* Notes Cell Title
+   Notes list view page title */
 "Notes" = "Uwagi";
 
 /* Default action in Alert */
@@ -111,6 +112,9 @@
 "Share" = "Dzielić";
 
 /* Clickable cell title */
+"Share Bible App" = "Udostępnij aplikację biblijną";
+
+/* Clickable cell title */
 "Share SafeBible" = "Udostępnij SafeBible";
 
 /* Table of Contents Title */
@@ -120,11 +124,11 @@
 "Traditional" = "Tradycyjny";
 
 /* Clickable cell title */
-"Verse Numbers" = "Numery wersetów";
+"Verse Numbers" = "Numery wierszy";
 
 /* Title of Videos page
    Videos Cell Title */
-"Videos" = "Filmy wideo";
+"Videos" = "Filmy";
 
 /* Clickable cell title */
 "Write A Review" = "Napisać recenzję";

@@ -90,7 +90,8 @@
 /* Notebook files in list */
 "Notebooks" = "מחברות";
 
-/* Notes list view page title */
+/* Notes Cell Title
+   Notes list view page title */
 "Notes" = "הערות";
 
 /* Default action in Alert */
@@ -109,6 +110,9 @@
 
 /* Menu option to share verse with others */
 "Share" = "שתף";
+
+/* Clickable cell title */
+"Share Bible App" = "שיתוף התנ\"ך App";
 
 /* Clickable cell title */
 "Share SafeBible" = "שתף את SafeBible";

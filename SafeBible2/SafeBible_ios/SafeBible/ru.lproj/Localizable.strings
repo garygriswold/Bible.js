@@ -90,7 +90,8 @@
 /* Notebook files in list */
 "Notebooks" = "Ноутбуки";
 
-/* Notes list view page title */
+/* Notes Cell Title
+   Notes list view page title */
 "Notes" = "Заметки";
 
 /* Default action in Alert */
@@ -109,6 +110,9 @@
 
 /* Menu option to share verse with others */
 "Share" = "Поделиться";
+
+/* Clickable cell title */
+"Share Bible App" = "Поделиться приложением Библии";
 
 /* Clickable cell title */
 "Share SafeBible" = "Поделиться SafeBible";
