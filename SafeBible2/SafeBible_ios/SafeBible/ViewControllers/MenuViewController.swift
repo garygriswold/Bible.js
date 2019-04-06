@@ -145,7 +145,7 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
                 return self.genericCell(view: tableView, indexPath: indexPath, title: privText,
                                         accessory: true, icon: "sec-shield-diagonal.png")
             case 3:
-                let shareText = NSLocalizedString("Share The Bible.", comment: "Clickable cell title")
+                let shareText = NSLocalizedString("Share Bible App", comment: "Clickable cell title")
                 return self.genericCell(view: tableView, indexPath: indexPath, title: shareText,
                                         accessory: true, icon: "ios-upload.png")
             default: fatalError("Unknown row \(indexPath.row) in section 3")
