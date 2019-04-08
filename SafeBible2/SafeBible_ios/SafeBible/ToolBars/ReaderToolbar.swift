@@ -20,6 +20,7 @@ class ReaderToolbar {
     private var tocChapLabel: UILabel!
     private var versionLabel: UILabel!
     private var audioPlayer: UIBarButtonItem!
+    private var searchButton: UIBarButtonItem!
     
     init(controller: ReaderPagesController) {
         self.controller = controller
@@ -74,13 +75,12 @@ class ReaderToolbar {
                                       action: #selector(composeTapHandler))
         items.append(compose)
         items.append(spacer)
- /*
- Disabled until search is developed
+        
         let searchImage = UIImage(named: "ios-search.png")
-        let search = UIBarButtonItem(image: searchImage, style: .plain, target: self,
+        self.searchButton = UIBarButtonItem(image: searchImage, style: .plain, target: self,
                                      action: #selector(searchTapHandler))
-        items.append(search)
- */
+        items.append(self.searchButton)
+        
         self.controller!.setToolbarItems(items, animated: true)
     }
     
@@ -106,6 +106,7 @@ class ReaderToolbar {
             self.audioBookIdSet = Set(self.findAudioVersion(ref: reference).split(separator: ","))
         }
         self.audioPlayer.isEnabled = self.audioBookIdSet.contains(Substring(reference.bookId))
+        self.searchButton.isEnabled = reference.isDownloaded
     }
     
     @objc func menuTapHandler(sender: UIBarButtonItem) {

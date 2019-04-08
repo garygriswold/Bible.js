@@ -96,6 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         self.bibleDownloadTask = UIApplication.shared.beginBackgroundTask(expirationHandler: {
             // Do cleanup here for when task does not complete
+            UIApplication.shared.endBackgroundTask(self.bibleDownloadTask)
             self.bibleDownloadTask = .invalid
         })
         let s3 = AwsS3Manager.findSS()
