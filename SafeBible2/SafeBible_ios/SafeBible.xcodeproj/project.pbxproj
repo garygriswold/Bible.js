@@ -25,6 +25,7 @@
 		E42C151B21CD8BAE00AA42D7 /* NotesExportActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42C151A21CD8BAE00AA42D7 /* NotesExportActionSheet.swift */; };
 		E431E92A21938D7300CF609C /* DynamicCSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E431E92921938D7300CF609C /* DynamicCSS.swift */; };
 		E437414B21FEC42B00BB4C9F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E437414921FEC42B00BB4C9F /* Localizable.strings */; };
+		E438058E225BCC2600D0714B /* ConcordanceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E438058D225BCC2600D0714B /* ConcordanceModel.swift */; };
 		E43B1E3D223448E1001C8395 /* HTMLVerseParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43B1E3C223448E1001C8395 /* HTMLVerseParserTest.swift */; };
 		E4467D7321F4290B00E60A1A /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4467D7221F4290B00E60A1A /* MenuViewController.swift */; };
 		E4480A2C21866E7F00C019B0 /* Reference.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4480A2B21866E7F00C019B0 /* Reference.swift */; };
@@ -164,6 +165,7 @@
 		E42C151A21CD8BAE00AA42D7 /* NotesExportActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExportActionSheet.swift; sourceTree = "<group>"; };
 		E431E92921938D7300CF609C /* DynamicCSS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicCSS.swift; sourceTree = "<group>"; };
 		E437414A21FEC42B00BB4C9F /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E438058D225BCC2600D0714B /* ConcordanceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcordanceModel.swift; sourceTree = "<group>"; };
 		E43B1E3C223448E1001C8395 /* HTMLVerseParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLVerseParserTest.swift; sourceTree = "<group>"; };
 		E4467D7221F4290B00E60A1A /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		E4480A2B21866E7F00C019B0 /* Reference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reference.swift; sourceTree = "<group>"; };
@@ -389,6 +391,7 @@
 				E4A4B324219F5D5700F70888 /* NotesModel.swift */,
 				E469080C2196650F00155F2A /* ReaderViewQueue.swift */,
 				E45A605F21E955A00042E3EE /* VideoModel.swift */,
+				E438058D225BCC2600D0714B /* ConcordanceModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -645,6 +648,7 @@
 				E402BCB7217B878F0026E1DE /* BibleDB.swift in Sources */,
 				E4289B4C22238C7400C344F7 /* LanguageListViewController.swift in Sources */,
 				E4C2E98B211B712D00B71CC5 /* SettingsAdapter.swift in Sources */,
+				E438058E225BCC2600D0714B /* ConcordanceModel.swift in Sources */,
 				E4BBAD4122189E0C00629362 /* HTMLVerseParserSS.swift in Sources */,
 				E4015258215D2DF60031654B /* InfoPageController.swift in Sources */,
 				E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */,
