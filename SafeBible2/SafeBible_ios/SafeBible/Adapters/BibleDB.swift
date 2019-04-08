@@ -102,10 +102,10 @@ struct BibleDB {
         do {
             db = try self.getBibleDB(bible: bible)
             let sql = "SELECT count(*) FROM sqlite_master WHERE type='table' AND name IN"
-                + " ('verses', 'concordance', 'identity')"
+                + " ('verses', 'concordance')"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let count: Int = Int(resultSet[0][0]!) ?? 0
-            return (count == 3)
+            return (count == 2)
         } catch let err {
             print("ERROR isDownloadedTest \(err)")
             return false

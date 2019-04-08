@@ -155,7 +155,6 @@ public class AwsS3 {
  
         let bucket = regionalizeBucket(bucket: s3Bucket)
         let temporaryDirectory: URL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
-        print("Temp Zip File Directory \(temporaryDirectory.absoluteString)")
         
         // Identify temp file for zip file download
         let tempZipURL = temporaryDirectory.appendingPathComponent(NSUUID().uuidString + ".zip")
@@ -219,8 +218,10 @@ public class AwsS3 {
     private func removeItemNoThrow(at: URL) -> Void {
         do {
             try FileManager.default.removeItem(at: at)
+        } catch CocoaError.fileNoSuchFile {
+            print("No Such File to delete \(at)")
         } catch let error {
-            print("Deleteion of \(at) Failed \(error.localizedDescription)")
+            print("Deletion of \(at) Failed \(error)")
         }
     }
     /////////////////////////////////////////////////////////////////////////

@@ -4,6 +4,9 @@
 //
 
 import UIKit
+import AWS
+import Utility
+import Foundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -12,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private static let NO = NSLocalizedString("No", comment: "No option on an alert")
 
     var window: UIWindow?
+    private var bibleDownloadTask: UIBackgroundTaskIdentifier = .invalid
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -31,6 +35,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         self.saveNote(url: url)
         return true
+    }
+    
+    // Respond to moving into background
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        self.doBibleDownloadIfNeeded()
     }
     
     private func saveNote(url: URL) {
@@ -67,6 +76,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             return nil
         }
+    }
+    
+    /** This method is called when entering background.  It downloads the current Bible if needed */
+    private func doBibleDownloadIfNeeded() {
+        if self.bibleDownloadTask != .invalid {
+            return
+        }
+        let reference = HistoryModel.shared.current()
+        let bible = reference.bible
+        if !bible.textBucket.contains("shortsands") {
+            return
+        }
+        if reference.isDownloaded {
+            return
+        }
+        if !BibleDB.shared.shouldDownload(bible: bible) {
+            return
+        }
+        self.bibleDownloadTask = UIApplication.shared.beginBackgroundTask(expirationHandler: {
+            // Do cleanup here for when task does not complete
+            self.bibleDownloadTask = .invalid
+        })
+        let s3 = AwsS3Manager.findSS()
+        let bucket = "shortsands-oldregion"
+        let databaseName = bible.bibleId // There should be a database property?
+        let key = databaseName + ".zip"
+        
+        let temporaryDirectory: URL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        let tempURL = temporaryDirectory.appendingPathComponent(NSUUID().uuidString + ".db")
+        
+        s3.downloadZipFile(s3Bucket: bucket, s3Key: key, filePath: tempURL, view: nil, complete: {
+            error in
+            if let err = error {
+                print("ERROR: \(err)")
+            } else {
+                Sqlite3.closeAllDB()
+                do {
+                    let filePath = Sqlite3.pathDB(dbname: databaseName)
+                    _ = try FileManager.default.replaceItemAt(filePath, withItemAt: tempURL,
+                                                              backupItemName: nil, options: [])
+                    print("SUCCESS in s3.downloadZipFile \(bucket) \(key)")
+                } catch let err {
+                    print("ERROR: \(err)")
+                }
+            }
+            UIApplication.shared.endBackgroundTask(self.bibleDownloadTask)
+            self.bibleDownloadTask = .invalid
+        })
     }
 }
 

@@ -95,11 +95,13 @@ class AudioTOCBible {
         }
     }
     
+    /** This is opended and close separately, because Audio is a different thread */
     private func readBookNames() {
         let query = "SELECT code, name from TableContents"
         do {
             let db = Sqlite3()
             try db.open(dbname: self.bibleId, copyIfAbsent: true)
+            defer { db.close() }
             let resultSet = try db.queryV1(sql: query, values: [])
             for row in resultSet {
                 let bookId = row[0]!
