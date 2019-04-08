@@ -14,11 +14,11 @@ struct BibleDB {
     
     private init() {}
     
-    func getTableContents(bibleId: String) -> [Book] {
+    func getTableContents(bible: Bible) -> [Book] {
         let db: Sqlite3
         var toc = [Book]()
         do {
-            db = try self.getBibleDB(bibleId: bibleId)
+            db = try self.getBibleDB(bible: bible)
             let sql = "SELECT code, name, lastChapter FROM TableContents ORDER BY rowid"
             let resultSet = try db.queryV1(sql: sql, values: [])
             for index in 0..<resultSet.count {
@@ -33,7 +33,7 @@ struct BibleDB {
         }
     }
     
-    func storeTableContents(bibleId: String, books: [Book]) {
+    func storeTableContents(bible: Bible, books: [Book]) {
         DispatchQueue.main.async(execute: {
             let db: Sqlite3
             var values = [[Any]]()
@@ -41,7 +41,7 @@ struct BibleDB {
                 values.append([book.bookId, (book.ordinal + 1), book.name, book.lastChapter])
             }
             do {
-                db = try self.getBibleDB(bibleId: bibleId)
+                db = try self.getBibleDB(bible: bible)
                 let sql = "REPLACE INTO TableContents (code, rowid, name, lastChapter)"
                     + " VALUES (?,?,?,?)"
                 _ = try db.bulkExecuteV1(sql: sql, values: values)
@@ -54,7 +54,7 @@ struct BibleDB {
     func getBiblePage(reference: Reference) -> String? {
         let db: Sqlite3
         do {
-            db = try self.getBibleDB(bibleId: reference.bibleId)
+            db = try self.getBibleDB(bible: reference.bible)
             let sql = "SELECT html FROM Chapters WHERE reference = ?"
             let resultSet = try db.queryHTMLv0(sql: sql, values: [reference.nodeId()])
             return (resultSet.count > 0) ? resultSet : nil
@@ -69,7 +69,7 @@ struct BibleDB {
             let db: Sqlite3
             let values: [Any] = [reference.nodeId(), html]
             do {
-                db = try self.getBibleDB(bibleId: reference.bibleId)
+                db = try self.getBibleDB(bible: reference.bible)
                 let sql = "REPLACE INTO Chapters (reference, html) VALUES (?,?)"
                 _ = try db.executeV1(sql: sql, values: values)
             } catch let err {
@@ -82,7 +82,7 @@ struct BibleDB {
         var result = [String]()
         let db: Sqlite3
         do {
-            db = try self.getBibleDB(bibleId: reference.bibleId)
+            db = try self.getBibleDB(bible: reference.bible)
             for verse in startVerse...endVerse {
                 print("Verse = \(verse)")
                 let sql = "SELECT html FROM Verses WHERE reference = ?"
@@ -100,7 +100,7 @@ struct BibleDB {
     func isDownloadedTest(bible: Bible) -> Bool {
         let db: Sqlite3
         do {
-            db = try self.getBibleDB(bibleId: bible.bibleId)
+            db = try self.getBibleDB(bible: bible)
             let sql = "SELECT count(*) FROM sqlite_master WHERE type='table' AND name IN"
                 + " ('verses', 'concordance', 'identity')"
             let resultSet = try db.queryV1(sql: sql, values: [])
@@ -112,10 +112,10 @@ struct BibleDB {
         }
     }
     
-    func shouldDownloadTest(bible: Bible) -> Bool {
+    func shouldDownload(bible: Bible) -> Bool {
         let db: Sqlite3
         do {
-            db = try self.getBibleDB(bibleId: bible.bibleId)
+            db = try self.getBibleDB(bible: bible)
             let sql = "SELECT count(*) FROM Chapters"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let count: Int = Int(resultSet[0][0]!) ?? 0
@@ -126,12 +126,12 @@ struct BibleDB {
         }
     }
     
-    private func getBibleDB(bibleId: String) throws -> Sqlite3 {
+    private func getBibleDB(bible: Bible) throws -> Sqlite3 {
         var db: Sqlite3?
         do {
-            db = try Sqlite3.findDB(dbname: bibleId)
+            db = try Sqlite3.findDB(dbname: bible.bibleId)
         } catch Sqlite3Error.databaseNotOpenError {
-            db = try Sqlite3.openDB(dbname: bibleId, copyIfAbsent: false) // No more embedded Bibles
+            db = try Sqlite3.openDB(dbname: bible.bibleId, copyIfAbsent: false) // No more embedded Bibles
             let create1 = "CREATE TABLE IF NOT EXISTS TableContents("
                 + " code TEXT PRIMARY KEY NOT NULL,"
                 + " name TEXT NOT NULL,"
