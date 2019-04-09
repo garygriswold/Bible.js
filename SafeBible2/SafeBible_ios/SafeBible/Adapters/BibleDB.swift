@@ -125,52 +125,11 @@ struct BibleDB {
             return false
         }
     }
+    
     //
     // Concordance Table
     //
-    
-//    function ConcordanceAdapter(database) {
-//        this.database = database;
-//        this.className = 'ConcordanceAdapter';
-//        Object.freeze(this);
-//    }
-//    ConcordanceAdapter.prototype.drop = function(callback) {
-//        this.database.executeDDL('drop table if exists concordance', function(err) {
-//            if (err instanceof IOError) {
-//                callback(err);
-//            } else {
-//                console.log('drop concordance success');
-//                callback();
-//            }
-//        });
-//    };
-//    ConcordanceAdapter.prototype.create = function(callback) {
-//        var statement = 'create table if not exists concordance(' +
-//            'word text primary key not null, ' +
-//            'refCount integer not null, ' +
-//            'refList text not null, ' + // comma delimited list of references where word occurs
-//            'refPosition text null, ' + // comma delimited list of references with position in verse.
-//            'refList2 text null)';
-//        this.database.executeDDL(statement, function(err) {
-//            if (err instanceof IOError) {
-//                callback(err);
-//            } else {
-//                console.log('create concordance success');
-//                callback();
-//            }
-//        });
-//    };
-//    ConcordanceAdapter.prototype.load = function(array, callback) {
-//        var statement = 'insert into concordance(word, refCount, refList, refPosition, refList2) values //(?,?,?,?,?)';
-//        this.database.bulkExecuteDML(statement, array, function(count) {
-//            if (count instanceof IOError) {
-//                callback(count);
-//            } else {
-//                console.log('load concordance success', count);
-//                callback();
-//            }
-//        });
-//    };
+
 //    ConcordanceAdapter.prototype.select = function(words, callback) {
 //        var values = [ words.length ];
 //        var questMarks = [ words.length ];
@@ -196,10 +155,34 @@ struct BibleDB {
 //            }
 //        });
 //    };
-//    /**
-//     * This is similar to select, except that it returns the refList2 field,
-//     * and resequences the results into the order the words were entered.
-//     */
+    /**
+     * This is similar to select, except that it returns the refList2 field,
+     * and resequences the results into the order the words were entered.
+     */
+    func selectRefList2(bible: Bible, words: [String]) -> [[String]] {
+        let values = words.map { $0.lowercased() }
+        let db: Sqlite3
+        do {
+            let sql = "SELECT word, refList2 FROM concordance WHERE word IN" + self.genQuest(array: words)
+            db = try self.getBibleDB(bible: bible)
+            let resultSet = try db.queryV1(sql: sql, values: values)
+            var resultMap = [String: [String]]()
+            for row in resultSet {
+               resultMap[row[0]!] = row[1]!.components(separatedBy: ",")
+            }
+            // This sequences the returned arrays into the order of the words
+            var refLists = [[String]]()
+            for word in words {
+                if let result = resultMap[word] {
+                    refLists.append(result)
+                }
+            }
+            return refLists
+        } catch let err {
+            print("ERROR selectRefList2 \(err)")
+            return [[String]]()
+        }
+    }
 //    ConcordanceAdapter.prototype.select2 = function(words, callback) {
 //        var values = [ words.length ];
 //        var questMarks = [ words.length ];
@@ -249,5 +232,10 @@ struct BibleDB {
             _ = try db?.executeV1(sql: create2, values: [])
         }
         return db!
+    }
+    
+    private func genQuest(array: [Any]) -> String {
+        let quest = [String](repeating: "?", count: array.count)
+        return " (" + quest.joined(separator: ",") + ")"
     }
 }

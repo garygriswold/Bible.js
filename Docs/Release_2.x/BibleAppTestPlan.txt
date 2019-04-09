@@ -200,5 +200,16 @@ Localize
 2. Verify that inital start of App is in language of device
 3. Verify that preferred languages are used in selection of initial Bibles.
 
+Bible Download
+1. Test that ESV does not download, because it is DBP
+2. Test Bible with less than 20 chapters, do not download
+3. Test Bible with more than 20 chapters, do download
+4. Watch download in debugger, verify that close is executed
+5. comment out move and look for temp file
+6. verify that isDownloaded flag prevents another download
+7. test many bible to download
+
+
+
 DynamicCSS
 AppFont
