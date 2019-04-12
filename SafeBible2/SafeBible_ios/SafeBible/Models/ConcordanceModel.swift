@@ -105,53 +105,39 @@ struct ConcordanceModel {
     * This method searches for all verses that contain all of the words entered.
     * It does not consider the position of the words or the number of times they occur.
     */
-    func search1(bible: Bible, words: [String]) -> [String] {
+    func search1(bible: Bible, words: [String]) -> [WordRef: WordPositions] {
+        var result = [WordRef: WordPositions]()
         let measure = Measurement()
         if words.count == 0 {
-            return [String]()
+            return result
         }
-        let refLists2: [[String]] = BibleDB.shared.selectRefList2(bible: bible, words: words)
-        measure.duration(location: "database select")
-        if refLists2.count != words.count {
-            return [String]()
+        let mapList: [[WordRef: [UInt8]]] = BibleDB.shared.selectRefList3(bible: bible, words: words)
+        if mapList.count != words.count {
+            return result
         }
-        var refLists = [[String]]()
-        for list in refLists2 {
-            refLists.append(list.map{ $0.components(separatedBy: ";")[0] })
-        }
-        measure.duration(location: "remove position")
-        let setList: [Set<String>] = refLists.map { Set($0) }
-        measure.duration(location: "make sets")
-        
-        var result = [String]()
-        let shortList = self.findShortest(refLists: refLists)
-        measure.duration(location: "find shortest")
-        for reference in shortList {
-            if presentInAllSets(setList: setList, reference: reference) {
-                result.append(reference)
+        let firstList = mapList[0]
+        measure.duration(location: "finish database")
+        for (reference, _) in firstList {
+            let wordPos = presentInAllSets(mapList: mapList, reference: reference)
+            if wordPos != nil {
+                result[reference] = wordPos
             }
         }
         measure.final(location: "search1")
         return result
     }
-    private func findShortest(refLists: [[String]]) -> [String] {
-        var count = 100000
-        var best = 0
-        for index in 0..<refLists.count {
-            if refLists[index].count < count {
-                count = refLists[index].count
-                best = index
+    
+    private func presentInAllSets(mapList: [[WordRef: [UInt8]]], reference: WordRef) -> WordPositions? {
+        var result = WordPositions()
+        for map in mapList {
+            let wordPositions = map[reference]
+            if wordPositions == nil {
+                return nil
+            } else {
+                result.addWord(positions: wordPositions!)
             }
         }
-        return refLists[best]
-    }
-    private func presentInAllSets(setList: [Set<String>], reference: String) -> Bool {
-        for set in setList {
-            if !set.contains(reference) {
-                return false
-            }
-        }
-        return true
+        return result
     }
 
     /**
@@ -280,42 +266,20 @@ struct ConcordanceModel {
         return true
     }
     
-    func search4(bible: Bible, words: [String]) -> [WordRef: WordPositions] {
-        var result = [WordRef: WordPositions]()
-        let measure = Measurement()
-        if words.count == 0 {
-            return result
-        }
-        let mapList: [[WordRef: [UInt8]]] = BibleDB.shared.selectRefList3(bible: bible, words: words)
-        if mapList.count != words.count {
-            return result
-        }
-        let firstList = mapList[0]
-        measure.duration(location: "find shortest")
-        for (reference, _) in firstList {
-            let wordPos = presentInAllSets(mapList: mapList, reference: reference)
-            if wordPos != nil {
-                result[reference] = wordPos
+    //
+    // Shared?
+    //
+    private func findShortest(refLists: [[String]]) -> [String] {
+        var count = 100000
+        var best = 0
+        for index in 0..<refLists.count {
+            if refLists[index].count < count {
+                count = refLists[index].count
+                best = index
             }
         }
-        measure.final(location: "search4")
-        return result
+        return refLists[best]
     }
-
-    private func presentInAllSets(mapList: [[WordRef: [UInt8]]], reference: WordRef) -> WordPositions? {
-        var result = WordPositions()
-        for map in mapList {
-            let wordPositions = map[reference]
-            if wordPositions == nil {
-                return nil
-            } else {
-                result.addWord(positions: wordPositions!)
-            }
-        }
-        return result
-    }
-
-
 }
 
 
