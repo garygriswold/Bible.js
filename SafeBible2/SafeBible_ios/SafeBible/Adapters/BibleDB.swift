@@ -129,34 +129,67 @@ struct BibleDB {
     //
     // Concordance Table
     //
-
-    /**
-     * This is similar to select, except that it returns the refList2 field,
-     * and resequences the results into the order the words were entered.
-     */
-    func selectRefList2(bible: Bible, words: [String]) -> [[String]] {
+    
+    func selectRefList(bible: Bible, words: [String]) -> [[String?]] {
         let values = words.map { $0.lowercased() }
         let db: Sqlite3
         do {
             let sql = "SELECT word, refList2 FROM concordance WHERE word IN" + self.genQuest(array: words)
             db = try self.getBibleDB(bible: bible)
             let resultSet = try db.queryV1(sql: sql, values: values)
-            var resultMap = [String: [String]]()
-            for row in resultSet {
-               resultMap[row[0]!] = row[1]!.components(separatedBy: ",")
-            }
-            // This sequences the returned arrays into the order of the words
-            var refLists = [[String]]()
-            for word in words {
-                if let result = resultMap[word] {
-                    refLists.append(result)
-                }
-            }
-            return refLists
+            return resultSet
         } catch let err {
-            print("ERROR selectRefList2 \(err)")
+            print("ERROR selectRefList \(err)")
             return [[String]]()
         }
+    }
+
+    /**
+     * This is similar to select, except that it returns the refList2 field,
+     * and resequences the results into the order the words were entered.
+     */
+    func selectRefList2(bible: Bible, words: [String]) -> [[String]] {
+        let resultSet = self.selectRefList(bible: bible, words: words)
+        var resultMap = [String: [String]]()
+        for row in resultSet {
+            resultMap[row[0]!] = row[1]!.components(separatedBy: ",")
+        }
+        // This sequences the returned arrays into the order of the words
+        var refLists = [[String]]()
+        for word in words {
+            if let result = resultMap[word] {
+                refLists.append(result)
+            }
+        }
+        return refLists
+    }
+    
+    /**
+     * This is similar to select, except that it returns one WordRef for each word in a verse.
+     * Each WordRef has an array of position for each word in that verse.
+     */
+    func selectRefList3(bible: Bible, words: [String]) -> [[WordRef: [UInt8]]] {
+        let measure = Measurement()
+        var mapList = [[WordRef: [UInt8]]]()
+        let refLists2 = self.selectRefList2(bible: bible, words: words)
+        
+        for list in refLists2 {
+            var map = [WordRef: [UInt8]]()
+            for item in list {
+                let wordRef = WordRef(reference: item)
+                var positions = map[wordRef]
+                if positions != nil {
+                    positions!.append(wordRef.position)
+                    map[wordRef] = positions
+                }
+                else {
+                    map[wordRef] = [wordRef.position]
+                }
+            }
+            mapList.append(map)
+        }
+        measure.duration(location: "selectRefList3")
+        return mapList
     }
 
     private func getBibleDB(bible: Bible) throws -> Sqlite3 {

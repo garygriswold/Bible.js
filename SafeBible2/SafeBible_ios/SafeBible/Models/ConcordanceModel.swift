@@ -286,29 +286,10 @@ struct ConcordanceModel {
         if words.count == 0 {
             return result
         }
-        let refLists2: [[String]] = BibleDB.shared.selectRefList2(bible: bible, words: words)
-        measure.duration(location: "database select")
-        if refLists2.count != words.count {
+        let mapList: [[WordRef: [UInt8]]] = BibleDB.shared.selectRefList3(bible: bible, words: words)
+        if mapList.count != words.count {
             return result
         }
-        var mapList = [[WordRef: [UInt8]]]()
-        for list in refLists2 {
-            var map = [WordRef: [UInt8]]()
-            for item in list {
-                let wordRef = WordRef(reference: item)
-                var positions = map[wordRef]
-                if positions != nil {
-                    positions!.append(wordRef.position)
-                    map[wordRef] = positions
-                }
-                else {
-                    map[wordRef] = [wordRef.position]
-                }
-            }
-            mapList.append(map)
-        }
-        measure.duration(location: "remove position")
-
         let firstList = mapList[0]
         measure.duration(location: "find shortest")
         for (reference, _) in firstList {
