@@ -39,12 +39,16 @@ struct WordRef : Equatable, Hashable {
 struct WordPositions {
     var positions: [[UInt8]]
     
-    init() {
-        self.positions = [[UInt8]]()
+    init(numWords: Int) {
+        self.positions = Array(repeating: [UInt8](), count: numWords)
     }
     
-    mutating func addWord(positions: [UInt8]) {
-        self.positions.append(positions)
+    var numWords: Int {
+        return self.positions.count
+    }
+    
+    mutating func addWord(word: Int, positions: [UInt8]) {
+        self.positions[word] = positions
     }
 }
 
@@ -114,13 +118,14 @@ struct ConcordanceModel {
     }
     
     private func presentInAllSets(mapList: [[WordRef: [UInt8]]], reference: WordRef) -> WordPositions? {
-        var result = WordPositions()
-        for map in mapList {
+        var result = WordPositions(numWords: mapList.count)
+        for index in 0..<mapList.count {
+            let map = mapList[index]
             let wordPositions = map[reference]
             if wordPositions == nil {
                 return nil
             } else {
-                result.addWord(positions: wordPositions!)
+                result.addWord(word: index, positions: wordPositions!)
             }
         }
         return result
@@ -146,22 +151,18 @@ struct ConcordanceModel {
         return finalResult
     }
     private func matchToNext(wordPositions: WordPositions, firstPosition: UInt8) -> WordPositions? {
-        var updatedPositions = WordPositions()
+        var updatedPositions = WordPositions(numWords: wordPositions.numWords)
         var nextPosition = firstPosition
-        for oneWordPositions in wordPositions.positions {
-        //for index in 0..<wordPositions.positions.count {
-        //    let oneWordPositions = wordPositions.positions[index]
+        for index in 0..<wordPositions.numWords {
+            let oneWordPositions = wordPositions.positions[index]
             if !oneWordPositions.contains(nextPosition) {
                 return nil
             }
-            
-            updatedPositions.addWord(positions: [nextPosition])
+            updatedPositions.addWord(word: index, positions: [nextPosition])
             nextPosition += 1
         }
         return wordPositions
     }
-    
-    // var positions = Array(count: numWords, repeatedValue: [UInt8])
 
     func search2old(bible: Bible, words: [String]) -> [String] {
         if words.count == 0 {
