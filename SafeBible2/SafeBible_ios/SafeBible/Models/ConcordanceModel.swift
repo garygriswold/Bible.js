@@ -31,16 +31,6 @@ struct WordRef : Equatable, Hashable {
         hasher.combine(self.verse)
     }
     
-    //var reference: String {
-    //    get {
-    //        return "\(self.bookId):\(self.chapter):\(self.verse);\(self.positions)"
-    //    }
-    //}
-    
-    //mutating func next() {
-    //    self.positions[0] += 1
-    //}
-    
     static func == (lhs: WordRef, rhs: WordRef) -> Bool {
         return lhs.bookId == rhs.bookId && lhs.chapter == rhs.chapter && lhs.verse == rhs.verse
     }
@@ -52,10 +42,6 @@ struct WordPositions {
     init() {
         self.positions = [[UInt8]]()
     }
-    
-    //mutating func addPosition(position: UInt8) {
-    //    self.positions[0].append(position)
-    //}
     
     mutating func addWord(positions: [UInt8]) {
         self.positions.append(positions)
@@ -144,7 +130,40 @@ struct ConcordanceModel {
     * This method searches for all of the words entered, but only returns references
     * where they are entered in the consequtive order of the search parameters.
     */
-    func search2(bible: Bible, words: [String]) -> [String] {
+    func search2(bible: Bible, words: [String]) -> [WordRef: WordPositions] {
+        var finalResult = [WordRef: WordPositions]()
+        let results1 = self.search1(bible: bible, words: words)
+        if results1.count == 0 {
+            return finalResult
+        }
+        for (wordRef, positions) in results1 {
+            let first = positions.positions[0][0]
+            let updatedPostions = self.matchToNext(wordPositions: positions, firstPosition: first)
+            if updatedPostions != nil {
+                finalResult[wordRef] = updatedPostions
+            }
+        }
+        return finalResult
+    }
+    private func matchToNext(wordPositions: WordPositions, firstPosition: UInt8) -> WordPositions? {
+        var updatedPositions = WordPositions()
+        var nextPosition = firstPosition
+        for oneWordPositions in wordPositions.positions {
+        //for index in 0..<wordPositions.positions.count {
+        //    let oneWordPositions = wordPositions.positions[index]
+            if !oneWordPositions.contains(nextPosition) {
+                return nil
+            }
+            
+            updatedPositions.addWord(positions: [nextPosition])
+            nextPosition += 1
+        }
+        return wordPositions
+    }
+    
+    // var positions = Array(count: numWords, repeatedValue: [UInt8])
+
+    func search2old(bible: Bible, words: [String]) -> [String] {
         if words.count == 0 {
             return [String]()
         }
@@ -153,7 +172,7 @@ struct ConcordanceModel {
             return [String]()
         }
         let setList: [Set<String>] = refLists2.map { Set($0) }
-        print(setList)
+        //print(setList)
         
         var result = [String]()
         let firstList = refLists2[0]
