@@ -119,7 +119,8 @@ struct ConcordanceModel {
     
     private func presentInAllSets(mapList: [[WordRef: [UInt8]]], reference: WordRef) -> WordPositions? {
         var result = WordPositions(numWords: mapList.count)
-        for index in 0..<mapList.count {
+        result.addWord(word: 0, positions: mapList[0][reference]!) // add first word wordPositions
+        for index in 1..<mapList.count {
             let map = mapList[index]
             let wordPositions = map[reference]
             if wordPositions == nil {
