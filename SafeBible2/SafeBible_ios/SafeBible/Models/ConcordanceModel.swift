@@ -50,6 +50,12 @@ struct WordPositions {
     mutating func addWord(word: Int, positions: [UInt8]) {
         self.positions[word] = positions
     }
+    
+    mutating func addReference(positions: [UInt8]) {
+        for wordIndex in 0..<positions.count {
+            self.positions[wordIndex].append(positions[wordIndex])
+        }
+    }
 }
 
 
@@ -93,7 +99,7 @@ struct ConcordanceModel {
     
     /**
     * This method searches for all verses that contain all of the words entered.
-    * It does not consider the position of the words or the number of times they occur.
+    * It does not consider the position of the words, but it keeps track of each occurrance.
     */
     func search1(bible: Bible, words: [String]) -> [WordRef: WordPositions] {
         var result = [WordRef: WordPositions]()
@@ -135,6 +141,7 @@ struct ConcordanceModel {
     /**
     * This method searches for all of the words entered, but only returns references
     * where they are entered in the consequtive order of the search parameters.
+    * This search method should be used for chinese
     */
     func search2(bible: Bible, words: [String]) -> [WordRef: WordPositions] {
         var finalResult = [WordRef: WordPositions]()
@@ -143,26 +150,39 @@ struct ConcordanceModel {
             return finalResult
         }
         for (wordRef, positions) in results1 {
-            let first = positions.positions[0][0]
-            let updatedPostions = self.matchToNext(wordPositions: positions, firstPosition: first)
-            if updatedPostions != nil {
+            let updatedPostions = self.matchToEachReference(wordPositions: positions)
+            if updatedPostions.positions[0].count > 0 {
                 finalResult[wordRef] = updatedPostions
             }
         }
         return finalResult
     }
-    private func matchToNext(wordPositions: WordPositions, firstPosition: UInt8) -> WordPositions? {
+    
+    private func matchToEachReference(wordPositions: WordPositions) -> WordPositions {
         var updatedPositions = WordPositions(numWords: wordPositions.numWords)
-        var nextPosition = firstPosition
-        for index in 0..<wordPositions.numWords {
-            let oneWordPositions = wordPositions.positions[index]
+        let firstWordPositions: [UInt8] = wordPositions.positions[0]
+        for index in 0..<firstWordPositions.count {
+            let matches: [UInt8]? = self.matchToEachWord(wordPositions: wordPositions, index: index)
+            if matches != nil {
+                updatedPositions.addReference(positions: matches!)
+            }
+        }
+        return updatedPositions
+    }
+    
+    private func matchToEachWord(wordPositions: WordPositions, index: Int) -> [UInt8]? {
+        var updatedPositions: [UInt8] = Array(repeating: 0, count: wordPositions.numWords)
+        var nextPosition: UInt8 = wordPositions.positions[0][index]
+        updatedPositions[0] = nextPosition
+        for wordIndex in 1..<wordPositions.numWords {
+            let oneWordPositions: [UInt8] = wordPositions.positions[wordIndex]
+            nextPosition += 1
             if !oneWordPositions.contains(nextPosition) {
                 return nil
             }
-            updatedPositions.addWord(word: index, positions: [nextPosition])
-            nextPosition += 1
+            updatedPositions[wordIndex] = nextPosition
         }
-        return wordPositions
+        return updatedPositions
     }
 
     func search2old(bible: Bible, words: [String]) -> [String] {
