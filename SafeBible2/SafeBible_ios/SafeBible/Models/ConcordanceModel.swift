@@ -16,6 +16,7 @@ struct WordRef : Equatable, Hashable {
     let chapter: UInt8
     let verse: UInt8
     var positions: [UInt8]
+    var wordPositions: WordPositions!
     
     init(reference: String) {
         let parts = reference.components(separatedBy: WordRef.delims)
@@ -105,46 +106,50 @@ struct ConcordanceModel {
     * This method searches for all verses that contain all of the words entered.
     * It does not consider the position of the words, but it keeps track of each occurrance.
     */
-    func search1(bible: Bible, words: [String]) -> [WordRef: WordPositions] {
-        var result = [WordRef: WordPositions]()
+    func search1(bible: Bible, words: [String]) -> [WordRef] {
+        var result = [WordRef]()
         let measure = Measurement()
         if words.count == 0 {
             return result
         }
-        let refList: [[WordRef]] = BibleDB.shared.selectRefList3(bible: bible, words: words)
-        if refList.count != words.count {
+        let refLists: [[WordRef]] = BibleDB.shared.selectRefList3(bible: bible, words: words)
+        if refLists.count != words.count {
             return result
         }
+        measure.duration(location: "database select complete")
+        // Prepare second to nth word
         var mapList = [[WordRef: [UInt8]]]()
-        for list in refList {
+        for index in 1..<refLists.count {
             var map = [WordRef: [UInt8]]()
-            for item in list {
-                map[item] = item.positions
+            for wordRef in refLists[index] {
+                map[wordRef] = wordRef.positions
             }
             mapList.append(map)
         }
-        let firstList = mapList[0]
-        measure.duration(location: "finish database")
-        for (reference, _) in firstList {
-            let wordPos = presentInAllSets(mapList: mapList, reference: reference)
+        measure.duration(location: "build hashtables")
+        let firstList = refLists[0]
+        for index in 0..<firstList.count {
+            var wordRef: WordRef = firstList[index]
+            let wordPos = presentInAllSets(mapList: mapList, wordRef: wordRef)
             if wordPos != nil {
-                result[reference] = wordPos
+                wordRef.wordPositions = wordPos
+                result.append(wordRef)
             }
         }
         measure.final(location: "search1")
         return result
     }
     
-    private func presentInAllSets(mapList: [[WordRef: [UInt8]]], reference: WordRef) -> WordPositions? {
-        var result = WordPositions(numWords: mapList.count)
-        result.addWord(word: 0, positions: mapList[0][reference]!) // add first word wordPositions
-        for index in 1..<mapList.count {
+    private func presentInAllSets(mapList: [[WordRef: [UInt8]]], wordRef: WordRef) -> WordPositions? {
+        var result = WordPositions(numWords: (mapList.count + 1))
+        result.addWord(word: 0, positions: wordRef.positions)
+        for index in 0..<mapList.count {
             let map = mapList[index]
-            let wordPositions = map[reference]
-            if wordPositions == nil {
-                return nil
+            let found: [UInt8]? = map[wordRef]
+            if found != nil {
+                result.addWord(word: (index + 1), positions: found!)
             } else {
-                result.addWord(word: index, positions: wordPositions!)
+                return nil
             }
         }
         return result
@@ -155,6 +160,7 @@ struct ConcordanceModel {
     * where they are entered in the consequtive order of the search parameters.
     * This search method should be used for chinese
     */
+/*
     func search2(bible: Bible, words: [String]) -> [WordRef: WordPositions] {
         var finalResult = [WordRef: WordPositions]()
         let results1 = self.search1(bible: bible, words: words)
@@ -169,7 +175,7 @@ struct ConcordanceModel {
         }
         return finalResult
     }
-    
+*/
     private func matchToEachReference(wordPositions: WordPositions) -> WordPositions {
         var updatedPositions = WordPositions(numWords: wordPositions.numWords)
         let firstWordPositions: [UInt8] = wordPositions.positions[0]
