@@ -15,14 +15,18 @@ struct WordRef : Equatable, Hashable {
     let bookId: String
     let chapter: UInt8
     let verse: UInt8
-    var position: UInt8
+    var positions: [UInt8]
     
     init(reference: String) {
         let parts = reference.components(separatedBy: WordRef.delims)
         self.bookId = parts[0]
         self.chapter = UInt8(parts[1])!
         self.verse = UInt8(parts[2])!
-        self.position = UInt8(parts[3])!
+        self.positions = [UInt8(parts[3])!]
+    }
+    
+    mutating func add(position: UInt8) {
+        self.positions.append(position)
     }
     
     func hash(into hasher: inout Hasher) {
@@ -107,9 +111,17 @@ struct ConcordanceModel {
         if words.count == 0 {
             return result
         }
-        let mapList: [[WordRef: [UInt8]]] = BibleDB.shared.selectRefList3(bible: bible, words: words)
-        if mapList.count != words.count {
+        let refList: [[WordRef]] = BibleDB.shared.selectRefList3(bible: bible, words: words)
+        if refList.count != words.count {
             return result
+        }
+        var mapList = [[WordRef: [UInt8]]]()
+        for list in refList {
+            var map = [WordRef: [UInt8]]()
+            for item in list {
+                map[item] = item.positions
+            }
+            mapList.append(map)
         }
         let firstList = mapList[0]
         measure.duration(location: "finish database")

@@ -168,28 +168,25 @@ struct BibleDB {
      * This is similar to select, except that it returns one WordRef for each word in a verse.
      * Each WordRef has an array of position for each word in that verse.
      */
-    func selectRefList3(bible: Bible, words: [String]) -> [[WordRef: [UInt8]]] {
+    func selectRefList3(bible: Bible, words: [String]) -> [[WordRef]] {
         let measure = Measurement()
-        var mapList = [[WordRef: [UInt8]]]()
-        let refLists2 = self.selectRefList2(bible: bible, words: words)
+        let refLists2: [[String]] = self.selectRefList2(bible: bible, words: words)
         
+        var summarizedLists = [[WordRef]]()
         for list in refLists2 {
-            var map = [WordRef: [UInt8]]()
-            for item in list {
-                let wordRef = WordRef(reference: item)
-                var positions = map[wordRef]
-                if positions != nil {
-                    positions!.append(wordRef.position)
-                    map[wordRef] = positions
-                }
-                else {
-                    map[wordRef] = [wordRef.position]
+            var summarizedList = [WordRef]()
+            for index in 0..<list.count {
+                let wordRef = WordRef(reference: list[index])
+                if index < 1 || summarizedList.last != wordRef {
+                    summarizedList.append(wordRef)
+                } else {
+                    summarizedList[summarizedList.count - 1].add(position: wordRef.positions[0])
                 }
             }
-            mapList.append(map)
+            summarizedLists.append(summarizedList)
         }
         measure.duration(location: "selectRefList3")
-        return mapList
+        return summarizedLists
     }
 
     private func getBibleDB(bible: Bible) throws -> Sqlite3 {
