@@ -61,46 +61,19 @@ struct WordPositions {
             self.positions[wordIndex].append(positions[wordIndex])
         }
     }
+    
+    mutating func addIfNewReference(positions: [UInt8]) {
+        for wordIndex in 0..<positions.count {
+            let lastValue = self.positions[wordIndex].last
+            if lastValue == nil || lastValue != positions[wordIndex] {
+                self.positions[wordIndex].append(positions[wordIndex])
+            }
+        }
+    }
 }
 
 
 struct ConcordanceModel {
-    
-    struct TempWordRef : Equatable, Hashable {
-        let nodeId: String
-        var position: Int  // Should be unsigned byte, or unsigned short
-        
-        init(reference: String) {
-            let parts = reference.components(separatedBy: ";")
-            self.nodeId = parts[0]
-            self.position = Int(parts[1])!
-        }
-        
-        //var hashValue: Int {
-        //    return self.nodeId.hashValue
-        //}
-        
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(self.nodeId)
-        }
-        
-        var reference: String {
-            get {
-                return self.nodeId + ";" + String(self.position)
-            }
-        }
-        
-        mutating func next() {
-            self.position += 1
-        }
-        
-        static func == (lhs: TempWordRef, rhs: TempWordRef) -> Bool {
-            //return lhs.nodeId == rhs.nodeId && lhs.position == rhs.position
-            return lhs.nodeId == rhs.nodeId
-        }
-    }
-    
-    //let wordsLookAhead = 0
     
     /**
     * This method searches for all verses that contain all of the words entered.
@@ -160,27 +133,28 @@ struct ConcordanceModel {
     * where they are entered in the consequtive order of the search parameters.
     * This search method should be used for chinese
     */
-/*
-    func search2(bible: Bible, words: [String]) -> [WordRef: WordPositions] {
-        var finalResult = [WordRef: WordPositions]()
-        let results1 = self.search1(bible: bible, words: words)
+    func search2(bible: Bible, words: [String]) -> [WordRef] {
+        var finalResult = [WordRef]()
+        let results1: [WordRef] = self.search1(bible: bible, words: words)
         if results1.count == 0 {
             return finalResult
         }
-        for (wordRef, positions) in results1 {
-            let updatedPostions = self.matchToEachReference(wordPositions: positions)
+        for index in 0..<results1.count {
+            var wordRef = results1[index]
+            let updatedPostions = self.matchToEachReference2(wordPositions: wordRef.wordPositions!)
             if updatedPostions.positions[0].count > 0 {
-                finalResult[wordRef] = updatedPostions
+                wordRef.wordPositions = updatedPostions
+                finalResult.append(wordRef)
             }
         }
         return finalResult
     }
-*/
-    private func matchToEachReference(wordPositions: WordPositions) -> WordPositions {
+    
+    private func matchToEachReference2(wordPositions: WordPositions) -> WordPositions {
         var updatedPositions = WordPositions(numWords: wordPositions.numWords)
         let firstWordPositions: [UInt8] = wordPositions.positions[0]
         for index in 0..<firstWordPositions.count {
-            let matches: [UInt8]? = self.matchToEachWord(wordPositions: wordPositions, index: index)
+            let matches: [UInt8]? = self.matchToEachWord2(wordPositions: wordPositions, index: index)
             if matches != nil {
                 updatedPositions.addReference(positions: matches!)
             }
@@ -188,17 +162,18 @@ struct ConcordanceModel {
         return updatedPositions
     }
     
-    private func matchToEachWord(wordPositions: WordPositions, index: Int) -> [UInt8]? {
+    private func matchToEachWord2(wordPositions: WordPositions, index: Int) -> [UInt8]? {
         var updatedPositions: [UInt8] = Array(repeating: 0, count: wordPositions.numWords)
         var nextPosition: UInt8 = wordPositions.positions[0][index]
         updatedPositions[0] = nextPosition
         for wordIndex in 1..<wordPositions.numWords {
             let oneWordPositions: [UInt8] = wordPositions.positions[wordIndex]
             nextPosition += 1
-            if !oneWordPositions.contains(nextPosition) {
+            if oneWordPositions.contains(nextPosition) {
+                updatedPositions[wordIndex] = nextPosition
+            } else {
                 return nil
             }
-            updatedPositions[wordIndex] = nextPosition
         }
         return updatedPositions
     }
@@ -207,53 +182,60 @@ struct ConcordanceModel {
      * This method searches for all verses that contain all of the words entered.
      * It also ensures that the words are in the sequence entered in the search.
      */
-    func search3(bible: Bible, words: [String]) -> [TempWordRef] {
-        let measure = Measurement()
-        if words.count == 0 {
-            return [TempWordRef]()
+    func search3(bible: Bible, words: [String]) -> [WordRef] {
+        var finalResult = [WordRef]()
+        let results1: [WordRef] = self.search1(bible: bible, words: words)
+        if results1.count == 0 {
+            return finalResult
         }
-        let refLists2: [[String]] = BibleDB.shared.selectRefList2(bible: bible, words: words)
-        measure.duration(location: "database select")
-        if refLists2.count != words.count {
-            return [TempWordRef]()
+        for index in 0..<results1.count {
+            var wordRef = results1[index]
+            let updatedPostions = self.matchToEachReference3(wordPositions: wordRef.wordPositions!)
+            if updatedPostions.positions[0].count > 0 {
+                wordRef.wordPositions = updatedPostions
+                finalResult.append(wordRef)
+            }
         }
-        var refLists = [[TempWordRef]]()
-        for list in refLists2 {
-            refLists.append(list.map { TempWordRef(reference: $0) })
+        return finalResult
+    }
+    
+    // This is identical to matchToEachReference2, except by calling matchToEachWord3
+    private func matchToEachReference3(wordPositions: WordPositions) -> WordPositions {
+        var updatedPositions = WordPositions(numWords: wordPositions.numWords)
+        let firstWordPositions: [UInt8] = wordPositions.positions[0]
+        for index in 0..<firstWordPositions.count {
+            let matches: [UInt8]? = self.matchToEachWord3(wordPositions: wordPositions, index: index)
+            if matches != nil {
+                updatedPositions.addIfNewReference(positions: matches!)
+            }
         }
-        measure.duration(location: "remove position")
-        let setList: [Set<TempWordRef>] = refLists.map { Set($0) }
-        measure.duration(location: "make sets")
+        return updatedPositions
+    }
+    
+    private func matchToEachWord3(wordPositions: WordPositions, index: Int) -> [UInt8]? {
+        var updatedPositions: [UInt8] = Array(repeating: 0, count: wordPositions.numWords)
+        var nextPosition: UInt8 = wordPositions.positions[0][index]
+        updatedPositions[0] = nextPosition
+        for wordIndex in 1..<wordPositions.numWords {
+            let oneWordPositions: [UInt8] = wordPositions.positions[wordIndex]
+            let greater: UInt8? = self.firstGreater3(array: oneWordPositions, num: nextPosition)
+            if greater != nil {
+                updatedPositions[wordIndex] = greater!
+                nextPosition = greater!
+            } else {
+                return nil
+            }
+        }
+        return updatedPositions
+    }
         
-        var result = [TempWordRef]()
-        let shortList = self.findShortest(refLists: refLists)
-        measure.duration(location: "find shortest")
-        for reference in shortList {
-            if presentInAllSets(setList: setList, reference: reference) {
-                result.append(reference)
+    private func firstGreater3(array: [UInt8], num: UInt8) -> UInt8? {
+        for val in array {
+            if val > num {
+                return val
             }
         }
-        measure.final(location: "search3")
-        return result
-    }
-    private func findShortest(refLists: [[TempWordRef]]) -> [TempWordRef] {
-        var count = 100000
-        var best = 0
-        for index in 0..<refLists.count {
-            if refLists[index].count < count {
-                count = refLists[index].count
-                best = index
-            }
-        }
-        return refLists[best]
-    }
-    private func presentInAllSets(setList: [Set<TempWordRef>], reference: TempWordRef) -> Bool {
-        for set in setList {
-            if !set.contains(reference) {
-                return false
-            }
-        }
-        return true
+        return nil
     }
 }
 
