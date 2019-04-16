@@ -9,15 +9,23 @@
 import UIKit
 
 class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
+    
+    enum ViewType {
+        case searchHistory
+        case lastResult
+    }
    
     static func push(controller: UIViewController?) {
         let searchController = ConcordanceViewController()
         controller?.navigationController?.pushViewController(searchController, animated: true)
     }
-    
+ 
+    private var viewType: ViewType
     private var searchController: ConcordanceSearchController!
+
     
     init() {
+        self.viewType = .lastResult
         super.init(nibName: nil, bundle: nil)
         self.searchController = ConcordanceSearchController(controller: self)
     }
@@ -39,13 +47,15 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         self.tableView.estimatedRowHeight = 88.0
         self.tableView.rowHeight = UITableView.automaticDimension
         
-        self.tableView.register(ConcordanceInputCell.self, forCellReuseIdentifier: "concordanceInput")
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "concordanceSearch")
         self.tableView.register(ConcordanceResultCell.self, forCellReuseIdentifier: "concordanceResult")
         
         // prevent searchBar from holding onto focus
         self.definesPresentationContext = true
         
         self.tableView.dataSource = self
+        
+        self.createToolbar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -85,21 +95,69 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         self.tableView.frame = self.view.bounds
     }
     
+    private func createToolbar() {
+        if let nav = self.navigationController {
+            
+            nav.toolbar.isTranslucent = false
+            nav.toolbar.barTintColor = AppFont.backgroundColor
+        }
+        let history = NSLocalizedString("Searches", comment: "Concordance search history")
+        let results = NSLocalizedString("Last Result", comment: "Result of last concordance search")
+        let typeControl = UISegmentedControl(items: [history, results])
+        typeControl.selectedSegmentIndex = 1
+        typeControl.addTarget(self, action: #selector(viewTypeHandler), for: .valueChanged)
+        
+        let typeCtrl = UIBarButtonItem(customView: typeControl)
+        self.setToolbarItems([typeCtrl], animated: true)
+    }
+    
+    @objc func viewTypeHandler(sender: UISegmentedControl) {
+        let index = sender.selectedSegmentIndex
+        self.viewType = (index == 0) ? .searchHistory : .lastResult
+        self.tableView.reloadData()
+    }
+    
+    
     //
     // DataSource
     //
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let concordance = ConcordanceModel.shared
-        print("table view count \(concordance.results.count)")
-        return concordance.results.count
+        switch self.viewType {
+        case .lastResult:
+            print("table view results count \(concordance.results.count)")
+            return concordance.results.count
+        case .searchHistory:
+            print("table view history count \(concordance.history.count)")
+            return concordance.history.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch self.viewType {
+        case .lastResult:
+            return showLastResult(indexPath: indexPath)
+        case .searchHistory:
+            return showSearchHistory(indexPath: indexPath)
+        }
+    }
+    
+    private func showSearchHistory(indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "concordanceSearch", for: indexPath)
+        cell.contentView.backgroundColor = AppFont.backgroundColor
+        cell.textLabel?.textColor = AppFont.textColor
+        
+        let history = ConcordanceModel.shared.history[indexPath.row]
+        cell.textLabel?.text = history.joined(separator: " ")
+        return cell
+    }
+    
+    private func showLastResult(indexPath: IndexPath) -> ConcordanceResultCell {
         let concordance = ConcordanceModel.shared
         let wordRef = concordance.results[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "concordanceResult", for: indexPath) as! ConcordanceResultCell
         cell.contentView.backgroundColor = AppFont.backgroundColor
-
+        
         cell.title.textColor = AppFont.textColor
         cell.verse.textColor = AppFont.textColor
         
@@ -107,7 +165,7 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         let reference = Reference(bibleId: bible.bibleId, bookId: wordRef.bookId,
                                   chapter: Int(wordRef.chapter))
         cell.title.text = reference.description(verse: wordRef.verse)
-
+        
         cell.verse.text = BibleDB.shared.selectVerse(bible: bible, wordRef: wordRef)
         cell.accessoryType = .disclosureIndicator
         
@@ -118,17 +176,23 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     // Delegate
     //
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let concordance = ConcordanceModel.shared
-        let wordRef = concordance.results[indexPath.row]
-        HistoryModel.shared.changeReference(bookId: wordRef.bookId, chapter: Int(wordRef.chapter))
-        NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
-                                        object: HistoryModel.shared.current())
-        self.navigationController?.popToRootViewController(animated: true)
+        switch self.viewType {
+        case .lastResult:
+            let wordRef = ConcordanceModel.shared.results[indexPath.row]
+            HistoryModel.shared.changeReference(bookId: wordRef.bookId, chapter: Int(wordRef.chapter))
+            NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                            object: HistoryModel.shared.current())
+            self.navigationController?.popToRootViewController(animated: true)
+        case .searchHistory:
+            let words = ConcordanceModel.shared.history[indexPath.row]
+            let bible = HistoryModel.shared.currBible
+            // Update search field with the words
+            let results = ConcordanceModel.shared.search(bible: bible, words: words)
+            self.viewType = .lastResult
+            print("search results count \(results.count)")
+            tableView.reloadData()
+        }
     }
-}
-
-class ConcordanceInputCell : UITableViewCell {
-    
 }
 
 class ConcordanceResultCell : UITableViewCell {

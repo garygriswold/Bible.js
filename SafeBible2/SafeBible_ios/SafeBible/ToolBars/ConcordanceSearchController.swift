@@ -50,11 +50,11 @@ class ConcordanceSearchController: NSObject, UISearchResultsUpdating, UISearchBa
         print("****** INSIDE update Search Results ********")
         if let text = self.searchController.searchBar.text {
             if text.count > 0 {
+                
 //                self.dataModel?.filterForSearch(searchText: text)
             }
 //            let sections = IndexSet(integer: self.availableSection)
 //            self.controller?.tableView.reloadData()
-//            self.controller?.tableView.reloadSections(sections, with: UITableView.RowAnimation.automatic)
         }
     }
     
