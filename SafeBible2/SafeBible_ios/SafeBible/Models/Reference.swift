@@ -100,6 +100,10 @@ struct Reference : Equatable {
         return "\(self.bookName) \(self.chapter)"
     }
     
+    func description(verse: UInt8) -> String {
+        return self.description() + ":" + String(verse)
+    }
+    
     func description(startVerse: Int, endVerse: Int) -> String {
         let verse = (startVerse != endVerse) ? "\(startVerse)-\(endVerse)" : String(startVerse)
         return self.description() + ":" + verse

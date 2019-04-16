@@ -101,10 +101,13 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         cell.contentView.backgroundColor = AppFont.backgroundColor
 
         cell.title.textColor = AppFont.textColor
-        cell.title.text = "Genesis 1:1"
-
         cell.verse.textColor = AppFont.textColor
+        
         let bible = HistoryModel.shared.currBible
+        let reference = Reference(bibleId: bible.bibleId, bookId: wordRef.bookId,
+                                  chapter: Int(wordRef.chapter))
+        cell.title.text = reference.description(verse: wordRef.verse)
+
         cell.verse.text = BibleDB.shared.selectVerse(bible: bible, wordRef: wordRef)
         cell.accessoryType = .disclosureIndicator
         
