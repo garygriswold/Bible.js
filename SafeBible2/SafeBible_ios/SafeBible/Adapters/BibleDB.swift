@@ -129,14 +129,15 @@ struct BibleDB {
     //
     // Concordance Table
     //
-    
+    /**
+    * Words passed in should be lowercase
+    */
     func selectRefList(bible: Bible, words: [String]) -> [[String?]] {
-        let values = words.map { $0.lowercased() }
         let db: Sqlite3
         do {
             let sql = "SELECT word, refList2 FROM concordance WHERE word IN" + self.genQuest(array: words)
             db = try self.getBibleDB(bible: bible)
-            let resultSet = try db.queryV1(sql: sql, values: values)
+            let resultSet = try db.queryV1(sql: sql, values: words)
             return resultSet
         } catch let err {
             print("ERROR selectRefList \(err)")
@@ -187,6 +188,20 @@ struct BibleDB {
         }
         measure.duration(location: "selectRefList3")
         return summarizedLists
+    }
+    
+    func selectVerse(bible: Bible, wordRef: WordRef) -> String? {
+        let values = [wordRef.reference]
+        let db: Sqlite3
+        do {
+            let sql = "SELECT html FROM verses WHERE reference = ?"
+            db = try self.getBibleDB(bible: bible)
+            let resultSet = try db.queryV1(sql: sql, values: values)
+            return (resultSet.count > 0) ? resultSet[0][0] : nil
+        } catch let err {
+            print("ERROR selectVerse \(err)")
+            return nil
+        }
     }
 
     private func getBibleDB(bible: Bible) throws -> Sqlite3 {

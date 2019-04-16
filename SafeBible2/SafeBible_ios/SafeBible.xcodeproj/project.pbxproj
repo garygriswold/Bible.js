@@ -24,6 +24,8 @@
 		E429FDBA21E9500E004A193A /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E429FDB921E9500D004A193A /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E42C151B21CD8BAE00AA42D7 /* NotesExportActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42C151A21CD8BAE00AA42D7 /* NotesExportActionSheet.swift */; };
 		E431E92A21938D7300CF609C /* DynamicCSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E431E92921938D7300CF609C /* DynamicCSS.swift */; };
+		E43533C22264461200DAE83C /* ConcordanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43533C12264461200DAE83C /* ConcordanceViewController.swift */; };
+		E43533C622644A2F00DAE83C /* ConcordanceSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43533C522644A2F00DAE83C /* ConcordanceSearchController.swift */; };
 		E437414B21FEC42B00BB4C9F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E437414921FEC42B00BB4C9F /* Localizable.strings */; };
 		E438058E225BCC2600D0714B /* ConcordanceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E438058D225BCC2600D0714B /* ConcordanceModel.swift */; };
 		E43B1E3D223448E1001C8395 /* HTMLVerseParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43B1E3C223448E1001C8395 /* HTMLVerseParserTest.swift */; };
@@ -164,6 +166,8 @@
 		E429FDB921E9500D004A193A /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = SafeBible/AWSCore.framework; sourceTree = "<group>"; };
 		E42C151A21CD8BAE00AA42D7 /* NotesExportActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExportActionSheet.swift; sourceTree = "<group>"; };
 		E431E92921938D7300CF609C /* DynamicCSS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicCSS.swift; sourceTree = "<group>"; };
+		E43533C12264461200DAE83C /* ConcordanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcordanceViewController.swift; sourceTree = "<group>"; };
+		E43533C522644A2F00DAE83C /* ConcordanceSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcordanceSearchController.swift; sourceTree = "<group>"; };
 		E437414A21FEC42B00BB4C9F /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E438058D225BCC2600D0714B /* ConcordanceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcordanceModel.swift; sourceTree = "<group>"; };
 		E43B1E3C223448E1001C8395 /* HTMLVerseParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLVerseParserTest.swift; sourceTree = "<group>"; };
@@ -354,6 +358,7 @@
 				E4D5A6D221C8A291008476D0 /* NotesListViewController.swift */,
 				E41B8DC721D9AE4B0099A63D /* FileListViewController.swift */,
 				E45A606121EA31870042E3EE /* VideoViewController.swift */,
+				E43533C12264461200DAE83C /* ConcordanceViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -365,6 +370,7 @@
 				E4FD140521CCC8800033F94B /* NotesListToolbar.swift */,
 				E4B4433A21A46999007A266B /* ColorPicker.swift */,
 				E4A712FF21461090009D99E2 /* SettingsSearchController.swift */,
+				E43533C522644A2F00DAE83C /* ConcordanceSearchController.swift */,
 				E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */,
 				E463897121799013009BF5E2 /* BiblesActionSheet.swift */,
 				E4706AE5221CBD92006C7AB5 /* CompareActionSheet.swift */,
@@ -639,6 +645,7 @@
 				E404A3BA2176BAA100340395 /* ReaderViewController.swift in Sources */,
 				E4C2E978211B70F500B71CC5 /* AppFont.swift in Sources */,
 				E4EC586F215D9D4C009BAA4F /* StoreReviewController.swift in Sources */,
+				E43533C22264461200DAE83C /* ConcordanceViewController.swift in Sources */,
 				E4480A302188147200C019B0 /* ReaderToolbar.swift in Sources */,
 				E4C2E98C211B712D00B71CC5 /* LanguageModel.swift in Sources */,
 				E41B8DC821D9AE4B0099A63D /* FileListViewController.swift in Sources */,
@@ -685,6 +692,7 @@
 				E469080D2196650F00155F2A /* ReaderViewQueue.swift in Sources */,
 				E4F720BA211B6F2A00E26B07 /* AppDelegate.swift in Sources */,
 				E4289B502223B90300C344F7 /* AppSettingsViewController.swift in Sources */,
+				E43533C622644A2F00DAE83C /* ConcordanceSearchController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

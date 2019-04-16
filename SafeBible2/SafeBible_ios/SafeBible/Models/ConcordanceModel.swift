@@ -1,5 +1,5 @@
 //
-//  SearchModel.swift
+//  ConcordanceModel.swift
 //  SafeBible
 //
 //  Created by Gary Griswold on 4/8/19.
@@ -24,6 +24,10 @@ struct WordRef : Equatable, Hashable {
         self.chapter = UInt8(parts[1])!
         self.verse = UInt8(parts[2])!
         self.positions = [UInt8(parts[3])!]
+    }
+    
+    var reference: String {
+        return "\(self.bookId):\(self.chapter):\(self.verse)"
     }
     
     mutating func add(position: UInt8) {
@@ -72,8 +76,39 @@ struct WordPositions {
     }
 }
 
-
 struct ConcordanceModel {
+    
+    static var shared = ConcordanceModel()
+    
+    var history: [[String]]
+    var results: [WordRef]
+    
+    private init() {
+        print("****** Init ConcordanceModel ******")
+        self.history = [[String]]()
+        self.results = [WordRef]()
+    }
+    
+    
+    //var concordance = ConcordanceModel.shared
+    //let result = concordance.search(bible: reference.bible, words: ["abide"])
+    //let result = concordance.search1(bible: reference.bible, words: ["the", "and", "a"])
+    //let result = concordance.search3(bible: reference.bible, words: ["the", "and", "a"])
+    //let result = concordance.search4(bible: reference.bible, words: ["actions"])//,
+    //let result = concordance.search2(bible: reference.bible, words: ["tent", "having"])
+    //let result = concordance.search2(bible: reference.bible, words: ["immediately", "it", "sprang"])
+    //let result = concordance.search2(bible: reference.bible, words: ["and", "the"])
+    //let resultSet = Set(result)
+    //print(resultSet.count)
+    //print(result.count)
+    //print(result)
+    
+    mutating func search(bible: Bible, words: [String]) -> [WordRef] {
+        self.history.append(words)
+        let words2 = words.map { $0.lowercased() }
+        self.results = self.search1(bible: bible, words: words2)
+        return self.results
+    }
     
     /**
     * This method searches for all verses that contain all of the words entered.

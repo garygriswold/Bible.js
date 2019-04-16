@@ -176,7 +176,7 @@ class ReaderToolbar {
     }
     
     @objc func searchTapHandler(sender: UIBarButtonItem) {
-        print("search button handler")
+        ConcordanceViewController.push(controller: self.controller)
     }
     
     private func toolbarLabel(width: CGFloat, action: Selector) -> UILabel {
