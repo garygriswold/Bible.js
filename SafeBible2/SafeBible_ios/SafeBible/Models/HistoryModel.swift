@@ -94,9 +94,9 @@ struct HistoryModel {
         self.add(reference: ref)
     }
     
-    mutating func changeReference(book: Book, chapter: Int) {
+    mutating func changeReference(bookId: String, chapter: Int) {
         let curr = self.current()
-        let ref = Reference(bibleId: curr.bibleId, bookId: book.bookId, chapter: chapter)
+        let ref = Reference(bibleId: curr.bibleId, bookId: bookId, chapter: chapter)
         self.add(reference: ref)
     }
     

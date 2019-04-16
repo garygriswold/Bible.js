@@ -119,8 +119,11 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     //
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let concordance = ConcordanceModel.shared
-        let verse = concordance.results[indexPath.row]
-        print("clicked on verse \(verse)")
+        let wordRef = concordance.results[indexPath.row]
+        HistoryModel.shared.changeReference(bookId: wordRef.bookId, chapter: Int(wordRef.chapter))
+        NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                        object: HistoryModel.shared.current())
+        self.navigationController?.popToRootViewController(animated: true)
     }
 }
 

@@ -148,7 +148,7 @@ class TOCBooksViewController : AppTableViewController, UITableViewDataSource {
                 TOCChaptersViewController.push(book: book, controller: self)
             } else {
                 // book.lastChapter can be zero or one.  It is zero for GLO and FRT
-                HistoryModel.shared.changeReference(book: book, chapter: book.lastChapter)
+                HistoryModel.shared.changeReference(bookId: book.bookId, chapter: book.lastChapter)
                 NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
                                                 object: HistoryModel.shared.current())
                 self.navigationController?.popToRootViewController(animated: true)

@@ -129,7 +129,7 @@ class NotesListViewController : AppTableViewController, UITableViewDataSource {
             if note.bibleId != ref.bibleId || note.bookId != ref.bookId || note.chapter != ref.chapter {
                 let noteRef = note.getReference()
                 if let book = noteRef.book {
-                    HistoryModel.shared.changeReference(book: book, chapter: noteRef.chapter)
+                    HistoryModel.shared.changeReference(bookId: book.bookId, chapter: noteRef.chapter)
                     NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
                                                     object: HistoryModel.shared.current())
                 }
