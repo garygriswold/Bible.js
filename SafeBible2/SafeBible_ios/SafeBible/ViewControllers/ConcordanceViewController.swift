@@ -150,8 +150,9 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         cell.contentView.backgroundColor = AppFont.backgroundColor
         cell.textLabel?.textColor = AppFont.textColor
         
-        let history = ConcordanceModel.shared.history[indexPath.row]
-        cell.textLabel?.text = history.joined(separator: " ")
+        let history = ConcordanceModel.shared.history
+        let item = history[history.count - indexPath.row - 1]
+        cell.textLabel?.text = item.joined(separator: " ")
         return cell
     }
     
