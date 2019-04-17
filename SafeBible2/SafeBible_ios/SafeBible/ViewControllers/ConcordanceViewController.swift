@@ -131,8 +131,8 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
             print("table view results count \(concordance.results.count)")
             return concordance.results.count
         case .searchHistory:
-            print("table view history count \(concordance.history.count)")
-            return concordance.history.count
+            print("table view history count \(concordance.historyCount)")
+            return concordance.historyCount
         }
     }
     
@@ -150,9 +150,8 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         cell.contentView.backgroundColor = AppFont.backgroundColor
         cell.textLabel?.textColor = AppFont.textColor
         
-        let history = ConcordanceModel.shared.history
-        let item = history[history.count - indexPath.row - 1]
-        cell.textLabel?.text = item.joined(separator: " ")
+        let history = ConcordanceModel.shared.getHistory(row: indexPath.row)
+        cell.textLabel?.text = history.joined(separator: " ")
         return cell
     }
     
@@ -188,10 +187,11 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
                                             object: HistoryModel.shared.current())
             self.navigationController?.popToRootViewController(animated: true)
         case .searchHistory:
-            let words = ConcordanceModel.shared.history[indexPath.row]
+            let words = ConcordanceModel.shared.getHistory(row: indexPath.row)
             let bible = HistoryModel.shared.currBible
             // Update search field with the words
             let results = ConcordanceModel.shared.search(bible: bible, words: words)
+            self.searchController.updateSearchBar() // The placement of this is critical
             self.viewType = .lastResult
             print("search results count \(results.count)")
             tableView.reloadData()
