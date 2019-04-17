@@ -149,9 +149,7 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "concordanceSearch", for: indexPath)
         cell.contentView.backgroundColor = AppFont.backgroundColor
         cell.textLabel?.textColor = AppFont.textColor
-        
-        let history = ConcordanceModel.shared.getHistory(row: indexPath.row)
-        cell.textLabel?.text = history.joined(separator: " ")
+        cell.textLabel?.text = ConcordanceModel.shared.getHistory(row: indexPath.row)
         return cell
     }
     
@@ -187,7 +185,7 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
                                             object: HistoryModel.shared.current())
             self.navigationController?.popToRootViewController(animated: true)
         case .searchHistory:
-            let words = ConcordanceModel.shared.getHistory(row: indexPath.row)
+            let words = ConcordanceModel.shared.getHistoryWords(row: indexPath.row)
             let bible = HistoryModel.shared.currBible
             // Update search field with the words
             let results = ConcordanceModel.shared.search(bible: bible, words: words)

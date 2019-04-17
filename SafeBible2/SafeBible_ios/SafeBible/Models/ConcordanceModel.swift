@@ -81,11 +81,11 @@ struct ConcordanceModel {
     static var shared = ConcordanceModel()
     
     var results: [WordRef]
-    private var history: [[String]]
+    private var history: [String]
     
     private init() {
         print("****** Init ConcordanceModel ******")
-        self.history = [[String]]()
+        self.history = [String]()
         self.results = [WordRef]()
     }
     
@@ -107,20 +107,24 @@ struct ConcordanceModel {
         return self.history.count
     }
     
-    var historyCurrent: [String] {
-        return (history.last != nil) ? history.last! : []
+    var historyCurrent: String {
+        return (history.last != nil) ? history.last! : ""
     }
     
-    func getHistory(row: Int) -> [String] {
+    func getHistory(row: Int) -> String {
         return self.history[self.history.count - row - 1]
     }
     
-    mutating func setHistory(search: [String]) { // not used
-        self.history.append(search)
+    func getHistoryWords(row: Int) -> [String] {
+        return self.history[self.history.count - row - 1].components(separatedBy: " ")
+    }
+    
+    mutating func setHistory(words: [String]) {
+        self.history.append(words.joined(separator: " "))
     }
     
     mutating func search(bible: Bible, words: [String]) -> [WordRef] {
-        self.history.append(words)
+        self.setHistory(words: words)
         let words2 = words.map { $0.lowercased() }
         self.results = self.search1(bible: bible, words: words2)
         return self.results

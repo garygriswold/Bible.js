@@ -42,8 +42,8 @@ class ConcordanceSearchController: NSObject, UISearchResultsUpdating, UISearchBa
     }
     
     func updateSearchBar() {
-        if let curr: [String] = ConcordanceModel.shared.historyCurrent {
-           self.searchController.searchBar.text = curr.joined(separator: " ")
+        if let curr: String = ConcordanceModel.shared.historyCurrent {
+           self.searchController.searchBar.text = curr
         }
     }
     
