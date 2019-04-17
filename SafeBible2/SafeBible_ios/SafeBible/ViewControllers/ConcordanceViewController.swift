@@ -20,7 +20,7 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         controller?.navigationController?.pushViewController(searchController, animated: true)
     }
  
-    private var viewType: ViewType
+    var viewType: ViewType
     private var searchController: ConcordanceSearchController!
 
     
@@ -102,7 +102,7 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
             nav.toolbar.barTintColor = AppFont.backgroundColor
         }
         let history = NSLocalizedString("Searches", comment: "Concordance search history")
-        let results = NSLocalizedString("Last Result", comment: "Result of last concordance search")
+        let results = NSLocalizedString("Last Search", comment: "Result of last concordance search")
         let typeControl = UISegmentedControl(items: [history, results])
         typeControl.selectedSegmentIndex = 1
         typeControl.addTarget(self, action: #selector(viewTypeHandler), for: .valueChanged)
@@ -114,6 +114,9 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     @objc func viewTypeHandler(sender: UISegmentedControl) {
         let index = sender.selectedSegmentIndex
         self.viewType = (index == 0) ? .searchHistory : .lastResult
+        if self.viewType == .lastResult {
+            self.searchController.updateSearchBar()
+        }
         self.tableView.reloadData()
     }
     
