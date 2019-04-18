@@ -24,6 +24,7 @@ class SettingsSearchController: NSObject, UISearchResultsUpdating {
         
         self.searchController.searchResultsUpdater = self
         self.searchController.obscuresBackgroundDuringPresentation = false
+        self.searchController.hidesNavigationBarDuringPresentation = false
         self.controller?.navigationItem.hidesSearchBarWhenScrolling = false
         //self.searchController.searchBar.setShowsCancelButton(false, animated: true)
     }

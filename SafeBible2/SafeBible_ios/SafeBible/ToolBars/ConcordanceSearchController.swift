@@ -22,6 +22,7 @@ class ConcordanceSearchController: NSObject, UISearchResultsUpdating, UISearchBa
         
         self.searchController.searchResultsUpdater = self
         self.searchController.obscuresBackgroundDuringPresentation = false
+        self.searchController.hidesNavigationBarDuringPresentation = false
         self.controller?.navigationItem.hidesSearchBarWhenScrolling = false
         
         self.searchController.searchBar.returnKeyType = .search
@@ -42,9 +43,7 @@ class ConcordanceSearchController: NSObject, UISearchResultsUpdating, UISearchBa
     }
     
     func updateSearchBar() {
-        if let curr: String = ConcordanceModel.shared.historyCurrent {
-           self.searchController.searchBar.text = curr
-        }
+        self.searchController.searchBar.text = ConcordanceModel.shared.historyCurrent
     }
     
 //    func isSearching() -> Bool {
