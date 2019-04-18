@@ -81,10 +81,12 @@ struct ConcordanceModel {
     static var shared = ConcordanceModel()
     
     var results: [WordRef]
+    private var fullHistory: [String]
     private var history: [String]
     
     private init() {
         print("****** Init ConcordanceModel ******")
+        self.fullHistory = [String]()
         self.history = [String]()
         self.results = [WordRef]()
     }
@@ -116,15 +118,21 @@ struct ConcordanceModel {
     }
     
     func getHistoryWords(row: Int) -> [String] {
-        return self.history[self.history.count - row - 1].components(separatedBy: " ")
+        return self.getHistory(row: row).components(separatedBy: " ")
     }
     
     mutating func setHistory(words: [String]) {
         let search = words.joined(separator: " ")
-        if let index = self.history.index(of: search) {
-            self.history.remove(at: index)
+        if let index = self.fullHistory.index(of: search) {
+            self.fullHistory.remove(at: index)
         }
-        self.history.append(search)
+        self.fullHistory.append(search)
+        self.history = self.fullHistory
+    }
+    
+    mutating func filterForSearch(searchText: String) {
+        let searchFor = searchText.lowercased()
+        self.history = self.fullHistory.filter { $0.lowercased().hasPrefix(searchFor) }
     }
     
     mutating func search(bible: Bible, words: [String]) -> [WordRef] {
