@@ -120,7 +120,11 @@ struct ConcordanceModel {
     }
     
     mutating func setHistory(words: [String]) {
-        self.history.append(words.joined(separator: " "))
+        let search = words.joined(separator: " ")
+        if let index = self.history.index(of: search) {
+            self.history.remove(at: index)
+        }
+        self.history.append(search)
     }
     
     mutating func search(bible: Bible, words: [String]) -> [WordRef] {
