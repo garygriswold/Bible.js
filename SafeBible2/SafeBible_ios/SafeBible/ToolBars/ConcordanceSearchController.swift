@@ -45,11 +45,6 @@ class ConcordanceSearchController: NSObject, UISearchResultsUpdating, UISearchBa
     func updateSearchBar() {
         self.searchController.searchBar.text = ConcordanceModel.shared.historyCurrent
     }
-    
-//    func isSearching() -> Bool {
-//        let searchBarEmpty: Bool = self.searchController.searchBar.text?.isEmpty ?? true
-//        return self.searchController.isActive && !searchBarEmpty
-//    }
 
     //
     // UISearchResultsUpdating
@@ -57,12 +52,11 @@ class ConcordanceSearchController: NSObject, UISearchResultsUpdating, UISearchBa
     func updateSearchResults(for searchController: UISearchController) {
         print("****** INSIDE update Search Results ********")
         if let text = self.searchController.searchBar.text {
-            self.controller?.viewType = .searchHistory
+            self.controller?.typeControl.selectedSegmentIndex = ConcordanceViewController.VIEW_SEARCHES
             if text.count > 0 {
                 
 //                self.dataModel?.filterForSearch(searchText: text)
             }
-//            let sections = IndexSet(integer: self.availableSection)
             self.controller?.tableView.reloadData()
         }
     }
@@ -71,9 +65,8 @@ class ConcordanceSearchController: NSObject, UISearchResultsUpdating, UISearchBa
     // UISearchBarDelegate
     //
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("search button clicked")
         if searchBar.text != nil && searchBar.text!.count > 0 {
-            self.controller?.viewType = .lastResult
+            self.controller?.typeControl.selectedSegmentIndex = ConcordanceViewController.VIEW_LAST_SEARCH
             let parts: [String] = searchBar.text!.components(separatedBy: " ")
             let words = parts.filter { $0.count > 0 }
 

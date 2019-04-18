@@ -10,22 +10,19 @@ import UIKit
 
 class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     
-    enum ViewType {
-        case searchHistory
-        case lastResult
-    }
+    static let VIEW_SEARCHES = 0
+    static let VIEW_LAST_SEARCH = 1
    
     static func push(controller: UIViewController?) {
         let searchController = ConcordanceViewController()
         controller?.navigationController?.pushViewController(searchController, animated: true)
     }
  
-    var viewType: ViewType
     private var searchController: ConcordanceSearchController!
+    var typeControl: UISegmentedControl!
 
     
     init() {
-        self.viewType = .lastResult
         super.init(nibName: nil, bundle: nil)
         self.searchController = ConcordanceSearchController(controller: self)
     }
@@ -63,7 +60,6 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         
         self.navigationController?.isToolbarHidden = false
         
-        // When UserMessage is dismissed, it has sometimes left behind only the top half of the screen
         self.tableView.frame = self.view.bounds
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 1.0))
         self.tableView.tableHeaderView = label
@@ -87,8 +83,6 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
                 self.tableView.frame = CGRect(x: 0.0, y: 0.0, width: bounds.width, height: keyboardTop)
             }
         }
-        // crashes when there are zero rows in table
-        //self.tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
     }
     
     @objc func keyboardWillHide(note: NSNotification) {
@@ -103,9 +97,9 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         }
         let history = NSLocalizedString("Searches", comment: "Concordance search history")
         let results = NSLocalizedString("Last Search", comment: "Result of last concordance search")
-        let typeControl = UISegmentedControl(items: [history, results])
-        typeControl.selectedSegmentIndex = 1
-        typeControl.addTarget(self, action: #selector(viewTypeHandler), for: .valueChanged)
+        self.typeControl = UISegmentedControl(items: [history, results])
+        self.typeControl.selectedSegmentIndex = 1
+        self.typeControl.addTarget(self, action: #selector(viewTypeHandler), for: .valueChanged)
         
         let typeCtrl = UIBarButtonItem(customView: typeControl)
         self.setToolbarItems([typeCtrl], animated: true)
@@ -113,34 +107,31 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     
     @objc func viewTypeHandler(sender: UISegmentedControl) {
         let index = sender.selectedSegmentIndex
-        self.viewType = (index == 0) ? .searchHistory : .lastResult
-        if self.viewType == .lastResult {
+        if index == ConcordanceViewController.VIEW_LAST_SEARCH {
             self.searchController.updateSearchBar()
         }
+        self.typeControl.selectedSegmentIndex = index
         self.tableView.reloadData()
     }
-    
     
     //
     // DataSource
     //
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let concordance = ConcordanceModel.shared
-        switch self.viewType {
-        case .lastResult:
+        if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
             print("table view results count \(concordance.results.count)")
             return concordance.results.count
-        case .searchHistory:
+        } else {
             print("table view history count \(concordance.historyCount)")
             return concordance.historyCount
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch self.viewType {
-        case .lastResult:
+        if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
             return showLastResult(indexPath: indexPath)
-        case .searchHistory:
+        } else {
             return showSearchHistory(indexPath: indexPath)
         }
     }
@@ -177,20 +168,18 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     // Delegate
     //
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch self.viewType {
-        case .lastResult:
+        if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
             let wordRef = ConcordanceModel.shared.results[indexPath.row]
             HistoryModel.shared.changeReference(bookId: wordRef.bookId, chapter: Int(wordRef.chapter))
             NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
                                             object: HistoryModel.shared.current())
             self.navigationController?.popToRootViewController(animated: true)
-        case .searchHistory:
+        } else {
             let words = ConcordanceModel.shared.getHistoryWords(row: indexPath.row)
             let bible = HistoryModel.shared.currBible
-            // Update search field with the words
             let results = ConcordanceModel.shared.search(bible: bible, words: words)
             self.searchController.updateSearchBar() // The placement of this is critical
-            self.viewType = .lastResult
+            self.typeControl.selectedSegmentIndex = ConcordanceViewController.VIEW_LAST_SEARCH
             print("search results count \(results.count)")
             tableView.reloadData()
         }
@@ -226,10 +215,10 @@ class ConcordanceResultCell : UITableViewCell {
         self.verse.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -inset).isActive = true
     }
     required init?(coder: NSCoder) {
-        fatalError("WordSearchResultCell(coder:) is not implemented.")
+        fatalError("ConcordanceResultCell(coder:) is not implemented.")
     }
     
     deinit {
-        print("**** deinit WordSearchResultCell ******")
+        print("**** deinit ConcordanceResultCell ******")
     }
 }
