@@ -5,7 +5,7 @@
 //  Created by Gary Griswold on 4/15/19.
 //  Copyright © 2019 ShortSands. All rights reserved.
 //
-
+import Foundation
 import UIKit
 
 class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
@@ -21,7 +21,6 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     private var searchController: ConcordanceSearchController!
     var typeControl: UISegmentedControl!
 
-    
     init() {
         super.init(nibName: nil, bundle: nil)
         self.searchController = ConcordanceSearchController(controller: self)
@@ -157,11 +156,67 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         let reference = Reference(bibleId: bible.bibleId, bookId: wordRef.bookId,
                                   chapter: Int(wordRef.chapter))
         cell.title.text = reference.description(verse: wordRef.verse)
-        
-        cell.verse.text = BibleDB.shared.selectVerse(bible: bible, wordRef: wordRef)
+        cell.verse.attributedText = self.format(bible: bible, wordRef: wordRef)
+
         cell.accessoryType = .disclosureIndicator
-        
         return cell
+    }
+    
+    private func format(bible: Bible, wordRef: WordRef) -> NSMutableAttributedString? {
+        let pointSize = AppFont.serif(style: .body).pointSize * 0.9
+        if let verseStr = BibleDB.shared.selectVerse(bible: bible, wordRef: wordRef) {
+            let verse = NSMutableAttributedString(string: verseStr)
+            let ranges = self.findRanges(string: verseStr, wordPositions: wordRef.wordPositions!)
+            for range in ranges {
+                verse.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: pointSize), range: range)
+            }
+            return verse
+        } else {
+            return nil
+        }
+    }
+    
+    private func findRanges(string: String, wordPositions: WordPositions) -> [NSRange] {
+        print(string)
+        var wordPositions = self.sequencePositions(wordPositions: wordPositions)
+        var ranges = [NSRange]()
+        var search = wordPositions.remove(at: 0)
+        let chars = Array(string)
+        var insideWord = false
+        var wordStart = 0
+        var wordCount: UInt8 = 0
+        for index in 0..<chars.count {
+            let char = chars[index]
+            if char == " " || char == "\t" || char == "\n" || char == "\r" {
+                if wordCount == search && insideWord {
+                    ranges.append(NSRange(location: wordStart, length: index - wordStart))
+                    if wordPositions.count > 0 {
+                        search = wordPositions.remove(at: 0)
+                    } else {
+                        return ranges
+                    }
+                }
+                insideWord = false
+            } else {
+                if !insideWord {
+                    insideWord = true
+                    wordStart = index
+                    wordCount += 1
+                }
+            }
+        }
+        if wordCount == search && insideWord {
+            ranges.append(NSRange(location: wordStart, length: chars.count - wordStart))
+        }
+        return ranges
+    }
+    
+    private func sequencePositions(wordPositions: WordPositions) -> [UInt8] {
+        var result = [UInt8]()
+        for index in 0..<wordPositions.numWords {
+            result += wordPositions.positions[index]
+        }
+        return result.sorted()
     }
     
     //
