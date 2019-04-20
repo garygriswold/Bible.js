@@ -163,7 +163,7 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     }
     
     private func format(bible: Bible, wordRef: WordRef) -> NSMutableAttributedString? {
-        let pointSize = AppFont.serif(style: .body).pointSize * 0.9
+        let pointSize = AppFont.serif(style: .body).pointSize * 0.95
         if let verseStr = BibleDB.shared.selectVerse(bible: bible, wordRef: wordRef) {
             let verse = NSMutableAttributedString(string: verseStr)
             let ranges = self.findRanges(string: verseStr, wordPositions: wordRef.wordPositions!)
