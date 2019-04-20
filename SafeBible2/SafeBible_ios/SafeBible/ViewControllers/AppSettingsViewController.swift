@@ -79,7 +79,7 @@ class AppSettingsViewController : AppTableViewController, UITableViewDataSource 
         // When we move a language from available to selected, then select initial versions
         if let model = self.dataModel as? LanguageModel {
             if let language = model.getSelectedLanguage(row: destination.row) {
-                let initial = BibleInitialSelect(adapter: model.settingsAdapter)
+                let initial = BibleInitialSelect()
                 let bibles = initial.getBiblesSelected(locales: [language])
                 SettingsDB.shared.addBibles(bibles: bibles)
             }

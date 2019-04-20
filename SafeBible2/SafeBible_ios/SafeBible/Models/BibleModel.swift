@@ -52,21 +52,19 @@ class BibleModel : SettingsModel {
     var available: [[Bible]]
     var filtered: [Bible] // deprecated, not used
     var oneLanguage: Language? // Used only when settingsViewType == .oneLang
-    private let adapter: SettingsAdapter
     private let availableSection: Int
     
     init(availableSection: Int, language: Language?, selectedOnly: Bool) {
         let start: Double = CFAbsoluteTimeGetCurrent()
-        self.adapter = SettingsAdapter()
         self.availableSection = availableSection
         self.oneLanguage = language
         let prefLocales = SettingsDB.shared.getLanguageSettings()
         self.selected = [Bible]()
         var bibles: [String] = SettingsDB.shared.getBibleSettings()
         if bibles.count > 0 {
-            self.selected = adapter.getBiblesSelected(locales: prefLocales, selectedBibles: bibles)
+            self.selected = VersionsDB.shared.getBiblesSelected(locales: prefLocales, selectedBibles: bibles)
         } else {
-            let initial = BibleInitialSelect(adapter: adapter)
+            let initial = BibleInitialSelect()
             self.selected = initial.getBiblesSelected(locales: prefLocales)
             bibles = selected.map { $0.bibleId }
             SettingsDB.shared.updateSettings(bibles: self.selected)
@@ -76,11 +74,12 @@ class BibleModel : SettingsModel {
         self.available = [[Bible]]()
         if !selectedOnly {
             if self.oneLanguage != nil {
-                let avail = adapter.getBiblesAvailable(locale: oneLanguage!, selectedBibles: bibles)
+                let avail = VersionsDB.shared.getBiblesAvailable(locale: oneLanguage!, selectedBibles: bibles)
                 self.available.append(avail)
             } else {
                 for locale in prefLocales {
-                    let available1 = adapter.getBiblesAvailable(locale: locale, selectedBibles: bibles)
+                    let available1 = VersionsDB.shared.getBiblesAvailable(locale: locale,
+                                                                          selectedBibles: bibles)
                     if available1.count > 0 || selectedLocales.contains(locale.identifier) {
                         tempLocales.append(locale)
                         self.available.append(available1)
@@ -95,10 +94,6 @@ class BibleModel : SettingsModel {
     
     deinit {
         print("***** deinit BibleModel ******")
-    }
-    
-    var settingsAdapter: SettingsAdapter {
-        get { return adapter }
     }
     
     var selectedCount: Int {

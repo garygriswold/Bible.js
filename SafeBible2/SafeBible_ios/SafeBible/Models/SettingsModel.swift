@@ -10,7 +10,6 @@ import UIKit
 
 protocol SettingsModel {
  
-    var settingsAdapter: SettingsAdapter { get }
     var locales: [Language] { get }
     var selectedCount: Int { get }
     var availableCount: Int { get }

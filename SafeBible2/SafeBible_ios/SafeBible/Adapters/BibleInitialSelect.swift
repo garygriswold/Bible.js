@@ -14,15 +14,9 @@
 import Utility
 
 struct BibleInitialSelect {
-
-    private var adapter: SettingsAdapter
-    
-    init(adapter: SettingsAdapter) {
-        self.adapter = adapter
-    }
     
     func getBiblesSelected(locales: [Language]) -> [Bible] {
-        let bibles = self.adapter.getAllBibles()
+        let bibles = VersionsDB.shared.getAllBibles()
         var selected = self.searchLocales(bibles: bibles, locales: locales) // match w/o countryCode
         if selected.count == 0 {
             selected = self.searchLocales(bibles: bibles, locales: [Language(identifier: "en")])

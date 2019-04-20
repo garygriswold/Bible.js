@@ -100,26 +100,20 @@ class LanguageModel : SettingsModel {
     var selected: [Language]
     var available: [Language]
     var filtered: [Language]
-    private let adapter: SettingsAdapter
     private let availableSection: Int
     
     init(availableSection: Int) {
         let start: Double = CFAbsoluteTimeGetCurrent()
-        self.adapter = SettingsAdapter()
         self.availableSection = availableSection
         self.locales = SettingsDB.shared.getLanguageSettings()
-        self.selected = adapter.getLanguagesSelected(selected: locales)
-        self.available = adapter.getLanguagesAvailable(selected: locales)
+        self.selected = VersionsDB.shared.getLanguagesSelected(selected: locales)
+        self.available = VersionsDB.shared.getLanguagesAvailable(selected: locales)
         self.filtered = [Language]()
         print("*** LanguageModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
     }
     
     deinit {
         print("***** deinit LanguageModel ******")
-    }
-    
-    var settingsAdapter: SettingsAdapter {
-        get { return adapter }
     }
     
     var selectedCount: Int {
