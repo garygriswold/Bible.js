@@ -197,7 +197,7 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
                     }
                 }
                 insideWord = false
-            } else {
+            } else if !char.isPunctuation {
                 if !insideWord {
                     insideWord = true
                     wordStart = index
