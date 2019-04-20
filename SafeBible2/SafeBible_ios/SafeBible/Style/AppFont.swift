@@ -19,15 +19,13 @@ public class AppFont {
     public static var userFontDelta: CGFloat {
         get {
             if _userFontDelta == nil {
-                let adapter = SettingsAdapter()
-                _userFontDelta = adapter.getUserFontDelta()
+                _userFontDelta = SettingsDB.shared.getUserFontDelta()
             }
             return _userFontDelta!
         }
         set(newValue) {
             _userFontDelta = newValue
-            let adapter = SettingsAdapter()
-            adapter.setUserFontDelta(fontDelta: newValue)
+            SettingsDB.shared.setUserFontDelta(fontDelta: newValue)
         }
     }
     

@@ -60,16 +60,16 @@ class BibleModel : SettingsModel {
         self.adapter = SettingsAdapter()
         self.availableSection = availableSection
         self.oneLanguage = language
-        let prefLocales = adapter.getLanguageSettings()
+        let prefLocales = SettingsDB.shared.getLanguageSettings()
         self.selected = [Bible]()
-        var bibles: [String] = adapter.getBibleSettings()
+        var bibles: [String] = SettingsDB.shared.getBibleSettings()
         if bibles.count > 0 {
             self.selected = adapter.getBiblesSelected(locales: prefLocales, selectedBibles: bibles)
         } else {
             let initial = BibleInitialSelect(adapter: adapter)
             self.selected = initial.getBiblesSelected(locales: prefLocales)
             bibles = selected.map { $0.bibleId }
-            adapter.updateSettings(bibles: self.selected)
+            SettingsDB.shared.updateSettings(bibles: self.selected)
         }
         let selectedLocales = Set(self.selected.map { $0.language.identifier })
         var tempLocales = [Language]()
@@ -165,21 +165,21 @@ class BibleModel : SettingsModel {
         let element = self.selected[source]
         self.selected.remove(at: source)
         self.selected.insert(element, at: destination)
-        self.adapter.updateSettings(bibles: self.selected)
+        SettingsDB.shared.updateSettings(bibles: self.selected)
     }
     
     func moveAvailableToSelected(source: IndexPath, destination: IndexPath, inSearch: Bool) {
         let element: Bible = self.available[source.section - self.availableSection][source.row]
         self.available[source.section - self.availableSection].remove(at: source.row)
         self.selected.insert(element, at: destination.row)
-        self.adapter.updateSettings(bibles: self.selected)
+        SettingsDB.shared.updateSettings(bibles: self.selected)
     }
     
     func moveSelectedToAvailable(source: IndexPath, destination: IndexPath, inSearch: Bool) {
         let element: Bible = self.selected[source.row]
         self.selected.remove(at: source.row)
         self.available[destination.section - self.availableSection].insert(element, at: destination.row)
-        self.adapter.updateSettings(bibles: self.selected)
+        SettingsDB.shared.updateSettings(bibles: self.selected)
     }
     
     func findAvailableInsertIndex(selectedIndex: IndexPath) -> IndexPath {

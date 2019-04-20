@@ -159,8 +159,9 @@ class BibleListViewController: AppSettingsViewController {
             }
             self.insertRow(tableView: tableView, indexPath: indexPath)
             // Ensure the language is selected, is added when a Bible is added
-            let model = self.dataModel as? BibleModel
-            model?.settingsAdapter.ensureLanguageAdded(language: model?.oneLanguage)
+            if let model = self.dataModel as? BibleModel {
+                SettingsDB.shared.ensureLanguageAdded(language: model.oneLanguage)
+            }
             self.navigationController?.popToRootViewController(animated: true)
         }
     }

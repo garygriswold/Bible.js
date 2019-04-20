@@ -11,12 +11,101 @@ import Utility
 struct SettingsDB {
     
     static var shared = SettingsDB()
+    
     private static let MAX_HISTORY: Int = 200
+    
+    // Changing these static values would break data stored in User settings
+    private static let LANGS_SELECTED = "langs_selected"
+    private static let BIBLE_SELECTED = "bible_selected"
+    private static let PSEUDO_USER_ID = "pseudo_user_id"
+    private static let CURR_VERSION = "version" // I think this is unused.  History is used instead.
+    private static let USER_FONT_DELTA = "userFontDelta"
     
     private init() {}
     
     //
-    // Settings Table
+    // Settings methods
+    //
+    func getLanguageSettings() -> [Language] {
+        var languages: [String]
+        if let langs = self.getSettings(name: SettingsDB.LANGS_SELECTED) {
+            languages = langs
+        } else {
+            languages = Locale.preferredLanguages
+            SettingsDB.shared.updateSettings(name: SettingsDB.LANGS_SELECTED, settings: languages)
+        }
+        let locales: [Language] = languages.map { Language(identifier: $0) }
+        return locales
+    }
+    
+    func getBibleSettings() -> [String] {
+        if let bibles = self.getSettings(name: SettingsDB.BIBLE_SELECTED) {
+            return bibles
+        } else {
+            return [] // Returning empty causes BibleInitialSelect to be used.
+        }
+    }
+    
+    func ensureLanguageAdded(language: Language?) {
+        if (language != nil) {
+            var locales = self.getLanguageSettings()
+            if !locales.contains(language!) {
+                locales.append(language!)
+                let localeStrs = locales.map { $0.fullIdentifier }
+                self.updateSettings(name: SettingsDB.LANGS_SELECTED, settings: localeStrs)
+            }
+        }
+    }
+    
+    func addBibles(bibles: [Bible]) {
+        var currBibles = self.getBibleSettings()
+        for bible in bibles {
+            let bibleId = bible.bibleId
+            if !currBibles.contains(bibleId) {
+                currBibles.append(bibleId)
+            }
+        }
+        SettingsDB.shared.updateSettings(name: SettingsDB.BIBLE_SELECTED, settings: currBibles)
+    }
+    
+    func updateSettings(languages: [Language]) {
+        let locales = languages.map { $0.fullIdentifier }
+        SettingsDB.shared.updateSettings(name: SettingsDB.LANGS_SELECTED, settings: locales)
+    }
+    
+    func updateSettings(bibles: [Bible]) {
+        let keys = bibles.map { $0.bibleId }
+        self.updateSettings(name: SettingsDB.BIBLE_SELECTED, settings: keys)
+        if let first = keys.first {
+            self.updateSetting(name: SettingsDB.CURR_VERSION, setting: first)
+        }
+    }
+    
+    func getPseudoUserId() -> String {
+        var userId: String? = self.getSetting(name: SettingsDB.PSEUDO_USER_ID)
+        if userId == nil {
+            userId = UUID().uuidString // Generates a pseudo random GUID
+            SettingsDB.shared.updateSetting(name: SettingsDB.PSEUDO_USER_ID, setting: userId!)
+        }
+        return userId!
+    }
+    
+    func getUserFontDelta() -> CGFloat {
+        if let deltaStr = self.getSetting(name: SettingsDB.USER_FONT_DELTA) {
+            if let deltaDbl = Double(deltaStr) {
+                return CGFloat(deltaDbl)
+            }
+        }
+        return 1.0
+    }
+    
+    func setUserFontDelta(fontDelta: CGFloat) {
+        let deltatDbl = Double(fontDelta)
+        self.updateSetting(name: SettingsDB.USER_FONT_DELTA, setting: String(deltatDbl))
+    }
+    
+    //
+    // Settings Table General Methods
     //
     func getSettings(name: String) -> [String]? {
         let value = self.getSetting(name: name)

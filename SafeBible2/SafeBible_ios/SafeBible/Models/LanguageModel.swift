@@ -107,7 +107,7 @@ class LanguageModel : SettingsModel {
         let start: Double = CFAbsoluteTimeGetCurrent()
         self.adapter = SettingsAdapter()
         self.availableSection = availableSection
-        self.locales = adapter.getLanguageSettings()
+        self.locales = SettingsDB.shared.getLanguageSettings()
         self.selected = adapter.getLanguagesSelected(selected: locales)
         self.available = adapter.getLanguagesAvailable(selected: locales)
         self.filtered = [Language]()
@@ -176,7 +176,7 @@ class LanguageModel : SettingsModel {
         let element = self.selected[source]
         self.selected.remove(at: source)
         self.selected.insert(element, at: destination)
-        self.adapter.updateSettings(languages: self.selected)
+        SettingsDB.shared.updateSettings(languages: self.selected)
     }
     
     func moveAvailableToSelected(source: IndexPath, destination: IndexPath, inSearch: Bool) {
@@ -194,7 +194,7 @@ class LanguageModel : SettingsModel {
             self.available.remove(at: source.row)
         }
         self.selected.insert(element, at: destination.row)
-        self.adapter.updateSettings(languages: self.selected)
+        SettingsDB.shared.updateSettings(languages: self.selected)
     }
     
     func moveSelectedToAvailable(source: IndexPath, destination: IndexPath, inSearch: Bool) {
@@ -204,7 +204,7 @@ class LanguageModel : SettingsModel {
         if inSearch {
             self.filtered.insert(element, at: destination.row)
         }
-        self.adapter.updateSettings(languages: self.selected)
+        SettingsDB.shared.updateSettings(languages: self.selected)
     }
     
     func findAvailableInsertIndex(selectedIndex: IndexPath) -> IndexPath {

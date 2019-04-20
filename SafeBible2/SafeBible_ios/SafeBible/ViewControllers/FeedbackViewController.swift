@@ -82,8 +82,7 @@ class FeedbackViewController: AppViewController, UITextViewDelegate {
         if let text: String = self.textView.text?.trimmingCharacters(in: .whitespacesAndNewlines) {
             if !text.isEmpty {
                 self.playMessageSentSound()
-                let adapter = SettingsAdapter()
-                let userId: String = adapter.getPseudoUserId()
+                let userId: String = SettingsDB.shared.getPseudoUserId()
                 let aws = AwsS3Manager.findUSEast1()
                 let key = userId + String(text.hashValue)
                 let message = userId + "\n" + Locale.current.identifier + "\n" + text
