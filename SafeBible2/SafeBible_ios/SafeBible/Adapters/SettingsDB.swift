@@ -13,6 +13,7 @@ struct SettingsDB {
     static var shared = SettingsDB()
     
     private static let MAX_HISTORY: Int = 200
+    private static let MAX_CONCORDANCE_HIST: Int = 20 // 30
     
     // Changing these static values would break data stored in User settings
     private static let LANGS_SELECTED = "langs_selected"
@@ -20,6 +21,7 @@ struct SettingsDB {
     private static let PSEUDO_USER_ID = "pseudo_user_id"
     private static let CURR_VERSION = "version" // I think this is unused.  History is used instead.
     private static let USER_FONT_DELTA = "userFontDelta"
+    private static let CONCORDANCE_HIST = "concordance_hist"
     
     private init() {}
     
@@ -102,6 +104,23 @@ struct SettingsDB {
     func setUserFontDelta(fontDelta: CGFloat) {
         let deltatDbl = Double(fontDelta)
         self.updateSetting(name: SettingsDB.USER_FONT_DELTA, setting: String(deltatDbl))
+    }
+    
+    func getConcordanceHistory() -> [String] {
+        let value = self.getSetting(name: SettingsDB.CONCORDANCE_HIST)
+        if value != nil && value!.count > 0 {
+            return value!.components(separatedBy: "|")
+        } else {
+            return [String]()
+        }
+    }
+    
+    func setConcordanceHistory(history: [String]) {
+        var searches = history
+        if searches.count > SettingsDB.MAX_CONCORDANCE_HIST {
+            searches.removeFirst(searches.count - SettingsDB.MAX_CONCORDANCE_HIST)
+        }
+        self.updateSetting(name: SettingsDB.CONCORDANCE_HIST, setting: searches.joined(separator: "|"))
     }
     
     //

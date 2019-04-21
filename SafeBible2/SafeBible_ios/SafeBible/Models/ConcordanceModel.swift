@@ -86,8 +86,8 @@ struct ConcordanceModel {
     
     private init() {
         print("****** Init ConcordanceModel ******")
-        self.fullHistory = [String]()
-        self.history = [String]()
+        self.fullHistory = SettingsDB.shared.getConcordanceHistory()
+        self.history = self.fullHistory
         self.results = [WordRef]()
     }
     
@@ -128,6 +128,9 @@ struct ConcordanceModel {
         }
         self.fullHistory.append(search)
         self.history = self.fullHistory
+        let measure = Measurement()
+        SettingsDB.shared.setConcordanceHistory(history: self.fullHistory)
+        measure.duration(location: "setConcordanceHistory")
     }
     
     mutating func filterForSearch(searchText: String) {

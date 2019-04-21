@@ -177,7 +177,6 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     }
     
     private func findRanges(string: String, wordPositions: WordPositions) -> [NSRange] {
-        print(string)
         var wordPositions = self.sequencePositions(wordPositions: wordPositions)
         var ranges = [NSRange]()
         var search = wordPositions.remove(at: 0)
@@ -235,7 +234,6 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
             let results = ConcordanceModel.shared.search(bible: bible, words: words)
             self.searchController.updateSearchBar() // The placement of this is critical
             self.typeControl.selectedSegmentIndex = ConcordanceViewController.VIEW_LAST_SEARCH
-            print("search results count \(results.count)")
             tableView.reloadData()
         }
     }
