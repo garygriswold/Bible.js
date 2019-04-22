@@ -97,7 +97,7 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         let history = NSLocalizedString("Searches", comment: "Concordance search history")
         let results = NSLocalizedString("Last Search", comment: "Result of last concordance search")
         self.typeControl = UISegmentedControl(items: [history, results])
-        self.typeControl.selectedSegmentIndex = 1
+        self.typeControl.selectedSegmentIndex = ConcordanceViewController.VIEW_LAST_SEARCH
         self.typeControl.addTarget(self, action: #selector(viewTypeHandler), for: .valueChanged)
         
         let typeCtrl = UIBarButtonItem(customView: typeControl)
@@ -108,6 +108,9 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         let index = sender.selectedSegmentIndex
         if index == ConcordanceViewController.VIEW_LAST_SEARCH {
             self.searchController.updateSearchBar()
+        } else {
+            ConcordanceModel.shared.clearSearch()
+            self.searchController.clearSearchBar()
         }
         self.typeControl.selectedSegmentIndex = index
         self.tableView.reloadData()

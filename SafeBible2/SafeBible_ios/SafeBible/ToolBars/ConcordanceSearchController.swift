@@ -48,6 +48,10 @@ class ConcordanceSearchController: NSObject, UISearchResultsUpdating, UISearchBa
     func updateSearchBar() {
         self.searchController.searchBar.text = ConcordanceModel.shared.historyCurrent
     }
+    
+    func clearSearchBar() {
+        self.searchController.searchBar.text = ""
+    }
 
     //
     // UISearchResultsUpdating
