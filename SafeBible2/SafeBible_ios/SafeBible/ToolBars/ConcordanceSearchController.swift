@@ -24,11 +24,8 @@ class ConcordanceSearchController: NSObject, UISearchResultsUpdating, UISearchBa
         self.searchController.obscuresBackgroundDuringPresentation = false
         self.searchController.hidesNavigationBarDuringPresentation = false
         self.controller?.navigationItem.hidesSearchBarWhenScrolling = false
-        
+ 
         self.searchController.searchBar.returnKeyType = .search
-        //self.searchController.searchBar.setShowsCancelButton(false, animated: true)
-        //self.searchController.searchBar.showsCancelButton = false
-        self.searchController.searchBar.showsSearchResultsButton = true
         
         self.searchController.searchBar.delegate = self
     }
@@ -61,6 +58,8 @@ class ConcordanceSearchController: NSObject, UISearchResultsUpdating, UISearchBa
             self.controller?.typeControl.selectedSegmentIndex = ConcordanceViewController.VIEW_SEARCHES
             if text.count > 0 {
                 ConcordanceModel.shared.filterForSearch(searchText: text)
+            } else {
+                ConcordanceModel.shared.clearSearch()
             }
             self.controller?.tableView.reloadData()
         }

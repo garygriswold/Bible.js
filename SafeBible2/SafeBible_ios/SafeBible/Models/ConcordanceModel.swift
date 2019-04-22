@@ -138,6 +138,10 @@ struct ConcordanceModel {
         self.history = self.fullHistory.filter { $0.lowercased().hasPrefix(searchFor) }
     }
     
+    mutating func clearSearch() {
+        self.history = self.fullHistory
+    }
+    
     mutating func search(bible: Bible, words: [String]) -> [WordRef] {
         self.setHistory(words: words)
         let words2 = words.map { $0.lowercased() }
