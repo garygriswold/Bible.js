@@ -72,6 +72,8 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
                            name: UIResponder.keyboardWillHideNotification, object: nil)
         
         self.searchController.viewAppears()
+        self.searchController.updateSearchBar()
+        self.searchController.performLastSearch()
     }
     
     @objc func keyboardWillShow(note: NSNotification) {
@@ -232,12 +234,9 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
                                             object: HistoryModel.shared.current())
             self.navigationController?.popToRootViewController(animated: true)
         } else {
-            let words = ConcordanceModel.shared.getHistoryWords(row: indexPath.row)
-            let bible = HistoryModel.shared.currBible
-            let results = ConcordanceModel.shared.search(bible: bible, words: words)
-            self.searchController.updateSearchBar() // The placement of this is critical
-            self.typeControl.selectedSegmentIndex = ConcordanceViewController.VIEW_LAST_SEARCH
-            tableView.reloadData()
+            let search = ConcordanceModel.shared.getHistory(row: indexPath.row)
+            self.searchController.setSearchBar(search: search)
+            self.searchController.performLastSearch()
         }
     }
 }
