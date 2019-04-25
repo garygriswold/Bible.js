@@ -38,12 +38,11 @@ class ConcordanceSearchController: NSObject, UISearchResultsUpdating, UISearchBa
         self.controller?.navigationItem.searchController = self.searchController
     }
     
-    
-    func isSearching() -> Bool {
-        let searchBarEmpty: Bool = self.searchController.searchBar.text?.isEmpty ?? true
-        return self.searchController.isActive && !searchBarEmpty
-    }
-    
+//    func isSearching() -> Bool {
+//        let searchBarEmpty: Bool = self.searchController.searchBar.text?.isEmpty ?? true
+//        return self.searchController.isActive && !searchBarEmpty
+//    }
+//
     func updateSearchBar() {
         self.searchController.searchBar.text = ConcordanceModel.shared.historyCurrent
     }
