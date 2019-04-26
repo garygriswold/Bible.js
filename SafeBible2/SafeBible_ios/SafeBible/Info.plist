@@ -24,9 +24,62 @@
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIcons</key>
-	<dict/>
-	<key>CFBundleIcons~ipad</key>
-	<dict/>
+	<dict>
+        <key>CFBundlePrimaryIcon</key>
+        <dict>
+            <key>CFBundleIconFiles</key>
+            <array>
+                <string>www/icons/cross1-60@2x.png</string>
+                <string>www/icons/cross1-60@3x.png</string>
+                <string>www/icons/cross1-76.png</string>
+                <string>www/icons/cross1-76@2x.png</string>
+                <string>www/icons/cross1-83.5@2x.png</string>
+                <string>www/icons/cross1-Small-40.png</string>
+                <string>www/icons/cross1-Small-40@2x.png</string>
+                <string>www/icons/cross1-Small-40@3x.png</string>
+                <string>www/icons/cross1-Small.png</string>
+                <string>www/icons/cross1-Small@2x.png</string>
+                <string>www/icons/cross1-Small@3x.png</string>
+            </array>
+        </dict>
+        <key>CFBundleAlternateIcons</key>
+        <dict>
+            <key>cross1</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>www/icons/cross1-60@2x.png</string>
+                    <string>www/icons/cross1-60@3x.png</string>
+                    <string>www/icons/cross1-76.png</string>
+                    <string>www/icons/cross1-76@2x.png</string>
+                    <string>www/icons/cross1-83.5@2x.png</string>
+                    <string>www/icons/cross1-Small-40.png</string>
+                    <string>www/icons/cross1-Small-40@2x.png</string>
+                    <string>www/icons/cross1-Small-40@3x.png</string>
+                    <string>www/icons/cross1-Small.png</string>
+                    <string>www/icons/cross1-Small@2x.png</string>
+                    <string>www/icons/cross1-Small@3x.png</string>
+                </array>
+            </dict>
+            <key>book1</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>www/icons/book1-60@2x.png</string>
+                    <string>www/icons/book1-60@3x.png</string>
+                    <string>www/icons/book1-76.png</string>
+                    <string>www/icons/book1-76@2x.png</string>
+                    <string>www/icons/book1-83.5@2x.png</string>
+                    <string>www/icons/book1-Small-40.png</string>
+                    <string>www/icons/book1-Small-40@2x.png</string>
+                    <string>www/icons/book1-Small-40@3x.png</string>
+                    <string>www/icons/book1-Small.png</string>
+                    <string>www/icons/book1-Small@2x.png</string>
+                    <string>www/icons/book1-Small@3x.png</string>
+                </array>
+            </dict>
+        </dict>
+	</dict>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
