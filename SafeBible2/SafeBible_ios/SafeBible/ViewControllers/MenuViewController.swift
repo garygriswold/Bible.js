@@ -17,6 +17,7 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
     
     private var textSizeSliderCell: TextSizeSliderCell!
     private var textHeightSliderCell: TextHeightSliderCell!
+    private var iconChangeCell: IconChangeCell!
     private let nightSwitch: UISwitch
     private let verseSwitch: UISwitch
     
@@ -40,6 +41,7 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
         
         self.textSizeSliderCell = TextSizeSliderCell(controller: self, style: .default, reuseIdentifier: nil)
         self.textHeightSliderCell = TextHeightSliderCell(controller: self, style: .default, reuseIdentifier: nil)
+        self.iconChangeCell = IconChangeCell()
         
         self.navigationItem.title = NSLocalizedString("Menu", comment: "Menu view page title")
 
@@ -63,7 +65,7 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0: return 4
-        case 1: return 4
+        case 1: return 5
         case 2: return 2
         case 3: return (UserMessageController.isAvailable()) ? 4 : 3
         default: fatalError("Unknown section \(section)")
@@ -116,6 +118,8 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
                                            for: .valueChanged)
                 verseCell.accessoryView = self.verseSwitch
                 return verseCell
+            case 4:
+                return self.iconChangeCell
             default: fatalError("Unknown row \(indexPath.row) in section 1")
             }
         case 2:
