@@ -17,7 +17,6 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
     
     private var textSizeSliderCell: TextSizeSliderCell!
     private var textHeightSliderCell: TextHeightSliderCell!
-    private var iconChangeCell: IconChangeCell!
     private let nightSwitch: UISwitch
     private let verseSwitch: UISwitch
     
@@ -41,7 +40,6 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
         
         self.textSizeSliderCell = TextSizeSliderCell(controller: self, style: .default, reuseIdentifier: nil)
         self.textHeightSliderCell = TextHeightSliderCell(controller: self, style: .default, reuseIdentifier: nil)
-        self.iconChangeCell = IconChangeCell()
         
         self.navigationItem.title = NSLocalizedString("Menu", comment: "Menu view page title")
 
@@ -119,7 +117,8 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
                 verseCell.accessoryView = self.verseSwitch
                 return verseCell
             case 4:
-                return self.iconChangeCell
+                let iconText = NSLocalizedString("Icons", comment: "Icons for home screen")
+                return self.genericCell(view: tableView, indexPath: indexPath, title: iconText, accessory: true, icon: "com-touchpad")
             default: fatalError("Unknown row \(indexPath.row) in section 1")
             }
         case 2:
@@ -227,7 +226,12 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
             default: fatalError("Unknown row \(indexPath.row) in section 0")
             }
         case 1:
-            print("Section 1 Font Size Widget.  It is not selectable.")
+            switch indexPath.row {
+            case 4:
+                IconViewController.push(controller: self)
+            default:
+                print("Section 1 Font Size Widget.  It is not selectable.")
+            }
         case 2:
             switch indexPath.row {
             case 0:

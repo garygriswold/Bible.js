@@ -17,7 +17,7 @@
 		E40D6065218252CA00A06B54 /* BiblePageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D6064218252CA00A06B54 /* BiblePageModel.swift */; };
 		E41B8DC821D9AE4B0099A63D /* FileListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8DC721D9AE4B0099A63D /* FileListViewController.swift */; };
 		E41B8DCA21D9EA880099A63D /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8DC921D9EA880099A63D /* FileCell.swift */; };
-		E41C1F6C227383A00032446A /* IconChangeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41C1F6B227383A00032446A /* IconChangeCell.swift */; };
+		E41C1F7022754B580032446A /* IconViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41C1F6F22754B580032446A /* IconViewController.swift */; };
 		E4289B4C22238C7400C344F7 /* LanguageListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4289B4B22238C7400C344F7 /* LanguageListViewController.swift */; };
 		E4289B502223B90300C344F7 /* AppSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4289B4F2223B90300C344F7 /* AppSettingsViewController.swift */; };
 		E429FDB621E94F7C004A193A /* www in Resources */ = {isa = PBXBuildFile; fileRef = E429FDB521E94F7B004A193A /* www */; };
@@ -157,7 +157,7 @@
 		E40D6064218252CA00A06B54 /* BiblePageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblePageModel.swift; sourceTree = "<group>"; };
 		E41B8DC721D9AE4B0099A63D /* FileListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileListViewController.swift; sourceTree = "<group>"; };
 		E41B8DC921D9EA880099A63D /* FileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
-		E41C1F6B227383A00032446A /* IconChangeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconChangeCell.swift; sourceTree = "<group>"; };
+		E41C1F6F22754B580032446A /* IconViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconViewController.swift; sourceTree = "<group>"; };
 		E41E2A942241984B00CDFA88 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4289B4B22238C7400C344F7 /* LanguageListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageListViewController.swift; sourceTree = "<group>"; };
 		E4289B4F2223B90300C344F7 /* AppSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsViewController.swift; sourceTree = "<group>"; };
@@ -359,6 +359,7 @@
 				E41B8DC721D9AE4B0099A63D /* FileListViewController.swift */,
 				E45A606121EA31870042E3EE /* VideoViewController.swift */,
 				E43533C12264461200DAE83C /* ConcordanceViewController.swift */,
+				E41C1F6F22754B580032446A /* IconViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -377,7 +378,6 @@
 				E42C151A21CD8BAE00AA42D7 /* NotesExportActionSheet.swift */,
 				E4C2E985211B712C00B71CC5 /* TextSizeSliderCell.swift */,
 				E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */,
-				E41C1F6B227383A00032446A /* IconChangeCell.swift */,
 				E4C2E986211B712C00B71CC5 /* LanguageCell.swift */,
 				E4FCC44B21C8E42100A5FF54 /* NoteCell.swift */,
 				E41B8DC921D9EA880099A63D /* FileCell.swift */,
@@ -685,13 +685,13 @@
 				E4C2E98E211B712D00B71CC5 /* TextSizeSliderCell.swift in Sources */,
 				E4C2E991211B712D00B71CC5 /* SettingsModel.swift in Sources */,
 				E4D5A6D121C85AA3008476D0 /* NotesExportDatabase.swift in Sources */,
+				E41C1F7022754B580032446A /* IconViewController.swift in Sources */,
 				E452C7B021BF3C6F00553B86 /* NoteEditViewController.swift in Sources */,
 				E469080B21964F5E00155F2A /* Measurement.swift in Sources */,
 				E41B8DCA21D9EA880099A63D /* FileCell.swift in Sources */,
 				E469080D2196650F00155F2A /* ReaderViewQueue.swift in Sources */,
 				E4F720BA211B6F2A00E26B07 /* AppDelegate.swift in Sources */,
 				E4289B502223B90300C344F7 /* AppSettingsViewController.swift in Sources */,
-				E41C1F6C227383A00032446A /* IconChangeCell.swift in Sources */,
 				E43533C622644A2F00DAE83C /* ConcordanceSearchController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
