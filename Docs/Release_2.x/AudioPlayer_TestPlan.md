@@ -64,7 +64,7 @@ Foreground Play
 
 NOT IMPLEMENTED: 8.	UI Text Cursor - While Audio play, the App will do an animated scroll of the text verse by verse for those Audio Bibles where verse information is available.
 
-NOT IMPLEMENTED: 9.	UI Scrub Bar Verse Number Interaction - If the verse start position is available, the playing starts at the beginning of the verse where the thumb was released.
+9.	UI Scrub Bar Verse Number Interaction - If the verse start position is available, the playing starts at the beginning of the verse where the thumb was released.
 
 10. UI Scrub Thumb Release, no verse position - If verse position data is not available, play starts a few seconds before where the thumb is released.
 
@@ -109,9 +109,13 @@ Control Center (ios only)
 
 6.	Control Center Skip Forward - Clicking the forward button should skip a number of seconds.
 
-NO SURE: 7.	The Skip back and forward button should activate play even when the audio is currently paused.
+7.	The Skip back and forward button should activate play even when the audio is currently paused.
 
 8.	When control center is playing, and user returns to App foreground, the App should be playing. a) When the App was left while playing, or b) When the App was left while not playing.
+
+9.  Start play, go to background, in media center, stop, start, skip, continue play.  Go back to foreground, change passage.  Repeat 3 times.
+
+10.  Repeat prior test, but leave play in pause in both forground and background.
 
 App Switching Tests
 -------------------
@@ -128,14 +132,16 @@ App Switching Tests
 
 6.	When the user changes Bible versions, the audio should continue, and jump to the position in the text that is being listened to.
 
+7.  Repeat tests 5 and 6 using Airpod (wireless earphones)
+
 Network Reliability
 -------------------
 
-1.	Test that once a download is started the handler is disabled to prevent multiple downloads
+1.	Test that once a download is started the handler is disabled to prevent multiple downloads. (How should I test this?)
 
-2.	Timeout - The timeout is currently set very long and I don't know how to change that.
+2.	Timeout - The timeout is currently set very long and I don't know how to change that. (So, what?)
 
-3.	Once a requested download succeeds, that audio should begin playing.
+3.	Once a requested download succeeds, the play button should become enable.
 
-4.	While an audio is in progress the App will allow the user to do other things.
+4.  
 

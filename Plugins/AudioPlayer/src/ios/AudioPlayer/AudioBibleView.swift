@@ -12,17 +12,12 @@ import WebKit
 
 class AudioBibleView {
     
-    // This needs to be removed
     private static var instance: AudioBibleView?
-    // This needs to be fixed in order to enable text moving with verse.
-    static var webview: WKWebView? {
-        get {
-            if let singleton = instance {
-                return singleton.view as? WKWebView
-            } else {
-                return nil
-            }
+    static func shared(view: UIView, audioBible: AudioBible) -> AudioBibleView {
+        if instance == nil {
+            instance = AudioBibleView(view: view, audioBible: audioBible)
         }
+        return instance!
     }
     
     private unowned let view: UIView
@@ -52,7 +47,7 @@ class AudioBibleView {
     private var verseNum: Int = 0
     private var isAudioViewActive: Bool = false
     
-    init(view: UIView, audioBible: AudioBible) {
+    private init(view: UIView, audioBible: AudioBible) {
         self.view = view
         self.audioBible = audioBible
         self.scrubSliderDuration = CMTime.zero
@@ -180,7 +175,6 @@ class AudioBibleView {
         scrub.layer.shadowOpacity = 0.5
         scrub.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
  
-        self.initNotifications()
         print("***** Init AudioBibleView *****")
     }
     
@@ -368,22 +362,8 @@ class AudioBibleView {
             }
         }
     }
-
-    private func initNotifications() {
-        let notify = NotificationCenter.default
-        notify.addObserver(self, selector: #selector(applicationWillEnterForeground(note:)),
-                           name: UIApplication.willEnterForegroundNotification, object: nil)
-    }
-    @objc private func applicationWillEnterForeground(note: Notification) {
-        print("\n****** APP WILL ENTER FOREGROUND IN VIEW \(Date().timeIntervalSince1970)")
-        if self.audioBible.isPlaying() {
-            self.presentPlayer()
-        } else {
-            self.setPlayButtonPlay(play: true)
-        }
-    }
     
-    private func setPlayButtonPlay(play: Bool) {
+    func setPlayButtonPlay(play: Bool) {
         if play {
             self.playButton.setImage(playUpImg, for: UIControl.State.normal)
             self.playButton.setImage(playDnImg, for: UIControl.State.highlighted)

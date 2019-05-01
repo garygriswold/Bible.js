@@ -13,15 +13,7 @@ public class AudioBibleController {
     public static let TEXT_PAGE_CHANGED = NSNotification.Name("text-page-changed")
     public static let AUDIO_CHAP_CHANGED = NSNotification.Name("audio-chap-changed")
     
-    private static var instance: AudioBibleController?
-    public static var shared: AudioBibleController {
-        get {
-            if AudioBibleController.instance == nil {
-                AudioBibleController.instance = AudioBibleController()
-            }
-            return AudioBibleController.instance!
-        }
-    }
+    public static var shared = AudioBibleController()
  
     var audioTOCBible: AudioTOCBible?
     private var fileType: String
@@ -32,8 +24,11 @@ public class AudioBibleController {
     
     private init() {
         self.fileType = "mp3"
-        NotificationCenter.default.addObserver(self, selector: #selector(textPageChanged(note:)),
-                                               name: AudioBibleController.TEXT_PAGE_CHANGED, object: nil)
+        let notify = NotificationCenter.default
+        notify.addObserver(self, selector: #selector(textPageChanged(note:)),
+                           name: AudioBibleController.TEXT_PAGE_CHANGED, object: nil)
+        notify.addObserver(self, selector: #selector(applicationWillEnterForeground(note:)),
+                           name: UIApplication.willEnterForegroundNotification, object: nil)
         print("***** Init AudioBibleController *****")
     }
     
@@ -59,13 +54,12 @@ public class AudioBibleController {
     }
     
     public func isPlaying() -> Bool {
-        var result:Bool = false
         if let play = self.audioBible {
             if let view = self.audioBibleView {
-                result = play.isPlaying() || view.audioBibleActive()
+                return play.isPlaying() || view.audioBibleActive()
             }
         }
-        return result
+        return false
     }
     
     /**
@@ -74,7 +68,7 @@ public class AudioBibleController {
     */
     public func present(view: UIView, book: String, chapterNum: Int, complete: @escaping (_ error:Error?) -> Void) {
         self.audioBible = AudioBible.shared(controller: self)
-        self.audioBibleView = AudioBibleView(view: view, audioBible: self.audioBible!)
+        self.audioBibleView = AudioBibleView.shared(view: view, audioBible: self.audioBible!)
         self.audioSession = AudioSession.shared(audioBibleView: self.audioBibleView!)
         self.completionHandler = complete
         
@@ -93,12 +87,12 @@ public class AudioBibleController {
     }
     
     public func dismiss() {
-        if self.audioBible!.isPlaying() {
+        if self.audioBible != nil && self.audioBible!.isPlaying() {
             self.audioBible!.stop()
         }
-        if self.audioBibleView!.audioBibleActive() {
+        if self.audioBibleView != nil && self.audioBibleView!.audioBibleActive() {
             self.audioBibleView!.dismissPlayer()
-            self.completionHandler!(nil)
+            self.completionHandler!(nil) // should this be outside and after condition?
         }
     }
     /**
@@ -119,6 +113,15 @@ public class AudioBibleController {
             if self.audioBible == nil || !self.audioBible!.isPlaying() {
                 self.dismiss()
             }
+        }
+    }
+    
+    @objc private func applicationWillEnterForeground(note: Notification) {
+        print("\n****** APP WILL ENTER FOREGROUND IN VIEW \(Date().timeIntervalSince1970)")
+        if self.audioBible != nil && self.audioBible!.isPlaying() {
+            self.audioBibleView?.presentPlayer()
+        } else {
+            self.audioBibleView?.setPlayButtonPlay(play: true)
         }
     }
 }

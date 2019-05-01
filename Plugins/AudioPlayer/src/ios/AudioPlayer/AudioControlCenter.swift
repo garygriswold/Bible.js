@@ -132,15 +132,16 @@ class AudioControlCenter {
     }
     
     private func updateTextPosition(nodeId: String) {
-        if let webview = AudioBibleView.webview {
-            let msg = "document.dispatchEvent(new CustomEvent(BIBLE.SCROLL_TEXT," +
-            " { detail: { id: '\(nodeId)' }}));"
-            print("DISPATCH EVENT LISTENING TO \(nodeId)")
-            webview.evaluateJavaScript(msg, completionHandler: {(result, error) in
-                if let err = error {
-                    print("Dispatch Event Listening to: Javascript error \(err)")
-                }
-            })
-        }
+// This must be rewritten as posting a notification to the main App, where the webview object is known.
+//        if let webview = AudioBibleView.webview {
+//            let msg = "document.dispatchEvent(new CustomEvent(BIBLE.SCROLL_TEXT," +
+//            " { detail: { id: '\(nodeId)' }}));"
+//            print("DISPATCH EVENT LISTENING TO \(nodeId)")
+//            webview.evaluateJavaScript(msg, completionHandler: {(result, error) in
+//                if let err = error {
+//                    print("Dispatch Event Listening to: Javascript error \(err)")
+//                }
+//            })
+//        }
     }
 }
