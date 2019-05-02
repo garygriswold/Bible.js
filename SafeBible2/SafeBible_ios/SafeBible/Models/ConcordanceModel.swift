@@ -79,9 +79,10 @@ struct WordPositions {
 struct ConcordanceModel {
     
     static var shared = ConcordanceModel()
+    
     // These are the exact characters used to delimit words used by the concordance builder program
     // See BibleApp/Library/ConcordanceBuilder.js line 53
-    private static let delims = CharacterSet(charactersIn:
+    static let delims = CharacterSet(charactersIn:
         " \t\t\r-\u{2010}\u{2011}\u{2012}\u{2013}\u{2014}\u{2015}\u{2043}\u{058A}")
     
     var results: [WordRef]

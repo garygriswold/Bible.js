@@ -190,8 +190,9 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         var wordStart = 0
         var wordCount: UInt8 = 0
         for index in 0..<chars.count {
-            let char = chars[index]
-            if char == " " || char == "\t" || char == "\n" || char == "\r" || char == "-" {
+            let char: Character = chars[index]
+            let unicode = Unicode.Scalar(String(char))
+            if unicode != nil && ConcordanceModel.delims.contains(unicode!) {
                 if wordCount == search && insideWord {
                     ranges.append(NSRange(location: wordStart, length: index - wordStart))
                     if wordPositions.count > 0 {
