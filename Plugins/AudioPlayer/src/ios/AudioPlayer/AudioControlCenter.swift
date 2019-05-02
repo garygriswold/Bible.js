@@ -96,7 +96,7 @@ class AudioControlCenter {
         if let reference = player.getCurrentReference() {
             if let play = player.getPlayer() {
                 if let item = play.currentItem {
-                    if let image = UIImage(named: "icon_60.png") {
+                    if let image = self.getIcon() {
                         info[MPMediaItemPropertyArtwork] =
                             MPMediaItemArtwork(boundsSize: image.size) { size in
                                 return image
@@ -115,6 +115,12 @@ class AudioControlCenter {
                 }
             }
         }
+    }
+    
+    /** This function might need be modified if the location of icons in the main App is modified. */
+    private func getIcon() -> UIImage? {
+        let iconName = UIApplication.shared.alternateIconName
+        return (iconName != nil) ? UIImage(named: "www/icons/\(iconName!)-60.png") : nil
     }
     
     func updateNowPlaying(reference: AudioReference, verse: Int, position: Double) {
