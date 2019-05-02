@@ -96,20 +96,6 @@ struct ConcordanceModel {
         self.results = [WordRef]()
     }
     
-    
-    //var concordance = ConcordanceModel.shared
-    //let result = concordance.search(bible: reference.bible, words: ["abide"])
-    //let result = concordance.search1(bible: reference.bible, words: ["the", "and", "a"])
-    //let result = concordance.search3(bible: reference.bible, words: ["the", "and", "a"])
-    //let result = concordance.search4(bible: reference.bible, words: ["actions"])//,
-    //let result = concordance.search2(bible: reference.bible, words: ["tent", "having"])
-    //let result = concordance.search2(bible: reference.bible, words: ["immediately", "it", "sprang"])
-    //let result = concordance.search2(bible: reference.bible, words: ["and", "the"])
-    //let resultSet = Set(result)
-    //print(resultSet.count)
-    //print(result.count)
-    //print(result)
-    
     var historyCount: Int {
         return self.history.count
     }
@@ -152,6 +138,7 @@ struct ConcordanceModel {
             let search2 = search.lowercased()
             let words: [String] = search2.components(separatedBy: ConcordanceModel.delims)
             self.results = self.search3(bible: bible, words: words)
+            //self.results = self.searchTest(bible: bible, words: words) // Test of search1
         }
         return self.results
     }
@@ -317,6 +304,33 @@ struct ConcordanceModel {
             }
         }
         return nil
+    }
+    
+    /**
+    * This test method should retrieve exactly the same word ref's as search1,
+    * then it compares its result count to search1 and produces an error if they do not match.
+    */
+    func searchTest(bible: Bible, words: [String]) -> [WordRef] {
+        let measure = Measurement()
+        let resultSet: [[String?]] = BibleDB.shared.selectRefList(bible: bible, words: words)
+        measure.duration(location: "searchTest database lookup")
+        var finalSet = self.getSet(row: resultSet[0])
+        for index in 1..<resultSet.count {
+            let set = self.getSet(row: resultSet[index])
+            finalSet = finalSet.intersection(set)
+        }
+        measure.duration(location: "searchTest set intersection")
+        let result = self.search1(bible: bible, words: words)
+        if result.count != finalSet.count {
+            print("***** ERROR: Concordance search1: \(result.count)  searchTest: \(finalSet.count)\n\n")
+        }
+        return result
+    }
+    
+    private func getSet(row: [String?]) -> Set<String> {
+        let refs:[String] = row[1]!.components(separatedBy: ",")
+        let refs2:[String] = refs.map { $0.components(separatedBy: ";")[0] }
+        return Set(refs2)
     }
 }
 
