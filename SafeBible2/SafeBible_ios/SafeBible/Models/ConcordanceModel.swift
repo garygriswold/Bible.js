@@ -79,6 +79,10 @@ struct WordPositions {
 struct ConcordanceModel {
     
     static var shared = ConcordanceModel()
+    // These are the exact characters used to delimit words used by the concordance builder program
+    // See BibleApp/Library/ConcordanceBuilder.js line 53
+    private static let delims = CharacterSet(charactersIn:
+        " \t\t\r-\u{2010}\u{2011}\u{2012}\u{2013}\u{2014}\u{2015}\u{2043}\u{058A}")
     
     var results: [WordRef]
     private var fullHistory: [String]
@@ -117,12 +121,7 @@ struct ConcordanceModel {
         return self.history[self.history.count - row - 1]
     }
     
-    func getHistoryWords(row: Int) -> [String] {
-        return self.getHistory(row: row).components(separatedBy: " ")
-    }
-    
-    mutating func setHistory(words: [String]) {
-        let search = words.joined(separator: " ")
+    mutating func setHistory(search: String) {
         if let index = self.fullHistory.index(of: search) {
             self.fullHistory.remove(at: index)
         }
@@ -142,10 +141,17 @@ struct ConcordanceModel {
         self.history = self.fullHistory
     }
     
-    mutating func search(bible: Bible, words: [String]) -> [WordRef] {
-        self.setHistory(words: words)
-        let words2 = words.map { $0.lowercased() }
-        self.results = self.search1(bible: bible, words: words2)
+    mutating func search(bible: Bible, search: String) -> [WordRef] {
+        self.setHistory(search: search)
+        if bible.language.iso == "zh" || bible.language.iso == "th" {
+            let chars:[Character] = Array(search)
+            let words:[String] = chars.map { String($0) }
+            self.results = self.search2(bible: bible, words: words)
+        } else {
+            let search2 = search.lowercased()
+            let words: [String] = search2.components(separatedBy: ConcordanceModel.delims)
+            self.results = self.search3(bible: bible, words: words)
+        }
         return self.results
     }
     

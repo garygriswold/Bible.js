@@ -84,11 +84,8 @@ class ConcordanceSearchController: NSObject, UISearchResultsUpdating, UISearchBa
     
     private func performSearch(search: String?) {
         if search != nil && search!.count > 0 {
-            let parts: [String] = search!.components(separatedBy: " ")
-            let words = parts.filter { $0.count > 0 } // eliminate zero length words
-            
             let bible = HistoryModel.shared.currBible
-            let results = ConcordanceModel.shared.search(bible: bible, words: words)
+            let results = ConcordanceModel.shared.search(bible: bible, search: search!)
             print("search results count \(results.count)")
             self.controller?.typeControl.selectedSegmentIndex = ConcordanceViewController.VIEW_LAST_SEARCH
             self.controller?.tableView.reloadData()
