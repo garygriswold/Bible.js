@@ -37,12 +37,7 @@ class ConcordanceSearchController: NSObject, UISearchResultsUpdating, UISearchBa
     func viewAppears() {
         self.controller?.navigationItem.searchController = self.searchController
     }
-    
-//    func isSearching() -> Bool {
-//        let searchBarEmpty: Bool = self.searchController.searchBar.text?.isEmpty ?? true
-//        return self.searchController.isActive && !searchBarEmpty
-//    }
-//
+
     func updateSearchBar() {
         self.searchController.searchBar.text = ConcordanceModel.shared.historyCurrent
     }
@@ -87,6 +82,9 @@ class ConcordanceSearchController: NSObject, UISearchResultsUpdating, UISearchBa
             let bible = HistoryModel.shared.currBible
             let results = ConcordanceModel.shared.search(bible: bible, search: search!)
             print("search results count \(results.count)")
+            if self.controller?.section != nil {
+                self.controller?.navigationController?.popViewController(animated: true)
+            }
             self.controller?.typeControl.selectedSegmentIndex = ConcordanceViewController.VIEW_LAST_SEARCH
             self.controller?.tableView.reloadData()
         }

@@ -14,15 +14,17 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     static let VIEW_LAST_SEARCH = 1
     static var VIEW_GROUP_SIZE = 3
    
-    static func push(controller: UIViewController?) {
-        let searchController = ConcordanceViewController()
+    static func push(controller: UIViewController?, section: Int?) {
+        let searchController = ConcordanceViewController(section: section)
         controller?.navigationController?.pushViewController(searchController, animated: true)
     }
  
+    var section: Int? // Only set for second page for single book of Bible
     private var searchController: ConcordanceSearchController!
     var typeControl: UISegmentedControl!
 
-    init() {
+    init(section: Int?) {
+        self.section = section
         super.init(nibName: nil, bundle: nil)
         self.searchController = ConcordanceSearchController(controller: self)
     }
@@ -74,7 +76,12 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         
         self.searchController.viewAppears()
         self.searchController.updateSearchBar()
-        self.searchController.performLastSearch()
+        if ConcordanceModel.shared.resultsByBook.count == 0 {
+            self.searchController.performLastSearch()
+        } else {
+            self.typeControl.selectedSegmentIndex = ConcordanceViewController.VIEW_LAST_SEARCH
+            self.tableView.reloadData()
+        }
     }
     
     @objc func keyboardWillShow(note: NSNotification) {
@@ -124,7 +131,12 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     //
     func numberOfSections(in tableView: UITableView) -> Int {
         if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
-            return ConcordanceModel.shared.resultsByBook.count
+            let bookCount = ConcordanceModel.shared.resultsByBook.count
+            if self.section == nil {
+                return bookCount
+            } else {
+                return (bookCount < 1) ? bookCount : 1
+            }
         } else {
             return 1
         }
@@ -133,9 +145,13 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let concordance = ConcordanceModel.shared
         if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
-            let count = concordance.resultsByBook[section].count
-            let max = ConcordanceViewController.VIEW_GROUP_SIZE + 1
-            return (count < max) ? count : max
+            if self.section == nil {
+                let count = concordance.resultsByBook[section].count
+                let max = ConcordanceViewController.VIEW_GROUP_SIZE + 1
+                return (count < max) ? count : max
+            } else {
+                return concordance.resultsByBook[self.section!].count
+            }
         } else {
             print("table view history count \(concordance.historyCount)")
             return concordance.historyCount
@@ -168,8 +184,9 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         
         let bible = HistoryModel.shared.currBible
 
-        if indexPath.row < ConcordanceViewController.VIEW_GROUP_SIZE {
-            let wordRef = concordance.resultsByBook[indexPath.section][indexPath.row]
+        if indexPath.row < ConcordanceViewController.VIEW_GROUP_SIZE || self.section != nil {
+            let useSection = (self.section != nil) ? self.section! : indexPath.section
+            let wordRef = concordance.resultsByBook[useSection][indexPath.row]
             let reference = Reference(bibleId: bible.bibleId, bookId: wordRef.bookId,
                                       chapter: Int(wordRef.chapter))
             cell.title.text = reference.description(verse: wordRef.verse)
@@ -249,11 +266,16 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     //
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
-            let wordRef = ConcordanceModel.shared.resultsByBook[indexPath.section][indexPath.row]
-            HistoryModel.shared.changeReference(bookId: wordRef.bookId, chapter: Int(wordRef.chapter))
-            NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
-                                            object: HistoryModel.shared.current())
-            self.navigationController?.popToRootViewController(animated: true)
+            let cell = tableView.cellForRow(at: indexPath) as! ConcordanceResultCell
+            if cell.verse.text != nil {
+                let wordRef = ConcordanceModel.shared.resultsByBook[indexPath.section][indexPath.row]
+                HistoryModel.shared.changeReference(bookId: wordRef.bookId, chapter: Int(wordRef.chapter))
+                NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                                object: HistoryModel.shared.current())
+                self.navigationController?.popToRootViewController(animated: true)
+            } else {
+                ConcordanceViewController.push(controller: self, section: indexPath.section)
+            }
         } else {
             let search = ConcordanceModel.shared.getHistory(row: indexPath.row)
             self.searchController.setSearchBar(search: search)
