@@ -12,6 +12,7 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     
     static let VIEW_SEARCHES = 0
     static let VIEW_LAST_SEARCH = 1
+    static var VIEW_GROUP_SIZE = 3
    
     static func push(controller: UIViewController?) {
         let searchController = ConcordanceViewController()
@@ -121,11 +122,20 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     //
     // DataSource
     //
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
+            return ConcordanceModel.shared.resultsByBook.count
+        } else {
+            return 1
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let concordance = ConcordanceModel.shared
         if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
-            print("table view results count \(concordance.results.count)")
-            return concordance.results.count
+            let count = concordance.resultsByBook[section].count
+            let max = ConcordanceViewController.VIEW_GROUP_SIZE + 1
+            return (count < max) ? count : max
         } else {
             print("table view history count \(concordance.historyCount)")
             return concordance.historyCount
@@ -150,7 +160,6 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     
     private func showLastResult(indexPath: IndexPath) -> ConcordanceResultCell {
         let concordance = ConcordanceModel.shared
-        let wordRef = concordance.results[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "concordanceResult", for: indexPath) as! ConcordanceResultCell
         cell.contentView.backgroundColor = AppFont.backgroundColor
         
@@ -158,11 +167,22 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         cell.verse.textColor = AppFont.textColor
         
         let bible = HistoryModel.shared.currBible
-        let reference = Reference(bibleId: bible.bibleId, bookId: wordRef.bookId,
-                                  chapter: Int(wordRef.chapter))
-        cell.title.text = reference.description(verse: wordRef.verse)
-        cell.verse.attributedText = self.format(bible: bible, wordRef: wordRef)
 
+        if indexPath.row < ConcordanceViewController.VIEW_GROUP_SIZE {
+            let wordRef = concordance.resultsByBook[indexPath.section][indexPath.row]
+            let reference = Reference(bibleId: bible.bibleId, bookId: wordRef.bookId,
+                                      chapter: Int(wordRef.chapter))
+            cell.title.text = reference.description(verse: wordRef.verse)
+            cell.verse.attributedText = self.format(bible: bible, wordRef: wordRef)
+
+        } else {
+            let wordRefGroup = concordance.resultsByBook[indexPath.section]
+            let count = wordRefGroup.count - ConcordanceViewController.VIEW_GROUP_SIZE
+            let bookId = wordRefGroup[0].bookId
+            let name = bible.tableContents?.getBook(bookId: bookId)?.name
+            cell.title.text = "\(count) More In \(name ?? bookId)"
+            cell.verse.text = nil
+        }
         cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -229,7 +249,7 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     //
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
-            let wordRef = ConcordanceModel.shared.results[indexPath.row]
+            let wordRef = ConcordanceModel.shared.resultsByBook[indexPath.section][indexPath.row]
             HistoryModel.shared.changeReference(bookId: wordRef.bookId, chapter: Int(wordRef.chapter))
             NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
                                             object: HistoryModel.shared.current())
@@ -238,6 +258,29 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
             let search = ConcordanceModel.shared.getHistory(row: indexPath.row)
             self.searchController.setSearchBar(search: search)
             self.searchController.performLastSearch()
+        }
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
+            //let font = AppFont.sansSerif(style: .subheadline)
+            let label = UILabel()
+            //label.font = font
+            //label.textAlignment = .center
+            label.textColor = UIColor.darkGray
+            //label.text = ConcordanceModel.shared.resultsByBook[section][0].bookId
+            return label
+        } else {
+            return nil
+        }
+    }
+ 
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
+            let font = AppFont.sansSerif(style: .subheadline)
+            return 1 * font.lineHeight
+        } else {
+            return 0
         }
     }
 }

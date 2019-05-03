@@ -85,7 +85,7 @@ struct ConcordanceModel {
     static let delims = CharacterSet(charactersIn:
         " \t\t\r-\u{2010}\u{2011}\u{2012}\u{2013}\u{2014}\u{2015}\u{2043}\u{058A}")
     
-    var results: [WordRef]
+    var resultsByBook: [[WordRef]]
     private var fullHistory: [String]
     private var history: [String]
     
@@ -93,7 +93,7 @@ struct ConcordanceModel {
         print("****** Init ConcordanceModel ******")
         self.fullHistory = SettingsDB.shared.getConcordanceHistory()
         self.history = self.fullHistory
-        self.results = [WordRef]()
+        self.resultsByBook = [[WordRef]]()
     }
     
     var historyCount: Int {
@@ -129,18 +129,41 @@ struct ConcordanceModel {
     }
     
     mutating func search(bible: Bible, search: String) -> [WordRef] {
+        var results: [WordRef]
         self.setHistory(search: search)
         if bible.language.iso == "zh" || bible.language.iso == "th" {
             let chars:[Character] = Array(search)
             let words:[String] = chars.map { String($0) }
-            self.results = self.search2(bible: bible, words: words)
+            results = self.search2(bible: bible, words: words)
         } else {
             let search2 = search.lowercased()
             let words: [String] = search2.components(separatedBy: ConcordanceModel.delims)
-            self.results = self.search3(bible: bible, words: words)
-            //self.results = self.searchTest(bible: bible, words: words) // Test of search1
+            results = self.search3(bible: bible, words: words)
+            //results = self.searchTest(bible: bible, words: words) // Test of search1
         }
-        return self.results
+        self.resultsByBook = self.groupByBook(results: results)
+        return results
+    }
+    
+    mutating private func groupByBook(results: [WordRef]) -> [[WordRef]] {
+        var resultsByBook = [[WordRef]]()
+        var priorBookId: String = ""
+        var bookWordRef = [WordRef]()
+        for wordRef in results {
+            if wordRef.bookId != priorBookId {
+                priorBookId = wordRef.bookId
+                if bookWordRef.count > 0 {
+                    resultsByBook.append(bookWordRef)
+                }
+                bookWordRef = [wordRef]
+            } else {
+                bookWordRef.append(wordRef)
+            }
+        }
+        if bookWordRef.count > 0 {
+            resultsByBook.append(bookWordRef)
+        }
+        return resultsByBook
     }
     
     /**
