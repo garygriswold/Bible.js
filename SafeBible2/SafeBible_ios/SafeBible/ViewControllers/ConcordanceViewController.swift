@@ -261,6 +261,23 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         return result.sorted()
     }
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    func tableView(_ tableView: UITableView,
+                   commit editingStyle: UITableViewCell.EditingStyle,
+                   forRowAt indexPath: IndexPath) {
+        if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_SEARCHES {
+            ConcordanceModel.shared.removeHistory(row: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+    
     //
     // Delegate
     //
@@ -303,6 +320,15 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
             return 1 * font.lineHeight
         } else {
             return 0
+        }
+    }
+
+    func tableView(_ tableView: UITableView,
+                   editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
+            return .none
+        } else {
+            return .delete
         }
     }
 }

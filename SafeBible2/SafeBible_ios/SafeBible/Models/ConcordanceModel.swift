@@ -108,15 +108,22 @@ struct ConcordanceModel {
         return self.history[self.history.count - row - 1]
     }
     
+    mutating func removeHistory(row: Int) {
+        let position = self.history.count - row - 1
+        let deletedItem = self.history.remove(at: position)
+        if let itemIndex = self.fullHistory.index(of: deletedItem) {
+            self.fullHistory.remove(at: itemIndex)
+            SettingsDB.shared.setConcordanceHistory(history: self.fullHistory)
+        }
+    }
+    
     mutating func setHistory(search: String) {
         if let index = self.fullHistory.index(of: search) {
             self.fullHistory.remove(at: index)
         }
         self.fullHistory.append(search)
         self.history = self.fullHistory
-        let measure = Measurement()
         SettingsDB.shared.setConcordanceHistory(history: self.fullHistory)
-        measure.duration(location: "setConcordanceHistory")
     }
     
     mutating func filterForSearch(searchText: String) {
