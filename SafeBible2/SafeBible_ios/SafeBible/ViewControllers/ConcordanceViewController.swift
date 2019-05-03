@@ -261,6 +261,22 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
         return result.sorted()
     }
     
+    func tableView(_ tableView: UITableView,
+                   titleForHeaderInSection section: Int) -> String? {
+        if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
+            if self.section == nil {
+                let bookId = ConcordanceModel.shared.resultsByBook[section][0].bookId
+                let bible = HistoryModel.shared.currBible
+                if let name = bible.tableContents?.getBook(bookId: bookId)?.name {
+                    return name
+                } else {
+                    return "  "
+                }
+            }
+        }
+        return nil
+    }
+    
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
             return false
@@ -297,29 +313,6 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
             let search = ConcordanceModel.shared.getHistory(row: indexPath.row)
             self.searchController.setSearchBar(search: search)
             self.searchController.performLastSearch()
-        }
-    }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
-            //let font = AppFont.sansSerif(style: .subheadline)
-            let label = UILabel()
-            //label.font = font
-            //label.textAlignment = .center
-            label.textColor = UIColor.darkGray
-            //label.text = ConcordanceModel.shared.resultsByBook[section][0].bookId
-            return label
-        } else {
-            return nil
-        }
-    }
- 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
-            let font = AppFont.sansSerif(style: .subheadline)
-            return 1 * font.lineHeight
-        } else {
-            return 0
         }
     }
 
