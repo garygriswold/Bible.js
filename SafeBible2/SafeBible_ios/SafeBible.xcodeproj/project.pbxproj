@@ -47,6 +47,7 @@
 		E469080B21964F5E00155F2A /* Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469080A21964F5E00155F2A /* Measurement.swift */; };
 		E469080D2196650F00155F2A /* ReaderViewQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469080C2196650F00155F2A /* ReaderViewQueue.swift */; };
 		E46B2C83218E50200063E68C /* TextHeightSliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */; };
+		E46BD581227DC9A3007BAD17 /* ConcordanceResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46BD580227DC9A3007BAD17 /* ConcordanceResultCell.swift */; };
 		E4706AE6221CBD92006C7AB5 /* CompareActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4706AE5221CBD92006C7AB5 /* CompareActionSheet.swift */; };
 		E474FE2021C4CB1000DC11D8 /* NotesExportDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E474FE1F21C4CB1000DC11D8 /* NotesExportDocument.swift */; };
 		E478BFDB21DCDE490093320D /* AppTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E478BFDA21DCDE490093320D /* AppTableViewController.swift */; };
@@ -188,6 +189,7 @@
 		E469080A21964F5E00155F2A /* Measurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Measurement.swift; sourceTree = "<group>"; };
 		E469080C2196650F00155F2A /* ReaderViewQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderViewQueue.swift; sourceTree = "<group>"; };
 		E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextHeightSliderCell.swift; sourceTree = "<group>"; };
+		E46BD580227DC9A3007BAD17 /* ConcordanceResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcordanceResultCell.swift; sourceTree = "<group>"; };
 		E4706AE5221CBD92006C7AB5 /* CompareActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareActionSheet.swift; sourceTree = "<group>"; };
 		E474FE1F21C4CB1000DC11D8 /* NotesExportDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExportDocument.swift; sourceTree = "<group>"; };
 		E478BFDA21DCDE490093320D /* AppTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTableViewController.swift; sourceTree = "<group>"; };
@@ -381,6 +383,7 @@
 				E4C2E986211B712C00B71CC5 /* LanguageCell.swift */,
 				E4FCC44B21C8E42100A5FF54 /* NoteCell.swift */,
 				E41B8DC921D9EA880099A63D /* FileCell.swift */,
+				E46BD580227DC9A3007BAD17 /* ConcordanceResultCell.swift */,
 			);
 			path = ToolBars;
 			sourceTree = "<group>";
@@ -659,6 +662,7 @@
 				E4015258215D2DF60031654B /* InfoPageController.swift in Sources */,
 				E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */,
 				E40D60612180EEA700A06B54 /* VersionsDB.swift in Sources */,
+				E46BD581227DC9A3007BAD17 /* ConcordanceResultCell.swift in Sources */,
 				E4D5A6D321C8A291008476D0 /* NotesListViewController.swift in Sources */,
 				E4C2E98A211B712D00B71CC5 /* BibleListViewController.swift in Sources */,
 				E4D5A6CF21C8563E008476D0 /* NotesDB.swift in Sources */,
