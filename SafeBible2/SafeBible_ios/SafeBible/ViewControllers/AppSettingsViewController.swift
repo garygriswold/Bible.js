@@ -105,8 +105,7 @@ class AppSettingsViewController : AppTableViewController, UITableViewDataSource 
         if let heading = titleForHeaderInSection(section: section) {
             let font = AppFont.sansSerif(style: .subheadline)
             let label = UILabel()
-            //let rect = CGRect(x: 0, y: font.lineHeight, width: tableView.frame.size.width - 10, height: font.lineHeight)
-            //let label = UILabel(frame: rect)
+            label.backgroundColor = AppFont.groupTableViewBackground
             label.font = font
             label.textAlignment = .center
             label.textColor = UIColor.darkGray
