@@ -1,0 +1,33 @@
+Concordance TestPlan
+
+May 4, 2019
+
+In ConcordanceModel.shared.search, change the call of search3() to searchTest().
+This executes search1 and searchTest and compares count of results.  It does not
+compare the identity of the results, but it could be improved to do that.
+
+To test search2 and search3, devise a specific search that performs a modest search.
+
+1. Change search3() to search1() and execute the specific test.
+2. Review the results and identify the subset that should appear in a search2 or search3 test.
+3. Perform a search2 and search3 test, and verify with expectations.
+
+The following is one such test:
+
+words: "Abide in me"
+
+Search1				search2 		search3
+
+1 Sam 22:23			--				once
+
+Jer 42:10			--				--
+
+John 12:46			twice			twice
+
+John 15:6			--				once
+
+John 15:7			once			once
+
+Acts 20:23			--				--
+
+
