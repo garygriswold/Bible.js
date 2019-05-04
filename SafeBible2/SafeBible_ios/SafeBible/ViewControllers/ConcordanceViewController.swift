@@ -265,13 +265,13 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
                    titleForHeaderInSection section: Int) -> String? {
         if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
             if self.section == nil {
-                let bookId = ConcordanceModel.shared.resultsByBook[section][0].bookId
-                let bible = HistoryModel.shared.currBible
-                if let name = bible.tableContents?.getBook(bookId: bookId)?.name {
-                    return name
-                } else {
-                    return "  "
-                }
+                //let bookId = ConcordanceModel.shared.resultsByBook[section][0].bookId
+                //let bible = HistoryModel.shared.currBible
+                //if let name = bible.tableContents?.getBook(bookId: bookId)?.name {
+                //    return name
+                //} else {
+                return "  "
+                //}
             }
         }
         return nil
