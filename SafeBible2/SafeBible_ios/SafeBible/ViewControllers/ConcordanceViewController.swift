@@ -177,23 +177,7 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
             return cell
         }
     }
-    
-    func tableView(_ tableView: UITableView,
-                   titleForHeaderInSection section: Int) -> String? {
-        if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
-            if self.section == nil {
-                //let bookId = ConcordanceModel.shared.resultsByBook[section][0].bookId
-                //let bible = HistoryModel.shared.currBible
-                //if let name = bible.tableContents?.getBook(bookId: bookId)?.name {
-                //    return name
-                //} else {
-                return "  "
-                //}
-            }
-        }
-        return nil
-    }
-    
+
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
             return false
@@ -214,6 +198,25 @@ class ConcordanceViewController: AppTableViewController, UITableViewDataSource {
     //
     // Delegate
     //
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH &&
+            self.section == nil {
+            let label = UILabel()
+            return label
+        } else {
+            return nil
+        }
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH &&
+            self.section == nil {
+            let font = AppFont.sansSerif(style: .subheadline)
+            return font.lineHeight
+        } else {
+            return 0
+        }
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if self.typeControl.selectedSegmentIndex == ConcordanceViewController.VIEW_LAST_SEARCH {
             let cell = tableView.cellForRow(at: indexPath) as! ConcordanceResultCell
