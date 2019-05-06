@@ -106,7 +106,21 @@ class ReaderToolbar {
             self.audioBookIdSet = Set(self.findAudioVersion(ref: reference).split(separator: ","))
         }
         self.audioPlayer.isEnabled = self.audioBookIdSet.contains(Substring(reference.bookId))
-        self.searchButton.isEnabled = reference.isDownloaded
+        
+        if var items = self.controller?.toolbarItems {
+            let hasSearchBtn = items.contains(self.searchButton)
+            if reference.isDownloaded {
+                if !hasSearchBtn {
+                    items.append(self.searchButton)
+                    self.controller?.setToolbarItems(items, animated: true)
+                }
+            } else {
+                if hasSearchBtn {
+                    items.remove(at: items.count - 1)
+                    self.controller?.setToolbarItems(items, animated: true)
+                }
+            }
+        }
     }
     
     @objc func menuTapHandler(sender: UIBarButtonItem) {
