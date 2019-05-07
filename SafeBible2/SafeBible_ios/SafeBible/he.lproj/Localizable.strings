@@ -53,8 +53,14 @@
 /* User text in message to other */
 "I like it!" = "אני אוהב את זה!";
 
+/* Icons for home screen */
+"Icons" = "סמלים";
+
 /* Languages view page title */
 "Languages" = "שפות";
+
+/* Result of last concordance search */
+"Last Search" = "חיפוש אחרון";
 
 /* Menu view page title */
 "Menu" = "תפריט";
@@ -104,6 +110,12 @@
 /* Red Delete Button text */
 "Remove" = "הסר";
 
+/* Concordance search bar */
+"Search" = "לחפש";
+
+/* Concordance search history */
+"Searches" = "חיפושים";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "שלח לנו תגובות";
@@ -129,6 +141,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "סרטונים";
+
+/* Title of Search page */
+"Word Search" = "חיפוש מילה";
 
 /* Clickable cell title */
 "Write A Review" = "כתוב ביקורת";

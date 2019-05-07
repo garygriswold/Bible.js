@@ -53,8 +53,14 @@
 /* User text in message to other */
 "I like it!" = "Imi place!";
 
+/* Icons for home screen */
+"Icons" = "icoane";
+
 /* Languages view page title */
 "Languages" = "Limbile";
+
+/* Result of last concordance search */
+"Last Search" = "Ultima căutare";
 
 /* Menu view page title */
 "Menu" = "Meniul";
@@ -104,6 +110,12 @@
 /* Red Delete Button text */
 "Remove" = "Elimina";
 
+/* Concordance search bar */
+"Search" = "Căutare";
+
+/* Concordance search history */
+"Searches" = "Căutări";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "Trimiteți-ne comentarii";
@@ -129,6 +141,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "Videoclipuri";
+
+/* Title of Search page */
+"Word Search" = "Cautare de cuvinte";
 
 /* Clickable cell title */
 "Write A Review" = "Scrie o recenzie";

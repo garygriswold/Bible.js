@@ -53,8 +53,14 @@
 /* User text in message to other */
 "I like it!" = "Tôi thích nó!";
 
+/* Icons for home screen */
+"Icons" = "Biểu tượng";
+
 /* Languages view page title */
 "Languages" = "Ngôn ngữ";
+
+/* Result of last concordance search */
+"Last Search" = "Tìm kiếm cuối cùng";
 
 /* Menu view page title */
 "Menu" = "Thực đơn";
@@ -104,6 +110,12 @@
 /* Red Delete Button text */
 "Remove" = "Tẩy";
 
+/* Concordance search bar */
+"Search" = "Tìm kiếm";
+
+/* Concordance search history */
+"Searches" = "Tìm kiếm";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "Gửi cho chúng tôi ý kiến";
@@ -129,6 +141,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "Video";
+
+/* Title of Search page */
+"Word Search" = "Tìm từ";
 
 /* Clickable cell title */
 "Write A Review" = "Viết đánh giá";

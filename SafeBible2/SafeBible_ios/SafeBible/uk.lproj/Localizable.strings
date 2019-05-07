@@ -53,8 +53,14 @@
 /* User text in message to other */
 "I like it!" = "Мені це подобається!";
 
+/* Icons for home screen */
+"Icons" = "Ікони";
+
 /* Languages view page title */
 "Languages" = "Мови";
+
+/* Result of last concordance search */
+"Last Search" = "Останній пошук";
 
 /* Menu view page title */
 "Menu" = "Меню";
@@ -104,6 +110,12 @@
 /* Red Delete Button text */
 "Remove" = "Видалити";
 
+/* Concordance search bar */
+"Search" = "Пошук";
+
+/* Concordance search history */
+"Searches" = "Пошук";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "Надішліть нам коментарі";
@@ -129,6 +141,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "Відео";
+
+/* Title of Search page */
+"Word Search" = "Пошук слова";
 
 /* Clickable cell title */
 "Write A Review" = "Написати відгук";

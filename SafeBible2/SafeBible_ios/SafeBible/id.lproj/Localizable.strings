@@ -53,8 +53,14 @@
 /* User text in message to other */
 "I like it!" = "Saya suka itu!";
 
+/* Icons for home screen */
+"Icons" = "Ikon";
+
 /* Languages view page title */
 "Languages" = "Bahasa";
+
+/* Result of last concordance search */
+"Last Search" = "Pencarian Terakhir";
 
 /* Menu view page title */
 "Menu" = "Menu";
@@ -104,6 +110,12 @@
 /* Red Delete Button text */
 "Remove" = "Menghapus";
 
+/* Concordance search bar */
+"Search" = "Pencarian";
+
+/* Concordance search history */
+"Searches" = "Pencarian";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "Kirimkan Kami Komentar";
@@ -129,6 +141,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "Video";
+
+/* Title of Search page */
+"Word Search" = "Pencarian kata";
 
 /* Clickable cell title */
 "Write A Review" = "Menulis review";

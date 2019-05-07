@@ -53,8 +53,14 @@
 /* User text in message to other */
 "I like it!" = "Μου αρέσει!";
 
+/* Icons for home screen */
+"Icons" = "Εικόνες";
+
 /* Languages view page title */
 "Languages" = "Γλώσσες";
+
+/* Result of last concordance search */
+"Last Search" = "Τελευταία αναζήτηση";
 
 /* Menu view page title */
 "Menu" = "Μενού";
@@ -104,6 +110,12 @@
 /* Red Delete Button text */
 "Remove" = "Αφαιρώ";
 
+/* Concordance search bar */
+"Search" = "Ψάξιμο";
+
+/* Concordance search history */
+"Searches" = "Αναζητήσεις";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "Στείλτε μας Σχόλια";
@@ -129,6 +141,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "Βίντεο";
+
+/* Title of Search page */
+"Word Search" = "Αναζήτηση λέξης";
 
 /* Clickable cell title */
 "Write A Review" = "Γράψτε μια κριτική";

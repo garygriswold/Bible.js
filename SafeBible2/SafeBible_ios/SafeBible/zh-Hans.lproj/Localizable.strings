@@ -53,8 +53,14 @@
 /* User text in message to other */
 "I like it!" = "我喜欢！";
 
+/* Icons for home screen */
+"Icons" = "图标";
+
 /* Languages view page title */
 "Languages" = "语言";
+
+/* Result of last concordance search */
+"Last Search" = "最后搜索";
 
 /* Menu view page title */
 "Menu" = "菜单";
@@ -104,6 +110,12 @@
 /* Red Delete Button text */
 "Remove" = "去掉";
 
+/* Concordance search bar */
+"Search" = "搜索";
+
+/* Concordance search history */
+"Searches" = "搜索";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "发送给我们评论";
@@ -129,6 +141,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "影片";
+
+/* Title of Search page */
+"Word Search" = "单词搜索";
 
 /* Clickable cell title */
 "Write A Review" = "写评论";

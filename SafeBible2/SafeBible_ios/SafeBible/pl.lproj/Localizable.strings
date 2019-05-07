@@ -53,8 +53,14 @@
 /* User text in message to other */
 "I like it!" = "Lubię to!";
 
+/* Icons for home screen */
+"Icons" = "Ikony";
+
 /* Languages view page title */
 "Languages" = "Języki";
+
+/* Result of last concordance search */
+"Last Search" = "Ostatnie wyszukiwanie";
 
 /* Menu view page title */
 "Menu" = "Menu";
@@ -104,6 +110,12 @@
 /* Red Delete Button text */
 "Remove" = "Usunąć";
 
+/* Concordance search bar */
+"Search" = "Szukaj";
+
+/* Concordance search history */
+"Searches" = "Wyszukiwania";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "Wyślij nam komentarze";
@@ -129,6 +141,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "Filmy";
+
+/* Title of Search page */
+"Word Search" = "Szukanie słowa";
 
 /* Clickable cell title */
 "Write A Review" = "Napisać recenzję";

@@ -53,8 +53,14 @@
 /* User text in message to other */
 "I like it!" = "احب ذلك!";
 
+/* Icons for home screen */
+"Icons" = "الرموز";
+
 /* Languages view page title */
 "Languages" = "اللغات";
+
+/* Result of last concordance search */
+"Last Search" = "البحث الأخير";
 
 /* Menu view page title */
 "Menu" = "قائمة طعام";
@@ -104,6 +110,12 @@
 /* Red Delete Button text */
 "Remove" = "إزالة";
 
+/* Concordance search bar */
+"Search" = "بحث";
+
+/* Concordance search history */
+"Searches" = "بحث";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "أرسل لنا تعليقات";
@@ -129,6 +141,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "أشرطة فيديو";
+
+/* Title of Search page */
+"Word Search" = "بحث كلمة";
 
 /* Clickable cell title */
 "Write A Review" = "أكتب مراجعة";

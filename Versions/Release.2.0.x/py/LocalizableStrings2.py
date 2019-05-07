@@ -125,32 +125,34 @@ for langDir in os.listdir(sourceDir):
 	if langDir[-6:] == ".xcloc":
 		appleLang = langDir[0:-6]
 		#print appleLang
-		filename = sourceDir + langDir + "/Localized Contents/" + appleLang + ".xliff"
-		#print filename
-		xmlDoc = xml.dom.minidom.parse(filename)
-		#print xmlDoc.toxml("utf-8")
-		parsedFile = parseXLIFF(xmlDoc)
-		#print parsedFile
-		googleLang = languages[appleLang][0]
-		#print googleLang
-		request = generateRequest(parsedFile, googleLang)
-		#print request
-		translations = getTranslation(request)
-		#print translations
-		if len(translations) != len(parsedFile):
-			print("num translations not correct", len(translations), len(parsedFile))
-			sys.exit()
-		updateXliff(xmlDoc, translations)
-		print xmlDoc.toxml("utf-8")
-		output = io.open(filename + ".out", mode="w", encoding="utf-8")
-		output.write(xmlDoc.toxml())
-		output.close()
+        if appleLang != "en":
+            filename = sourceDir + langDir + "/Localized Contents/" + appleLang + ".xliff"
+            #print filename
+            xmlDoc = xml.dom.minidom.parse(filename)
+            #print xmlDoc.toxml("utf-8")
+            parsedFile = parseXLIFF(xmlDoc)
+            #print parsedFile
+            googleLang = languages[appleLang][0]
+            #print googleLang
+            request = generateRequest(parsedFile, googleLang)
+            #print request
+            translations = getTranslation(request)
+            #print translations
+            if len(translations) != len(parsedFile):
+                print("num translations not correct", len(translations), len(parsedFile))
+                sys.exit()
+            updateXliff(xmlDoc, translations)
+            print xmlDoc.toxml("utf-8")
+            output = io.open(filename + ".out", mode="w", encoding="utf-8")
+            output.write(xmlDoc.toxml())
+            output.close()
 
 for langDir in os.listdir(sourceDir):
 	if langDir[-6:] == ".xcloc":
 		appleLang = langDir[0:-6]
-		filename = sourceDir + langDir + "/Localized Contents/" + appleLang + ".xliff"
-		saveFilename = sourceDir + langDir + "/Notes/" + appleLang + ".xliff"
-		print filename
-		os.rename(filename, saveFilename)
-		os.rename(filename + ".out", filename)
+        if appleLang != "en":
+            filename = sourceDir + langDir + "/Localized Contents/" + appleLang + ".xliff"
+            saveFilename = sourceDir + langDir + "/Notes/" + appleLang + ".xliff"
+            print filename
+            os.rename(filename, saveFilename)
+            os.rename(filename + ".out", filename)

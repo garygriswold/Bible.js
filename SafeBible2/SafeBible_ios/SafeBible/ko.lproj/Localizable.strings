@@ -53,8 +53,14 @@
 /* User text in message to other */
 "I like it!" = "나는 그것을 좋아한다!";
 
+/* Icons for home screen */
+"Icons" = "아이콘";
+
 /* Languages view page title */
 "Languages" = "언어";
+
+/* Result of last concordance search */
+"Last Search" = "마지막 검색";
 
 /* Menu view page title */
 "Menu" = "메뉴";
@@ -104,6 +110,12 @@
 /* Red Delete Button text */
 "Remove" = "풀다";
 
+/* Concordance search bar */
+"Search" = "수색";
+
+/* Concordance search history */
+"Searches" = "검색";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "의견 보내기";
@@ -129,6 +141,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "비디오";
+
+/* Title of Search page */
+"Word Search" = "단어 검색";
 
 /* Clickable cell title */
 "Write A Review" = "리뷰를 작성";

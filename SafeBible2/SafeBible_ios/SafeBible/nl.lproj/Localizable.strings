@@ -53,8 +53,14 @@
 /* User text in message to other */
 "I like it!" = "Ik vind het leuk!";
 
+/* Icons for home screen */
+"Icons" = "Icons";
+
 /* Languages view page title */
 "Languages" = "talen";
+
+/* Result of last concordance search */
+"Last Search" = "Laatste zoekopdracht";
 
 /* Menu view page title */
 "Menu" = "Menu";
@@ -104,6 +110,12 @@
 /* Red Delete Button text */
 "Remove" = "Verwijderen";
 
+/* Concordance search bar */
+"Search" = "Zoeken";
+
+/* Concordance search history */
+"Searches" = "zoekopdrachten";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "Stuur ons reacties";
@@ -129,6 +141,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "Videos";
+
+/* Title of Search page */
+"Word Search" = "Woorden zoeken";
 
 /* Clickable cell title */
 "Write A Review" = "Schrijf een recensie";

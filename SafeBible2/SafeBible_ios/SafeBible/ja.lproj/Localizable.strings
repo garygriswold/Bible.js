@@ -53,8 +53,14 @@
 /* User text in message to other */
 "I like it!" = "私はそれが好きです！";
 
+/* Icons for home screen */
+"Icons" = "アイコン";
+
 /* Languages view page title */
 "Languages" = "言語";
+
+/* Result of last concordance search */
+"Last Search" = "最後の検索";
 
 /* Menu view page title */
 "Menu" = "メニュー";
@@ -104,6 +110,12 @@
 /* Red Delete Button text */
 "Remove" = "削除する";
 
+/* Concordance search bar */
+"Search" = "サーチ";
+
+/* Concordance search history */
+"Searches" = "検索する";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "コメントを送る";
@@ -129,6 +141,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "動画";
+
+/* Title of Search page */
+"Word Search" = "単語検索";
 
 /* Clickable cell title */
 "Write A Review" = "レビューを書く";

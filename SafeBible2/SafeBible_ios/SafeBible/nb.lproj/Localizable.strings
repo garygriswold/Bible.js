@@ -53,8 +53,14 @@
 /* User text in message to other */
 "I like it!" = "Jeg liker det!";
 
+/* Icons for home screen */
+"Icons" = "ikoner";
+
 /* Languages view page title */
 "Languages" = "språk";
+
+/* Result of last concordance search */
+"Last Search" = "Siste søk";
 
 /* Menu view page title */
 "Menu" = "Meny";
@@ -104,6 +110,12 @@
 /* Red Delete Button text */
 "Remove" = "Fjerne";
 
+/* Concordance search bar */
+"Search" = "Søke";
+
+/* Concordance search history */
+"Searches" = "søk";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "Send oss kommentarer";
@@ -129,6 +141,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "videoer";
+
+/* Title of Search page */
+"Word Search" = "Ordsøk";
 
 /* Clickable cell title */
 "Write A Review" = "Skrive en omtale";

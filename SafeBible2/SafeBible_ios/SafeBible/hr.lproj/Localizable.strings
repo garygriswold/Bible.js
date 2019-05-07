@@ -53,8 +53,14 @@
 /* User text in message to other */
 "I like it!" = "Sviđa mi se!";
 
+/* Icons for home screen */
+"Icons" = "ikone";
+
 /* Languages view page title */
 "Languages" = "Jezici";
+
+/* Result of last concordance search */
+"Last Search" = "Posljednje pretraživanje";
 
 /* Menu view page title */
 "Menu" = "izbornik";
@@ -104,6 +110,12 @@
 /* Red Delete Button text */
 "Remove" = "Ukloniti";
 
+/* Concordance search bar */
+"Search" = "traži";
+
+/* Concordance search history */
+"Searches" = "pretraga";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "Pošaljite nam komentare";
@@ -129,6 +141,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "Video";
+
+/* Title of Search page */
+"Word Search" = "Pretraživanje riječi";
 
 /* Clickable cell title */
 "Write A Review" = "Napišite svoje mišljenje";

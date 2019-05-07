@@ -53,18 +53,24 @@
 /* User text in message to other */
 "I like it!" = "मुझें यह पसंद है!";
 
+/* Icons for home screen */
+"Icons" = "प्रतीक";
+
 /* Languages view page title */
 "Languages" = "बोली";
+
+/* Result of last concordance search */
+"Last Search" = "अंतिम खोज";
 
 /* Menu view page title */
 "Menu" = "मेन्यू";
 
 /* Clickable cell title */
-"More Bibles" = "अधिक बाईबिल";
+"More Bibles" = "अधिक Bibles";
 
 /* Clickable cell title
    Section heading for Other languages */
-"More Languages" = "अधिक भाषाएँ";
+"More Languages" = "और भाषाएँ";
 
 /* Section heading for User selected Bibles */
 "My Bibles" = "मेरी बीबल्स";
@@ -104,6 +110,12 @@
 /* Red Delete Button text */
 "Remove" = "हटाना";
 
+/* Concordance search bar */
+"Search" = "खोज";
+
+/* Concordance search history */
+"Searches" = "खोजें";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "हमें टिप्पणियाँ भेजें";
@@ -129,6 +141,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "वीडियो";
+
+/* Title of Search page */
+"Word Search" = "शब्द खोज";
 
 /* Clickable cell title */
 "Write A Review" = "एक समीक्षा लिखे";
