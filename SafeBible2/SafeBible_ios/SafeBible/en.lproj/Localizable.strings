@@ -53,8 +53,14 @@
 /* User text in message to other */
 "I like it!" = "I like it!";
 
+/* Icons for home screen */
+"Icons" = "Icons";
+
 /* Languages view page title */
 "Languages" = "Languages";
+
+/* Result of last concordance search */
+"Last Search" = "Last Search";
 
 /* Menu view page title */
 "Menu" = "Menu";
@@ -103,6 +109,12 @@
 /* Red Delete Button text */
 "Remove" = "Remove";
 
+/* Concordance search bar */
+"Search" = "Search";
+
+/* Concordance search history */
+"Searches" = "Searches";
+
 /* Clickable cell title
    Feedback view title */
 "Send Us Comments" = "Send Us Comments";
@@ -111,7 +123,7 @@
 "Share" = "Share";
 
 /* Clickable cell title */
-"Share SafeBible" = "Share SafeBible";
+"Share Bible App" = "Share Bible App";
 
 /* Table of Contents Title */
 "Table of Contents" = "Table of Contents";
@@ -125,6 +137,9 @@
 /* Title of Videos page
    Videos Cell Title */
 "Videos" = "Videos";
+
+/* Title of Search page */
+"Word Search" = "Word Search";
 
 /* Clickable cell title */
 "Write A Review" = "Write A Review";
