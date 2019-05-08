@@ -51,6 +51,8 @@ class IconViewController : AppTableViewController, UITableViewDataSource {
         
         if iconName == UIApplication.shared.alternateIconName {
             cell.accessoryType = .checkmark
+        } else if iconName == "cross1" && UIApplication.shared.alternateIconName == nil {
+            cell.accessoryType = .checkmark
         } else {
             cell.accessoryType = .none
         }
