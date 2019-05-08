@@ -119,7 +119,7 @@ struct BibleDB {
             let sql = "SELECT count(*) FROM Chapters"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let count: Int = Int(resultSet[0][0]!) ?? 0
-            return (count > 20) // Should download if more than 20 chapters read.
+            return (count > 7) // Should download if more than 7 chapters read.
         } catch let err {
             print("ERROR shouldDownloadTest \(err)")
             return false
