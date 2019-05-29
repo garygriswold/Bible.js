@@ -84,6 +84,7 @@
 		E4F66865217D85AC00E998CC /* TOCChaptersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F66864217D85AC00E998CC /* TOCChaptersViewController.swift */; };
 		E4F720BA211B6F2A00E26B07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */; };
 		E4F720C4211B6F2C00E26B07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F720C2211B6F2C00E26B07 /* LaunchScreen.storyboard */; };
+		E4F82CD22297A08C003088A5 /* CarPlayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F82CD12297A08C003088A5 /* CarPlayManager.swift */; };
 		E4FCC44C21C8E42100A5FF54 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FCC44B21C8E42100A5FF54 /* NoteCell.swift */; };
 		E4FD140621CCC8800033F94B /* NotesListToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FD140521CCC8800033F94B /* NotesListToolbar.swift */; };
 /* End PBXBuildFile section */
@@ -291,6 +292,7 @@
 		E4F720B6211B6F2A00E26B07 /* SafeBible.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SafeBible.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4F720C5211B6F2C00E26B07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4F82CD12297A08C003088A5 /* CarPlayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayManager.swift; sourceTree = "<group>"; };
 		E4FCC44B21C8E42100A5FF54 /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		E4FD140521CCC8800033F94B /* NotesListToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesListToolbar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -362,6 +364,7 @@
 				E45A606121EA31870042E3EE /* VideoViewController.swift */,
 				E43533C12264461200DAE83C /* ConcordanceViewController.swift */,
 				E41C1F6F22754B580032446A /* IconViewController.swift */,
+				E4F82CD12297A08C003088A5 /* CarPlayManager.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -642,6 +645,7 @@
 				E478BFDB21DCDE490093320D /* AppTableViewController.swift in Sources */,
 				E4467D7321F4290B00E60A1A /* MenuViewController.swift in Sources */,
 				E40D6065218252CA00A06B54 /* BiblePageModel.swift in Sources */,
+				E4F82CD22297A08C003088A5 /* CarPlayManager.swift in Sources */,
 				E4B4433B21A46999007A266B /* ColorPicker.swift in Sources */,
 				E4F66863217C377600E998CC /* TOCBooksViewController.swift in Sources */,
 				E4480A2C21866E7F00C019B0 /* Reference.swift in Sources */,
@@ -917,6 +921,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = Appicon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = "$(inherited) $(PROJECT_DIR)/SafeBible/SafeBible.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -943,6 +948,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = Appicon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = "$(inherited) $(PROJECT_DIR)/SafeBible/SafeBible.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
 				FRAMEWORK_SEARCH_PATHS = (

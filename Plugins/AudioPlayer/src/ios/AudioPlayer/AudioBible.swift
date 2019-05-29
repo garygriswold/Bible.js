@@ -88,6 +88,7 @@ class AudioBible {
         self.player?.actionAtItemEnd = AVPlayer.ActionAtItemEnd.none
         
         self.controller.audioReadyToPlay(enabled: true)
+        self.controlCenter.nowPlaying(player: self)
         self.preFetchNextChapter(reference: reference)
     }
     
@@ -111,8 +112,8 @@ class AudioBible {
             if let reference = self.currReference {
                 print("\n*********** PLAY *************")
                 play.play()
-                self.audioAnalytics?.playStarted(item: reference.toString(), position: play.currentTime())
-                self.controlCenter.nowPlaying(player: self)
+                self.audioAnalytics?.playStarted(item: reference.toString(),
+                                                 position: play.currentTime())
             }
         }
     }

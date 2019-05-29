@@ -28,41 +28,44 @@ class AudioControlCenter {
     func setupControlCenter(player: AudioBible) {
         let controlCenter = MPRemoteCommandCenter.shared()
         
+        controlCenter.playCommand.isEnabled = true
         controlCenter.playCommand.addTarget(handler: { event in
             if !player.isPlaying() {
                 player.play()
+                MPNowPlayingInfoCenter.default().playbackState = .playing
                 return MPRemoteCommandHandlerStatus.success
             }
             return MPRemoteCommandHandlerStatus.commandFailed
         })
         
+        controlCenter.pauseCommand.isEnabled = true
         controlCenter.pauseCommand.addTarget(handler: { event in
             if player.isPlaying() {
                 player.pause()
+                MPNowPlayingInfoCenter.default().playbackState = .paused
                 return MPRemoteCommandHandlerStatus.success
             }
             return MPRemoteCommandHandlerStatus.commandFailed
         })
         
-        controlCenter.nextTrackCommand.isEnabled = false
-        controlCenter.previousTrackCommand.isEnabled = false
-        /*
-        controlCenter.nextTrackCommand.addTarget { event in
+        controlCenter.nextTrackCommand.isEnabled = true
+        controlCenter.nextTrackCommand.addTarget(handler: { event in
             if player.getPlayer() != nil {
                 player.nextChapter()
                 return MPRemoteCommandHandlerStatus.success
             }
             return MPRemoteCommandHandlerStatus.commandFailed
-        }
+        })
         
-        controlCenter.previousTrackCommand.addTarget { event in
+        controlCenter.previousTrackCommand.isEnabled = true
+        controlCenter.previousTrackCommand.addTarget(handler: { event in
             if player.getPlayer() != nil {
                 player.priorChapter()
                 return MPRemoteCommandHandlerStatus.success
             }
             return MPRemoteCommandHandlerStatus.commandFailed
-        }
-        */
+        })
+        
         controlCenter.skipBackwardCommand.isEnabled = true
         controlCenter.skipBackwardCommand.preferredIntervals = [10.0]
         controlCenter.skipBackwardCommand.addTarget(handler: { event in
@@ -96,20 +99,35 @@ class AudioControlCenter {
         if let reference = player.getCurrentReference() {
             if let play = player.getPlayer() {
                 if let item = play.currentItem {
-                    if let image = self.getIcon() {
-                        info[MPMediaItemPropertyArtwork] =
-                            MPMediaItemArtwork(boundsSize: image.size) { size in
-                                return image
-                        }
-                    } else {
-                        print("Error: Could not find image for Control Center.")
-                    }
+                //https://developer.apple.com/documentation/mediaplayer/mpmediaitem/general_media_item_property_keys
+                    // The above crashes App
+                    //self.info[MPMediaItemPropertyMediaType] = MPMediaType.audioBook
+                    self.info[MPMediaItemPropertyPodcastTitle] = "Podcast Title" // necessary?
                     self.currentBookChapter = reference.localName
+                    print("Title \(self.currentBookChapter)")
                     self.info[MPMediaItemPropertyTitle] = self.currentBookChapter
-                    self.info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = item.currentTime().seconds
+                    
+                    //https://developer.apple.com/documentation/mediaplayer/mpnowplayinginfocenter
                     self.info[MPMediaItemPropertyPlaybackDuration] = item.asset.duration.seconds
-                    self.info[MPNowPlayingInfoPropertyPlaybackRate] = play.rate
+                    self.info[MPNowPlayingInfoCollectionIdentifier] = reference.damId
+                    self.info[MPNowPlayingInfoPropertyChapterNumber] = reference.chapterNum - 1
+                    //self.info[MPNowPlayingInfoPropertyCurrentLanguageOptions] postpone
+                    self.info[MPNowPlayingInfoPropertyDefaultPlaybackRate] = 1.0
+                    self.info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = item.currentTime().seconds
+                    self.info[MPNowPlayingInfoPropertyExternalContentIdentifier] = reference.getS3Key()
+                    self.info[MPNowPlayingInfoPropertyExternalUserProfileIdentifier] =
+                        "Hear Holy Bible XXX" // necessary?
+                    self.info[MPNowPlayingInfoPropertyIsLiveStream] = 0.0 // or 0.0 for false
+                    // The following crashes the App
+                    //self.info[MPNowPlayingInfoPropertyMediaType] = MPNowPlayingInfoMediaType.audio
+                    let progress = item.currentTime().seconds / item.asset.duration.seconds
+                    self.info[MPNowPlayingInfoPropertyPlaybackProgress] = progress
+                    self.info[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
+   
                     MPNowPlayingInfoCenter.default().nowPlayingInfo = self.info
+                    MPNowPlayingInfoCenter.default().playbackState = .paused // .unknown | .playing | .paused | .stopped | .interrupted
+                    
+                    self.getIcon()
                     
                     self.updateTextPosition(nodeId: reference.getNodeId(verse: 0))
                 }
@@ -118,11 +136,22 @@ class AudioControlCenter {
     }
     
     /** This function might need be modified if the location of icons in the main App is modified. */
-    private func getIcon() -> UIImage? {
-        let iconName = UIApplication.shared.alternateIconName
-        return (iconName != nil) ? UIImage(named: "www/icons/\(iconName!)-60.png") : nil
+    private func getIcon() {
+        DispatchQueue.main.async {
+            print("Get image in main thread")
+            if let iconName = UIApplication.shared.alternateIconName {
+                if let image = UIImage(named: "www/icons/\(iconName)-60.png") {
+                    //self.info[MPMediaItemPropertyArtwork] =
+                    MPNowPlayingInfoCenter.default().nowPlayingInfo![MPMediaItemPropertyArtwork] =
+                        MPMediaItemArtwork(boundsSize: image.size) { size in
+                            return image
+                    }
+                }
+            }
+        }
     }
     
+    /* This is called by AudioBibleView */
     func updateNowPlaying(reference: AudioReference, verse: Int, position: Double) {
         let title = self.currentBookChapter + ":" + String(verse)
         let duration = MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration]

@@ -86,6 +86,20 @@ public class AudioBibleController {
         } else { complete(nil) }
     }
     
+    public func carPlayPlayer(book: String, chapterNum: Int) {
+        if self.audioBible == nil {
+            self.audioBible = AudioBible.shared(controller: self)
+        }
+        if !self.audioBible!.isPlaying() {
+            if let reader = self.audioTOCBible {
+                if let meta = reader.findBook(bookId: book) {
+                    let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)
+                    self.audioBible!.beginReadFile(reference: ref)
+                }
+            }
+        }
+    }
+    
     public func dismiss() {
         if self.audioBible != nil && self.audioBible!.isPlaying() {
             self.audioBible!.stop()

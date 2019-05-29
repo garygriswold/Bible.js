@@ -6,6 +6,7 @@
 import UIKit
 import AWS
 import Utility
+import AudioPlayer
 import Foundation
 
 @UIApplicationMain
@@ -18,6 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var bibleDownloadTask: UIBackgroundTaskIdentifier = .invalid
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        // Setup CarPlay
+        CarPlayManager.setUp()
         
         let readerNavigator = ReaderViewNavigator()
         let navController = readerNavigator.present()
