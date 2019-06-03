@@ -79,9 +79,9 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
                 return self.genericCell(view: tableView, indexPath: indexPath, title: tocText,
                                         accessory: true, icon: "ios-keypad.png")
             case 1:
-                let histText = NSLocalizedString("History", comment: "History Cell Title")
+                let histText = NSLocalizedString("Recents", comment: "Recents Cell Title")
                 return self.genericCell(view: tableView, indexPath: indexPath, title: histText,
-                                        accessory: true, icon: "ios-previous.png")
+                                        accessory: true, icon: "ios-recents.png")
             case 2:
                 let notesText = NSLocalizedString("Notes", comment: "Notes Cell Title")
                 return self.genericCell(view: tableView, indexPath: indexPath, title: notesText,

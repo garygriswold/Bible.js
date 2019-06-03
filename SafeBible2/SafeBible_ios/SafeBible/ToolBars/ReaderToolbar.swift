@@ -42,7 +42,7 @@ class ReaderToolbar {
         items.append(menu)
         items.append(spacer)
         
-        let priorImage = UIImage(named: "ios-previous.png")
+        let priorImage = UIImage(named: "ios-recents.png")
         self.historyBack = UIBarButtonItem(image: priorImage, style: .plain, target: self,
                                            action: #selector(historyTapHandler))
         self.historyBack.isEnabled = HistoryModel.shared.hasHistory()

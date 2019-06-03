@@ -22,7 +22,7 @@ class HistoryViewController : AppTableViewController, UITableViewDataSource {
     override func loadView() {
         super.loadView()
         
-        self.navigationItem.title = NSLocalizedString("History", comment: "History view page title")
+        self.navigationItem.title = NSLocalizedString("Recents", comment: "Recents view page title")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Clear", style: .plain,
                                                                  target: self,
                                                                  action: #selector(clearHandler))
