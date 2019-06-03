@@ -171,6 +171,6 @@
 		</dict>
 	</array>
     <key>UIBrowsableContentSupportsSectionedBrowsing</key>
-    <false/>
+    <true/>
 </dict>
 </plist>

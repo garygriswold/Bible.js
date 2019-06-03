@@ -14,30 +14,70 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     
     static var shared = CarPlayManager()
     
+    private static let tabs = [
+        ["recents", "Recents", "ios-recents"],
+        ["favorites", "Favorites", "ios-favorites"]
+    ]
+    private static let playList = [
+        ["MAT", "Matthew", "Gospel According to Matthew"],
+        ["MRK", "Mark", "Gospel According to Mark"],
+        ["LUK", "Luke", "Gospel According to Luke"],
+        ["JHN", "John", "Gospel According to John"],
+        ["ACT", "Acts", "Acts of the Apostles"],
+        ["EPH", "Ephesians", "Letter to the Ephesians"],
+        ["PHP", "Philippians", "Letter to the Philippians"],
+        ["PSA", "Psalms", "Psalms of David"],
+        ["PRO", "Proverbs", "The Book of Proverbs"]
+    ]
+    private static let history = [
+        ["JHN:3", "John 3", "Gospel According to John"],
+        ["LUK:2", "Luke 2", "Gospel According to Luke"],
+        ["GEN:1", "Genesis 1", "Book of Genesis"]
+    ]
+    
     static func setUp() {
         MPPlayableContentManager.shared().dataSource = CarPlayManager.shared
         MPPlayableContentManager.shared().delegate = CarPlayManager.shared
-        // Crashes if title is not initialized.
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = [
-            MPMediaItemPropertyTitle: "Hear Holy Bible"
-        ]
     }
     
     private override init() {
         super.init()
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = [
+            MPMediaItemPropertyTitle: "Hear Holy Bible"
+        ]
+        //AudioControlCenter.shared.getIcon() // from prototype
+        let controlCenter = MPRemoteCommandCenter.shared()
+        controlCenter.playCommand.isEnabled = true
+        controlCenter.playCommand.addTarget(handler: { event in
+            return .success
+        })
+        controlCenter.stopCommand.isEnabled = true
+        controlCenter.stopCommand.addTarget(handler: { event in
+            return .success
+        })
+        controlCenter.nextTrackCommand.isEnabled = false
+        controlCenter.previousTrackCommand.isEnabled = false
     }
     
     deinit {
         print("****** deinit CarPlayManager ******")
     }
     
-    
     //
     // DataSource
     //
     func numberOfChildItems(at indexPath: IndexPath) -> Int {
-        print("CarPlay number Child Items called")
-        return 0
+        print("CarPlay number Child Items called \(indexPath)  count: \(indexPath.count)")
+        switch indexPath.count {
+        case 0: return CarPlayManager.tabs.count
+        case 1:
+            switch indexPath[0] {
+            case 0: return CarPlayManager.history.count
+            case 1: return CarPlayManager.playList.count
+            default: return 0
+            }
+        default: return 0
+        }
     }
     
     func contentItem(forIdentifier identifier: String,
@@ -45,19 +85,35 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         print("Retrieve content item \(identifier)")
     }
     
-    func beginLoadingChildItems(at indexPath: IndexPath,
-                                completionHandler: @escaping (Error?) -> Void) {
-        print("Starts load of item at \(indexPath)")
-    }
+//    func beginLoadingChildItems(at indexPath: IndexPath,
+//                                completionHandler: @escaping (Error?) -> Void) {
+//        print("Starts load of item at \(indexPath)")
+//    }
     
     func childItemsDisplayPlaybackProgress(at indexPath: IndexPath) -> Bool {
         print("Ask if child items Display Progress")
-        return false
+        return true
     }
     
     func contentItem(at indexPath: IndexPath) -> MPContentItem? {
         print("CarPlay content item called")
-        return nil
+        switch indexPath.count {
+        case 1:
+            let item = CarPlayManager.tabs[indexPath[0]]
+            return loadCarPlayTab(ident: item[0], title: item[1], image: item[2])
+        case 2:
+            switch indexPath[0] {
+            case 0:
+                let item = CarPlayManager.history[indexPath[1]]
+                return loadCarPlayItem(ident: item[0], title: item[1], subtitle: item[2])
+            case 1:
+                let item = CarPlayManager.playList[indexPath[1]]
+                return loadCarPlayItem(ident: item[0], title: item[1], subtitle: item[2])
+            default:
+                return nil
+            }
+        default: return nil
+        }
     }
     
     //
@@ -66,15 +122,40 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     func playableContentManager(_ contentManager: MPPlayableContentManager,
                                 initiatePlaybackOfContentItemAt indexPath: IndexPath,
                                 completionHandler: @escaping (Error?) -> Void) {
-        print("initiate CarPlay Playback of Content Item called")
+        print("initiate CarPlay Playback of Content Item called \(indexPath)")
+        completionHandler(nil)
     }
     
     func playableContentManager(_ contentManager: MPPlayableContentManager,
                                 didUpdate context: MPPlayableContentManagerContext) {
         print("update CarPlay ContentManagerContext called")
-        
-        let ref = HistoryModel.shared.current()
-        AudioBibleController.shared.carPlayPlayer(book: ref.bookId, chapterNum: ref.chapter)
+    }
+    
+    private func loadCarPlayTab(ident: String, title: String, image: String) -> MPContentItem {
+        let item = MPContentItem(identifier: ident)
+        item.isContainer = true
+        item.isExplicitContent = false
+        item.isPlayable = false
+        item.isStreamingContent = false
+        item.title = title
+        if let image = UIImage(named: image) {
+            item.artwork = MPMediaItemArtwork(boundsSize: image.size,
+                                              requestHandler: { _ in return image
+            })
+        }
+        return item
+    }
+    
+    private func loadCarPlayItem(ident: String, title: String, subtitle: String) -> MPContentItem {
+        let item = MPContentItem(identifier: ident)
+        item.isContainer = false
+        item.isExplicitContent = false
+        item.isPlayable = true
+        item.isStreamingContent = true
+        item.playbackProgress = 0.0
+        item.title = title
+        item.subtitle = subtitle
+        return item
     }
 }
 

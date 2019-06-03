@@ -38,6 +38,8 @@ class AudioControlCenter {
             return MPRemoteCommandHandlerStatus.commandFailed
         })
         
+        // What about stop ?
+        
         controlCenter.pauseCommand.isEnabled = true
         controlCenter.pauseCommand.addTarget(handler: { event in
             if player.isPlaying() {
