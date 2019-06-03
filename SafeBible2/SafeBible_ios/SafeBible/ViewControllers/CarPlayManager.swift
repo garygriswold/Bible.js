@@ -18,6 +18,10 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         ["recents", "Recents", "ios-recents"],
         ["favorites", "Favorites", "ios-favorites"]
     ]
+    
+    private static var HISTORY_LIMIT = 5
+    private var historyLimit = 0
+    
     private static let playList = [
         ["MAT", "Matthew", "Gospel According to Matthew"],
         ["MRK", "Mark", "Gospel According to Mark"],
@@ -28,11 +32,6 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         ["PHP", "Philippians", "Letter to the Philippians"],
         ["PSA", "Psalms", "Psalms of David"],
         ["PRO", "Proverbs", "The Book of Proverbs"]
-    ]
-    private static let history = [
-        ["JHN:3", "John 3", "Gospel According to John"],
-        ["LUK:2", "Luke 2", "Gospel According to Luke"],
-        ["GEN:1", "Genesis 1", "Book of Genesis"]
     ]
     
     static func setUp() {
@@ -72,7 +71,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         case 0: return CarPlayManager.tabs.count
         case 1:
             switch indexPath[0] {
-            case 0: return CarPlayManager.history.count
+            case 0: return min(self.historyLimit, HistoryModel.shared.historyCount)
             case 1: return CarPlayManager.playList.count
             default: return 0
             }
@@ -104,8 +103,9 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         case 2:
             switch indexPath[0] {
             case 0:
-                let item = CarPlayManager.history[indexPath[1]]
-                return loadCarPlayItem(ident: item[0], title: item[1], subtitle: item[2])
+                let item = HistoryModel.shared.getHistory(row: indexPath[1])
+                return loadCarPlayItem(ident: item.nodeId(), title: item.description(),
+                                       subtitle: item.bible.name)
             case 1:
                 let item = CarPlayManager.playList[indexPath[1]]
                 return loadCarPlayItem(ident: item[0], title: item[1], subtitle: item[2])
@@ -129,6 +129,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     func playableContentManager(_ contentManager: MPPlayableContentManager,
                                 didUpdate context: MPPlayableContentManagerContext) {
         print("update CarPlay ContentManagerContext called")
+        self.historyLimit = min(context.enforcedContentItemsCount, CarPlayManager.HISTORY_LIMIT)
     }
     
     private func loadCarPlayTab(ident: String, title: String, image: String) -> MPContentItem {
