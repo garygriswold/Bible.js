@@ -18,26 +18,17 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         ["recents", "Recents", "ios-recents"],
         ["favorites", "Favorites", "ios-favorites"]
     ]
-    
     private static var HISTORY_LIMIT = 5
-    private var historyLimit = 0
-    
-    private static let playList = [
-        ["MAT", "Matthew", "Gospel According to Matthew"],
-        ["MRK", "Mark", "Gospel According to Mark"],
-        ["LUK", "Luke", "Gospel According to Luke"],
-        ["JHN", "John", "Gospel According to John"],
-        ["ACT", "Acts", "Acts of the Apostles"],
-        ["EPH", "Ephesians", "Letter to the Ephesians"],
-        ["PHP", "Philippians", "Letter to the Philippians"],
-        ["PSA", "Psalms", "Psalms of David"],
-        ["PRO", "Proverbs", "The Book of Proverbs"]
-    ]
+    private static let FAV_LIST = ["MAT", "MRK", "LUK", "JHN", "ACT", "EPH", "PHP", "PSA", "PRO" ]
     
     static func setUp() {
         MPPlayableContentManager.shared().dataSource = CarPlayManager.shared
         MPPlayableContentManager.shared().delegate = CarPlayManager.shared
     }
+    
+    private var historyLimit = 0
+    private var bibleId: String = "" // this is a problem
+    private var favoriteList = [String]()
     
     private override init() {
         super.init()
@@ -72,10 +63,30 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         case 1:
             switch indexPath[0] {
             case 0: return min(self.historyLimit, HistoryModel.shared.historyCount)
-            case 1: return CarPlayManager.playList.count
+            case 1:
+                self.buildFavoriteList()
+                return self.favoriteList.count
             default: return 0
             }
         default: return 0
+        }
+    }
+    
+    /** This is also being done by Toolbar, can't I use that when available? */
+    private func buildFavoriteList() {
+        let ref = HistoryModel.shared.current()
+        self.bibleId = ref.bibleId
+        let controller = AudioBibleController.shared
+        let bookIdList = controller.findAudioVersion(bibleId: ref.bibleId, iso3: ref.bible.iso3,
+                                                          audioBucket: ref.bible.audioBucket,
+                                                          otDamId: ref.bible.otDamId,
+                                                          ntDamId: ref.bible.ntDamId)
+        print("bookIdList \(bookIdList)")
+        self.favoriteList = [String]()
+        for item in CarPlayManager.FAV_LIST {
+            if bookIdList.contains(item) {
+                self.favoriteList.append(item)
+            }
         }
     }
     
@@ -107,8 +118,10 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
                 return loadCarPlayItem(ident: item.nodeId(), title: item.description(),
                                        subtitle: item.bible.name)
             case 1:
-                let item = CarPlayManager.playList[indexPath[1]]
-                return loadCarPlayItem(ident: item[0], title: item[1], subtitle: item[2])
+                let item = Reference(bibleId: self.bibleId,
+                                     bookId: self.favoriteList[indexPath[1]], chapter: 1)
+                return loadCarPlayItem(ident: item.nodeId(), title: item.description(),
+                                       subtitle: item.bible.name)
             default:
                 return nil
             }
