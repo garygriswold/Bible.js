@@ -54,6 +54,7 @@ class AudioControlCenter {
         controlCenter.nextTrackCommand.addTarget(handler: { event in
             if player.getPlayer() != nil {
                 player.nextChapter()
+                MPNowPlayingInfoCenter.default().playbackState = .playing
                 return MPRemoteCommandHandlerStatus.success
             }
             return MPRemoteCommandHandlerStatus.commandFailed
@@ -63,6 +64,7 @@ class AudioControlCenter {
         controlCenter.previousTrackCommand.addTarget(handler: { event in
             if player.getPlayer() != nil {
                 player.priorChapter()
+                MPNowPlayingInfoCenter.default().playbackState = .playing
                 return MPRemoteCommandHandlerStatus.success
             }
             return MPRemoteCommandHandlerStatus.commandFailed
@@ -75,6 +77,7 @@ class AudioControlCenter {
                 let position = player.skip(seconds: -10)
                 self.info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
                 MPNowPlayingInfoCenter.default().nowPlayingInfo = self.info
+                MPNowPlayingInfoCenter.default().playbackState = .playing
                 return MPRemoteCommandHandlerStatus.success
             }
             return MPRemoteCommandHandlerStatus.commandFailed
@@ -87,6 +90,7 @@ class AudioControlCenter {
                 let position = player.skip(seconds: 10)
                 self.info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
                 MPNowPlayingInfoCenter.default().nowPlayingInfo = self.info
+                MPNowPlayingInfoCenter.default().playbackState = .playing
                 return MPRemoteCommandHandlerStatus.success
             }
             return MPRemoteCommandHandlerStatus.commandFailed
