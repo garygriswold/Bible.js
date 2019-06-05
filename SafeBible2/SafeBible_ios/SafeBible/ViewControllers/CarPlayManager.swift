@@ -32,21 +32,23 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     
     private override init() {
         super.init()
+        let curr = HistoryModel.shared.current()
         MPNowPlayingInfoCenter.default().nowPlayingInfo = [
-            MPMediaItemPropertyTitle: "Hear Holy Bible"
+            MPMediaItemPropertyTitle: curr.description()
         ]
         //AudioControlCenter.shared.getIcon() // from prototype
         let controlCenter = MPRemoteCommandCenter.shared()
         controlCenter.playCommand.isEnabled = true
         controlCenter.playCommand.addTarget(handler: { event in
-            return .success
+            return MPRemoteCommandHandlerStatus.success
         })
-        controlCenter.stopCommand.isEnabled = true
-        controlCenter.stopCommand.addTarget(handler: { event in
-            return .success
-        })
-        controlCenter.nextTrackCommand.isEnabled = false
-        controlCenter.previousTrackCommand.isEnabled = false
+        controlCenter.pauseCommand.isEnabled = false
+        controlCenter.stopCommand.isEnabled = false
+        //controlCenter.stopCommand.addTarget(handler: { event in
+        //    return .success
+        //})
+        //controlCenter.nextTrackCommand.isEnabled = false
+        //controlCenter.previousTrackCommand.isEnabled = false
     }
     
     deinit {
@@ -59,7 +61,10 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     func numberOfChildItems(at indexPath: IndexPath) -> Int {
         print("CarPlay number Child Items called \(indexPath)  count: \(indexPath.count)")
         switch indexPath.count {
-        case 0: return CarPlayManager.tabs.count
+        case 0:
+            let curr = HistoryModel.shared.current()
+            AudioBibleController.shared.carPlayPlayer(book: curr.bookId, chapterNum: curr.chapter)
+            return CarPlayManager.tabs.count
         case 1:
             switch indexPath[0] {
             case 0: return min(self.historyLimit, HistoryModel.shared.historyCount)
@@ -106,7 +111,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     }
     
     func contentItem(at indexPath: IndexPath) -> MPContentItem? {
-        print("CarPlay content item called")
+        print("CarPlay content item called \(indexPath)")
         switch indexPath.count {
         case 1:
             let item = CarPlayManager.tabs[indexPath[0]]
@@ -136,6 +141,12 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
                                 initiatePlaybackOfContentItemAt indexPath: IndexPath,
                                 completionHandler: @escaping (Error?) -> Void) {
         print("initiate CarPlay Playback of Content Item called \(indexPath)")
+        if let item = self.contentItem(at: indexPath) {
+            let parts = item.identifier.components(separatedBy: ":")
+            let bookId = parts[0]
+            let chapter: Int = (parts.count > 0) ? Int(parts[1]) ?? 1 : 1
+            AudioBibleController.shared.carPlayPlayer(book: bookId, chapterNum: chapter)
+        }
         completionHandler(nil)
     }
     
