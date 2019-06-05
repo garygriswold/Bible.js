@@ -77,7 +77,7 @@ class AudioControlCenter {
                 let position = player.skip(seconds: -10)
                 self.info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
                 MPNowPlayingInfoCenter.default().nowPlayingInfo = self.info
-                MPNowPlayingInfoCenter.default().playbackState = .playing
+                // .playbackState is unchanged
                 return MPRemoteCommandHandlerStatus.success
             }
             return MPRemoteCommandHandlerStatus.commandFailed
@@ -90,7 +90,7 @@ class AudioControlCenter {
                 let position = player.skip(seconds: 10)
                 self.info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
                 MPNowPlayingInfoCenter.default().nowPlayingInfo = self.info
-                MPNowPlayingInfoCenter.default().playbackState = .playing
+                // .playbackState is unchanged
                 return MPRemoteCommandHandlerStatus.success
             }
             return MPRemoteCommandHandlerStatus.commandFailed

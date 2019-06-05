@@ -332,4 +332,3 @@ class AudioBible {
             damid: reference.damId, bookId: reference.bookId, chapter: reference.chapterNum)
     }
 }
-
