@@ -10,7 +10,8 @@ import sys
 # Build a map of bibles and damId's to collect
 # This table controls what Audio versions will be included, and what
 # text versions that are associated with
-versions = {}
+#versions = {}
+versions = set()
 db = sqlite3.connect('Versions.db')
 cursor = db.cursor()
 sql = "SELECT bibleId, otDamId, ntDamId FROM Bible ORDER BY bibleId"
@@ -18,10 +19,12 @@ values = ()
 cursor.execute(sql, values)
 rows = cursor.fetchall()
 for row in rows:
-	bibleId = row[0]
 	otDamId = row[1]
 	ntDamId = row[2]
-	versions[bibleId] = [otDamId, ntDamId]
+	if otDamId != None:
+		versions.add(otDamId)
+	if ntDamId != None:
+		versions.add(ntDamId)
 
 db.close()
 
@@ -252,42 +255,39 @@ for line in dbpProd:
 	numParts = len(parts)
 	if parts[0] == 'audio' and parts[numParts -1][-4:] == ".mp3":
 		bibleId = parts[1]
-		damId = parts[2]
-		if numParts == 4 and bibleId in versions.keys():
-			allowDamId = versions[bibleId]
-			if damId in allowDamId and damId not in EXCLUDE:
+		damId = "audio/" + parts[1] + "/" + parts[2]
+		if numParts == 4 and damId in versions and damId not in EXCLUDE:
 
-				# Write AudioBookRow
-				book = parts[3]
-				damId2 = book[21:31].replace("_", " ").strip()
-				if damId == damId2:
-					order = book[0:3]
-					chapter = book[5:8]
-					chapter = chapter.replace("_", "")
-					name = book[9:21]
-					name = name.replace("_", " ").strip()
-					usfm = usfmBookId(name)
-					if usfm == None:
-						print "ERROR", line, name
-					bookIdKey = damId + usfm
-					if usfm != lastUsfm or damId != lastDamId:
-						if bookLine != None:
-							bookOut.write(bookLine)
-						lastUsfm = usfm
-						lastDamId = damId
-					bookLine = u"REPLACE INTO AudioBook VALUES('%s', '%s', '%s', '%s', '%s');\n" % (damId, usfm, order, name, chapter)
+			# Write AudioBookRow
+			book = parts[3]
+			damId2 = book[21:31].replace("_", " ").strip()
+			if damId2 == parts[2]:
+				order = book[0:3]
+				chapter = book[5:8]
+				chapter = chapter.replace("_", "")
+				name = book[9:21]
+				name = name.replace("_", " ").strip()
+				usfm = usfmBookId(name)
+				if usfm == None:
+					print "ERROR", line, name
+				if usfm != lastUsfm or damId != lastDamId:
+					if bookLine != None:
+						bookOut.write(bookLine)
+					lastUsfm = usfm
+					lastDamId = damId
+				bookLine = u"REPLACE INTO AudioBook VALUES('%s', '%s', '%s', '%s', '%s');\n" % (damId, usfm, order, name, chapter)
 
-					# Validate Key Generation Logic
-					checkChapter = chapter
-					if len(checkChapter) < 3:
-						checkChapter = "_" + checkChapter
-					checkName = name.replace(" ", "_")
-					checkName = checkName + "_______________"[0: 12 - len(name)]
-					generated = "audio/%s/%s/%s__%s_%s%s.mp3" % (bibleId, damId, order, checkChapter, checkName, damId)
-					if line != generated:
-						print "ERROR"
-						print line
-						print generated
+				# Validate Key Generation Logic
+				checkChapter = chapter
+				if len(checkChapter) < 3:
+					checkChapter = "_" + checkChapter
+				checkName = name.replace(" ", "_")
+				checkName = checkName + "_______________"[0: 12 - len(name)]
+				generated = "%s/%s__%s_%s%s.mp3" % (damId, order, checkChapter, checkName, damId2)
+				if line != generated:
+					print "ERROR"
+					print line
+					print generated
 
 
 dbpProd.close()

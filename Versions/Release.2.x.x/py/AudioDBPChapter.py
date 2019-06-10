@@ -19,8 +19,6 @@ output.write(u"  versePositions TEXT NOT NULL,\n")
 output.write(u"  PRIMARY KEY (damId, bookId, chapter),\n")
 output.write(u"  FOREIGN KEY (damId, bookId) REFERENCES AudioBook(damId, bookId));\n")
 
-TEST_CASES = ['CHNUNVN2DA', 'ENGESVN2DA', 'ENGESVO2DA']
-
 def getOsisBookCode(bookCode):
 	books = {
 		'GEN': 'Gen',
@@ -97,27 +95,33 @@ def getOsisBookCode(bookCode):
 
 def getVerseNumbers(damId, osisCode, chapter):
 	chapStr = str(chapter)
-	url = HOST + "audio/versestart?" + KEY + "&dam_id=" + damId + "&osis_code=" + osisCode + "&chapter_number=" + chapStr
+	dam_id = damId.split('/')[2]
+	url = HOST + "audio/versestart?" + KEY + "&dam_id=" + dam_id + "&osis_code=" + osisCode + "&chapter_number=" + chapStr
 	try:
 		response = urllib2.urlopen(url)
 		data = response.read()
-		verses = json.loads(data)
-		lastVerseId = int(verses[-1:][0]["verse_id"])
-		array = [None] * (lastVerseId + 1)
-		array[0] = 0
-		for verse in verses:
-			num = int(verse["verse_id"])
-			pos = float(verse["verse_start"])
-			array[num] = pos
+	except Exception, err:
+		print "ERROR", damId, osisCode, chapter, verses, err
+		return False	
+	try:
+		if data != None and len(data) > 0:
+			verses = json.loads(data)
+			lastVerseId = int(verses[-1:][0]["verse_id"])
+			array = [None] * (lastVerseId + 1)
+			array[0] = 0
+			for verse in verses:
+				num = int(verse["verse_id"])
+				pos = float(verse["verse_start"])
+				array[num] = pos
 
-		for idx in range(1, len(array)):
-			if array[idx] == None:
-				array[idx] = array[idx - 1]
+			for idx in range(1, len(array)):
+				if array[idx] == None:
+					array[idx] = array[idx - 1]
 
-		numbers = json.dumps(array)
-		numbers = numbers.replace(" ", "")
-		output.write("INSERT INTO AudioChapter VALUES('%s', '%s', '%s', '%s');\n" % (damId, bookId, chapter, numbers))
-		return True
+			numbers = json.dumps(array)
+			numbers = numbers.replace(" ", "")
+			output.write("INSERT INTO AudioChapter VALUES('%s', '%s', '%s', '%s');\n" % (damId, bookId, chapter, numbers))
+			return True
 	except Exception, err:
 		print "ERROR", damId, osisCode, chapter, verses, err
 		return False
@@ -125,21 +129,21 @@ def getVerseNumbers(damId, osisCode, chapter):
 db = sqlite3.connect('Versions.db')
 cursor = db.cursor()
 sql = "SELECT damId, bookId, numberOfChapters FROM AudioBook ORDER BY damId, bookOrder"
+#sql = "SELECT damId, bookId, numberOfChapters FROM AudioBook WHERE damId like '%ENGESVN2DA' ORDER BY damId, bookOrder"
 values = ()
 cursor.execute(sql, values)
 rows = cursor.fetchall()
 for row in rows:
 	damId = row[0]
-	if damId in TEST_CASES:
-		bookId = row[1]
-		osisCode = getOsisBookCode(bookId)
-		numberOfChapters = row[2]
+	bookId = row[1]
+	osisCode = getOsisBookCode(bookId)
+	numberOfChapters = row[2]
 
-		print damId, bookId, osisCode, numberOfChapters
-		ok = getVerseNumbers(damId, osisCode, 1)
-		if ok and numberOfChapters > 1:
-			for chap in range(2, (numberOfChapters + 1)):
-				getVerseNumbers(damId, osisCode, chap)
+	print damId, bookId, osisCode, numberOfChapters
+	ok = getVerseNumbers(damId, osisCode, 1)
+	if ok and numberOfChapters > 1:
+		for chap in range(2, (numberOfChapters + 1)):
+			getVerseNumbers(damId, osisCode, chap)
 
 db.close()
 output.close()

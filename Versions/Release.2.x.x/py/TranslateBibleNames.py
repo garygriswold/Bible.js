@@ -27,39 +27,35 @@ def getTranslation(body):
 # This function adjusts some names, because they were translating poorly
 # Especially the word 'Version' is a problem
 def fixEnglishName(bibleId):
-	names = { "ALSABV": "Albanian Bible",
-			"BNGRBV": "Bangla Bible",
-			"HAUCLV": "Holy Bible",
-			"KMRKLA": "Holy Bible",
-			"YORUBS": "Holy Bible" }
+	names = {}
 	return names.get(bibleId)
 
 # Some Bibles has already translated names in the name field, which is
 # better than the name that is gotten by translating the english name
 # For those, the name should be used
 def useName(bibleId):
-	useName = ["ENGESV", "ENGLXX", "FRALSG", "MALTBK", "QVCTBL", "QXLWBT", "QXRBSE", "SOMSIM"]
+	useName = ["ERV-AWA.db", "ERV-ORI.db"]
 	return bibleId in useName
 
 
 out = io.open("sql/LocalizedBibleNames.sql", mode="w", encoding="utf-8")
 db = sqlite3.connect('Versions.db')
 cursor = db.cursor()
-sql = "SELECT b.bibleId, b.iso3, b.name, b.englishName, l.iso1, l.name"
-sql += " FROM Bible b, Language l WHERE b.iso3 = l.iso3"
-sql += " ORDER BY b.bibleId"
+sql = "SELECT bibleId, iso3, name, englishName, iso1"
+sql += " FROM Bible"
+sql += " ORDER BY bibleId"
 values = ( )
 cursor.execute(sql, values)
 for row in cursor:
 	bibleId = row[0]
 	iso3 = row[1]
-	name = row[2].replace("[", "").replace("]", "")
-	englishName = row[3].replace("[", "").replace("]", "")
+	name = row[2]
+	englishName = row[3]
 	checkName = fixEnglishName(bibleId)
 	if checkName != None:
 		englishName = checkName
 	iso1 = row[4]
-	language = row[5]
+	#language = row[5]
 	translated = None
 	if iso1 == "en":
 		translated = englishName
@@ -90,7 +86,7 @@ for row in cursor:
 			out.write("ERROR in translation %s \n" % (bibleId))
 	else:
 		translated = None
-		#print "No iso1 code for Translation ", bibleId
+		print "No iso1 code for Translation ", bibleId
 	if useName(bibleId):
 		translated = name
 	if translated != None:
@@ -102,9 +98,9 @@ for row in cursor:
 			translations2 = obj2["data"]["translations"]
 			backTranslated = translations2[0]['translatedText']	
 		if translated.find("'") >= 0 and translated.find("''") < 0:
-			translated = translated.replace("'", "''")
-		out.write("UPDATE Bible set localizedName = '%s' WHERE bibleId = '%s'; -- %s %s [%s] (%s) {%s}\n" % 
-		(translated, bibleId, iso1, language, backTranslated, englishName, name))
+			translated = translated.replace("'", "''") 
+		out.write("UPDATE Bible set localizedName = '%s' WHERE bibleId = '%s'; -- %s [%s] (%s) {%s}\n" % 
+		(translated, bibleId, iso1, backTranslated, englishName, name))
 
 db.close()
 out.close()
