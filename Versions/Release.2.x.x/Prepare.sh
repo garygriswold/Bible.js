@@ -18,7 +18,12 @@ sqlite Versions.db < sql/Credentials.sql
 python py/LanguageTable.py
 sqlite Versions.db < sql/language.sql
 
-# Create Bible Table
+# Create Bible Table and Load manually maintained ShortSands Bibles
+sqlite Versions.db < sql/BibleTable.sql
+
+# might need to drop scope from table, it is not used.
+
+# Insert FCBH Bibles into table
 python py/BibleTable.py
 sqlite Versions.db < sql/bible.sql
 
@@ -36,16 +41,26 @@ sqlite Versions.db < sql/Bible_lang.sql
 # where it is appropriate, and it must exclude script for
 # all languages where it is not appropriate
 sqlite Versions.db <<END_SQL
--- delete script for thos that should not have one
+-- change all null script to be zero length string
+update Bible set script='' where script is null;
+-- delete script for those that should not have one
 update Bible set script='' where iso1 not in (select iso1 from Language where script != '');
 -- select those that must have a script
-select bibleId, script from Bible where iso1 in (select iso1 from Language where script != '');
+select bibleId, script from Bible where iso1 in (select iso1 from Language where script != '') order by bibleId;
 -- double check results are the same
-select bibleId, script from Bible where script != '';
+select bibleId, script from Bible where script != '' order by bibleId;
 -- correct script codes that are in error
+update Bible set script='Arab' where bibleId='AZBEMV';
+update Bible set script='Latn' where bibleId='AZEBSA'; -- must check text to be sure
+update Bible set script='Hans' where bibleId='CMNUNV';
 update Bible set script='Hans' where bibleId='ERV-CMN.db';
 update Bible set script='Guru' where bibleId='ERV-PAN.db';
 update Bible set script='Cyrl' where bibleId='ERV-SRP.db';
+update Bible set script='Arab' where bibleId='UZNIBT';
+update Bible set script='Latn' where bibleId='XMMLAI';
+update Bible set script='Hant' where bibleId='YUEUNV';
+update Bible set script='Arab' where bibleId='ZLMAVB';
+update Bible set script='Arab' where bibleId='ZLMTMV';
 
 DROP TABLE IF EXISTS Owner;
 DROP TABLE IF EXISTS Region;
@@ -60,8 +75,33 @@ sqlite Versions.db < sql/copied_region.sql
 # Validate Bible Table keys against dbp-prod bucket
 python py/BibleValidate.py
 
-# Validate the lookup of info.json files and the last chapter
-python py/BibleValidate2.sh
+# Remove from Bible any versions that do not have text, or audio
+sqlite Versions.db <<END_SQL2
+delete from Bible where bibleId='KMRKKN';
+delete from Bible where bibleId='KMRMBN';
+delete from Bible where bibleId='PESTPV';
+delete from Bible where bibleId='SPAR60';
+delete from Bible where bibleId='TZESBM';
+delete from Bible where bibleId='YADTBL';
+update Bible set ntDamId=null where bibleId='KMRK05';
+update Bible set ntDamId=null where bibleId='TZESBM';
+END_SQL2
+
+# Repeat Validate Bible Table keys against dbp-prod bucket
+python py/BibleValidate.py
+
+# Validate the lookup of info.json files and the last chapter.
+# This can be run after permission has been granted.
+python py/BibleValidate2.py
+
+# Patch some with bad entries
+# All downloadable Bibles should come from text-%R-shortsands
+sqlite Versions.db <<END_SQL3
+-- INSERT INTO Bible (bibleId, abbr, iso3, name, englishName, textBucket, textId, keyTemplate, audioBucket, otDamId, ntDamId) VALUES 
+-- ('KMRIBT', 'IBT', 'kmr', 'Încîl Mizgînî', 'Kurmanji Kurdish New Testament (Latin)', 'dbp-prod', 'KM2IBT', '%I_%O_%B_%C.html', 'dbp-prod', null, 'KMRIBTN2DA');
+-- select count(*) from Bible;
+-- vacuum;
+END_SQL3
 
 # Create A Copy of DB before Deletions
 cp Versions.db VersionsFull.db
@@ -70,41 +110,30 @@ cp Versions.db VersionsFull.db
 sqlite Versions.db <<END_SQL
 select count(*) from Language;
 select count(*) from Bible;
-delete from Language where iso3 || script not in (select iso3 || script from Bible);
+select bibleId, iso3, iso1, script from Bible where iso1 || script not in (select iso1 || script from Language) order by iso1;
+delete from Bible where iso1 || script not in (select iso1 || script from Language);
+select count(*) from Bible;
+select iso1, script, name from language where iso1 || script not in (select iso1 || script from Bible) order by iso1;
+delete from Language where iso1 || script not in (select iso1 || script from Bible);
 select count(*) from Language;
-select bibleId from Bible where iso3 || script not in (select iso3 || script from Language);
-
-create index language_iso1_idx on Language(iso1);
-create index bible_iso3_idx on Bible(iso3);
-
 vacuum;
 END_SQL
 
-# Patch some with bad entries
-# All downloadable Bibles should come from text-%R-shortsands
-sqlite Versions.db <<END_SQL3
-update Bible set textBucket='text-%R-shortsands', textId='ENGKJV' where bibleId='ENGKJV';
-update Bible set otDamId='ENGESVO2DA', ntDamId='ENGESVN2DA' where bibleId='ENGESV';
-delete from Bible where textId is null;
-INSERT INTO Bible (bibleId, abbr, iso3, name, englishName, textBucket, textId, keyTemplate, audioBucket, otDamId, ntDamId) VALUES 
-('KMRIBT', 'IBT', 'kmr', 'Încîl Mizgînî', 'Kurmanji Kurdish New Testament (Latin)', 'dbp-prod', 'KM2IBT', '%I_%O_%B_%C.html', 'dbp-prod', null, 'KMRIBTN2DA');
-select count(*) from Bible;
-vacuum;
-END_SQL3
-
-# Run a final validation to make sure that problems are removed
-python py/BibleValidate.sh
-
-# Validate the lookup of info.json files and the last chapter
-python py/BibleValidate2.sh
-
-# Make any needed deletions from Bible based upon errors in validation
+# Make any needed country code corrections, although it is not used at this time
 sqlite Versions.db <<END_SQL4
 update Bible set country='RU' where bibleId='ERV-RUS.db';
 update Bible set country='IR' where bibleId='NMV.db';
 update Bible set country='GB' where bibleId='KJVPD.db';
 update Bible set country='ES' where bibleId='ERV-SPA.db';
+
+delete from Bible where bibleId='ENGESV'; -- my ENGESV.db was there first, and must remain
 END_SQL4
+
+# Run a final validation to make sure that problems are removed
+python py/BibleValidate.py
+
+# Validate the lookup of info.json files and the last chapter
+python py/BibleValidate2.py
 
 # Use Google Translate to improve the Bible names
 python py/TranslateBibleNames.py

@@ -24,7 +24,7 @@ for row in rows:
 	try:
 		filename = textId.replace("/", ":") + ":info.json"
 		#filename = textKey = "text:" + bibleId + ":" + textId + ":info.json"
-		print("open", filename)
+		#print("open", filename)
 		input = io.open(source + filename, mode="r", encoding="utf-8")
 		data = input.read()
 		bible = json.loads(data)
