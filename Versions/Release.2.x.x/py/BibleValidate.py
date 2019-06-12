@@ -11,7 +11,6 @@ output = io.open("PermissionsRequest.txt", mode="w", encoding="utf-8")
 
 textSet = set()
 audioSet = set()
-#input = io.open("metadata/FCBH/dbp_prod.txt", mode="r", encoding="utf-8")
 input = io.open(os.environ['HOME'] + "/ShortSands/DBL/FCBH/dbp_prod.txt", mode="r", encoding="utf-8")
 for line in input:
 
@@ -39,13 +38,13 @@ rows = cursor.fetchall()
 for row in rows:
 	bibleId = row[0]
 	textBucket = row[1]
-	#if textBucket == BUCKET:
-	textId = row[2]
-	if textId != None:
-		if textId in textSet:
-			output.write(PREFIX + BUCKET + "/" + textId + "/*\n")
-		else:
-			print "missing text", bibleId, textId
+	if textBucket == BUCKET:
+		textId = row[2]
+		if textId != None:
+			if textId in textSet:
+				output.write(PREFIX + BUCKET + "/" + textId + "/*\n")
+			else:
+				print "missing text", bibleId, textId
 
 for row in rows:
 	bibleId = row[0]
