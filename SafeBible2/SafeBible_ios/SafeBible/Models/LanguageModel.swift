@@ -224,4 +224,67 @@ class LanguageModel : SettingsModel {
             }
         }
     }
+    
+    static func testScriptDefaults() {
+        let az = Locale(identifier: "az") // az||Azerbaijani (Arabic)
+        print("script of az: \(az.scriptCode)")
+        let az_cyrl = Locale(identifier: "az-Cyrl") // az|Cyrl|Azerbaijani (Cyrillic)
+        print("script of az_cyrl: \(az_cyrl.scriptCode)")
+        let az_latn = Locale(identifier: "az-Latn") //az|Latn|Azerbaijani (Latin)
+        print("script of az_latn: \(az_latn.scriptCode)")
+        let bs = Locale(identifier: "bs") // bs||Bosnian (Arabic)
+        print("script of bs: \(bs.scriptCode)")
+        let bs_cyrl = Locale(identifier: "bs-Cyrl") // bs|Cyrl|Bosnian (Cyrillic)
+        print("script of bs_cyrl: \(bs_cyrl.scriptCode)")
+        let bs_latn = Locale(identifier: "bs-Latn") // bs|Latn|Bosnian (Latin)
+        print("script of bs_latn: \(bs_latn.scriptCode)")
+        let ms = Locale(identifier: "ms") // ms||Malay (Latin)
+        print("script of ms: \(ms.scriptCode)")
+        let ms_arab = Locale(identifier: "ms-Arab") // ms|Arab|Malay (Arabic)
+        print("script of ms_arab: \(ms_arab.scriptCode)")
+        let pa = Locale(identifier: "pa") // pa||Punjabi ??
+        print("script of pa: \(pa.scriptCode)")
+        let pa_arab = Locale(identifier: "pa-Arab") // pa|Arab|Punjabi (Arabic)
+        print("script of pa_arab: \(pa_arab.scriptCode)")
+        let pa_guru = Locale(identifier: "pa-Guru") // pa|Guru|Punjabi (Gurmukhi)
+        print("script of pa_guru: \(pa_guru.scriptCode)")
+        let shi = Locale(identifier: "shi") // shi||Tachelhit (Arabic)
+        print("script of shi: \(shi.scriptCode)")
+        let shi_latn = Locale(identifier: "shi-Latn") // shi|Latn|Tachelhit (Latin)
+        print("script of shi_latn: \(shi_latn.scriptCode)")
+        let shi_tfng = Locale(identifier: "shi-Tfng") // shi|Tfng|Tachelhit (Tifinagh)
+        print("script of shi_tfng: \(shi_tfng.scriptCode)")
+        let sr = Locale(identifier: "sr") // sr||Serbian ??
+        print("script of sr: \(sr.scriptCode)")
+        let sr_cyrl = Locale(identifier: "sr-Cyrl") // sr|Cyrl|Serbian (Cyrillic)
+        print("script of sr_cyrl: \(sr_cyrl.scriptCode)")
+        let sr_latn = Locale(identifier: "sr-Latn") // sr|Latn|Serbian (Latin)
+        print("script of sr_latn: \(sr_latn.scriptCode)")
+        let uz = Locale(identifier: "uz") // uz||Uzbek ??
+        print("script of uz: \(uz.scriptCode)")
+        let uz_arab = Locale(identifier: "uz-Arab") // uz|Arab|Uzbek (Arabic)
+        print("script of uz_arab: \(uz_arab.scriptCode)")
+        let uz_cyrl = Locale(identifier: "uz-Cyrl") // uz|Cyrl|Uzbek (Cyrillic)
+        print("script of uz_cyrl: \(uz_cyrl.scriptCode)")
+        let uz_latn = Locale(identifier: "uz-Latn") // uz|Latn|Uzbek (Latin)
+        print("script of uz_latn: \(uz_latn.scriptCode)")
+        let vai = Locale(identifier: "vai") // vai||Vai ??
+        print("script of vai: \(vai.scriptCode)")
+        let vai_latn = Locale(identifier: "vai-Latn") // vai|Latn|Vai (Latin)
+        print("script of vai_latn: \(vai_latn.scriptCode)")
+        let vai_vaii = Locale(identifier: "vai-Vaii") // vai|Vaii|Vai (Vai)
+        print("script of vai_vaii: \(vai_vaii.scriptCode)")
+        let yue = Locale(identifier: "yue") // yue||Cantonese ??
+        print("script of yue: \(yue.scriptCode)")
+        let yue_hans = Locale(identifier: "yue-Hans") // yue|Hans|Cantonese (Simplified)
+        print("script of yue_hans: \(yue_hans.scriptCode)")
+        let yue_hant = Locale(identifier: "yue-Hant") // yue|Hant|Cantonese (Traditional)
+        print("script of yue_hant: \(yue_hant.scriptCode)")
+        let zh = Locale(identifier: "zh") // zh||Chinese ??
+        print("script of zh: \(zh.scriptCode)")
+        let zh_hans = Locale(identifier: "zh-Hans") // zh|Hans|Chinese (Simplified)
+        print("script of zh_hans: \(zh_hans.scriptCode)")
+        let zh_hant = Locale(identifier: "zh-Hant") // zh|Hant|Chinese (Traditional)
+        print("script of zh_hant: \(zh_hant.scriptCode)")
+    }
 }
