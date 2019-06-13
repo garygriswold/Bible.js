@@ -12,7 +12,7 @@ target = "/Users/garygriswold/ShortSands/DBL/FCBH_info/"
 session = boto3.Session(profile_name='FCBH_BibleApp')
 client = session.client('s3')
 
-input = io.open("metadata/FCBH/dbp_prod.txt", mode="r", encoding="utf-8")
+input = io.open("/Users/garygriswold/ShortSands/DBL/FCBH/dbp_prod.txt", mode="r", encoding="utf-8")
 for line in input:
 	line = line.strip()
 	if line.endswith(searchFile):

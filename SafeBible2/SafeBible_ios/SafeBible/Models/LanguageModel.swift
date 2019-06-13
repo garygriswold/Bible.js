@@ -225,6 +225,21 @@ class LanguageModel : SettingsModel {
         }
     }
     
+    /** This method exists solely to creat a file of valid Language codes, i.e. AppleLang.txt */
+    static func getAllAvailableLocales() {
+        let locales = Locale.availableIdentifiers
+        for locale in locales.sorted() {
+            let parts = locale.components(separatedBy: "_")
+            if parts.count == 1 || parts[parts.count - 1].count != 2 {
+                let iso1 = parts[0]
+                let script = (parts.count > 1) ? parts[1] : ""
+                // There is a bug in generating name?
+                let lang = Language(iso: iso1, script: script)
+                print("\(locale)|\(parts[0])|\(script)|\(lang.englishName)")
+            }
+        }
+    }
+    
     static func testScriptDefaults() {
         let az = Locale(identifier: "az") // az||Azerbaijani (Arabic)
         print("script of az: \(az.scriptCode)")
