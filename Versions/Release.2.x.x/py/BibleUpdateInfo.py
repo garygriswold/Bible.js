@@ -6,7 +6,7 @@ import io
 import sqlite3
 import json
 
-source = "/Users/garygriswold/ShortSands/DBL/FCBH_info/"
+source = os.environ['HOME'] + "/ShortSands/DBL/FCBH_info/"
 
 out = io.open("sql/bible_update.sql", mode="w", encoding="utf-8")
 

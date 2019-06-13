@@ -7,7 +7,7 @@ import io
 import os 
 
 searchFile = "info.json"
-target = "/Users/garygriswold/ShortSands/DBL/FCBH_info/"
+target = os.environ['HOME'] + "/ShortSands/DBL/FCBH_info/"
 
 session = boto3.Session(profile_name='FCBH_BibleApp')
 client = session.client('s3')

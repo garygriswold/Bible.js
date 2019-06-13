@@ -20,7 +20,7 @@ import sys
 import json
 import xml.dom.minidom
 
-sourceDir = "/Users/garygriswold/Downloads/SafeBible/"
+sourceDir = os.environ['HOME'] + "/Downloads/SafeBible/"
 
 # item 0 is Apple code for language
 # item 1 is Google code for language
