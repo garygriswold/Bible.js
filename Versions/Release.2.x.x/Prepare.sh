@@ -110,11 +110,39 @@ cp Versions.db VersionsFull.db
 sqlite Versions.db <<END_SQL
 select count(*) from Language;
 select count(*) from Bible;
-select bibleId, iso3, iso1, script from Bible where iso1 || script not in (select iso1 || script from Language) order by iso1;
-delete from Bible where iso1 || script not in (select iso1 || script from Language);
+
+-- See those Bibles that will be kept, because we have a Language record for them
+select bibleId, iso3, iso1, script from Bible where iso1 || script in (select iso1 || script from Language)
+union
+select bibleId, iso3, iso1, script from Bible where iso1 in (select iso1 from Language) 
+order by iso1;
+
+-- See those Bibles that will be deleted, because we do not have a Language record for them
+select bibleId, iso3, iso1, script from Bible where iso1 not in (select iso1 from Language)
+and iso1 || script not in (select iso1 || script from Language)
+order by iso1;
+
+-- Delete them
+delete from Bible where iso1 not in (select iso1 from Language)
+and iso1 || script not in (select iso1 || script from Language);
+
 select count(*) from Bible;
-select iso1, script, name from language where iso1 || script not in (select iso1 || script from Bible) order by iso1;
-delete from Language where iso1 || script not in (select iso1 || script from Bible);
+select count(*) from Language;
+
+-- See those Languages that will be kept, because we have a Bible for it.
+select * from Language where iso1 || script in (select iso1 || script from Bible)
+union
+select * from Language where iso1 in (select iso1 from Bible);
+
+-- See those Languages that will be deleted,
+select * from Language where iso1 not in (select iso1 from Bible)
+and iso1 || script not in (select iso1 || script from Bible)
+order by iso1;
+
+-- Delete them
+delete from Language where iso1 not in (select iso1 from Bible)
+and iso1 || script not in (select iso1 || script from Bible);
+
 select count(*) from Language;
 vacuum;
 END_SQL
