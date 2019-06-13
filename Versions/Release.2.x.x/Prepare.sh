@@ -21,8 +21,6 @@ sqlite Versions.db < sql/language.sql
 # Create Bible Table and Load manually maintained ShortSands Bibles
 sqlite Versions.db < sql/BibleTable.sql
 
-# might need to drop scope from table, it is not used.
-
 # Insert FCBH Bibles into table
 python py/BibleTable.py
 sqlite Versions.db < sql/bible.sql
@@ -77,14 +75,10 @@ python py/BibleValidate.py
 
 # Remove from Bible any versions that do not have text, or audio
 sqlite Versions.db <<END_SQL2
-delete from Bible where bibleId='KMRKKN';
-delete from Bible where bibleId='KMRMBN';
-delete from Bible where bibleId='PESTPV';
-delete from Bible where bibleId='SPAR60';
-delete from Bible where bibleId='TZESBM';
+delete from Bible where bibleId='ASABST';
+delete from Bible where bibleId='QUJPMC';
+delete from Bible where bibleId='TURTBS';
 delete from Bible where bibleId='YADTBL';
-update Bible set ntDamId=null where bibleId='KMRK05';
-update Bible set ntDamId=null where bibleId='TZESBM';
 END_SQL2
 
 # Repeat Validate Bible Table keys against dbp-prod bucket

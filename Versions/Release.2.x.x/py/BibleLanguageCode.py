@@ -27,8 +27,9 @@ macroMap = {}
 input1 = io.open("metadata/iso-639-3/iso-639-3-macrolanguages.txt", mode="r", encoding="utf-8")
 for line in input1:
     row = line.split("\t")
-    macroMap[row[1]] = row[0]
-    macroMap[row[0]] = row[0]
+    if not row[1] in ['yue']: # put language codes we want to keep here
+    	macroMap[row[1]] = row[0]
+    	macroMap[row[0]] = row[0]
 input1.close()
 
 iso1Map = {}

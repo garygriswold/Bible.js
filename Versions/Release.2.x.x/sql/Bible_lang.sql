@@ -403,7 +403,7 @@ UPDATE Bible SET iso1='yle' WHERE bibleId='YLEWBT';
 UPDATE Bible SET iso1='yo' WHERE bibleId='YORYOR';
 UPDATE Bible SET iso1='yre' WHERE bibleId='YRESCB';
 UPDATE Bible SET iso1='yua' WHERE bibleId='YUASBM';
-UPDATE Bible SET iso1='zh' WHERE bibleId='YUEUNV';
+UPDATE Bible SET iso1='yue' WHERE bibleId='YUEUNV';
 UPDATE Bible SET iso1='zav' WHERE bibleId='ZAVTBL';
 UPDATE Bible SET iso1='zca' WHERE bibleId='ZCAWBT';
 UPDATE Bible SET iso1='zim' WHERE bibleId='ZIMBSC';
