@@ -79,6 +79,8 @@ delete from Bible where bibleId='ASABST';
 delete from Bible where bibleId='QUJPMC';
 delete from Bible where bibleId='TURTBS';
 delete from Bible where bibleId='YADTBL';
+
+update Bible set textId='text/CMNUNV/CMNUNV' where bibleId='CMNUNV'; -- hack 
 END_SQL2
 
 # Repeat Validate Bible Table keys against dbp-prod bucket
@@ -153,6 +155,9 @@ END_SQL4
 
 # Run a final validation to make sure that problems are removed
 python py/BibleValidate.py
+
+# Verify the permissions request file
+python py/FinishPermissionRequest.py
 
 # Validate the lookup of info.json files and the last chapter
 python py/BibleValidate2.py

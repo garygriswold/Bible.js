@@ -5,9 +5,24 @@ import io
 import os
 import sqlite3
 
-BUCKET = "dbp-prod"
-PREFIX = "arn:aws:s3:::"
+BUCKET = u"dbp-prod"
+PREFIX = u"arn:aws:s3:::"
 output = io.open("PermissionsRequest.txt", mode="w", encoding="utf-8")
+output.write(PREFIX + BUCKET + "/*/info.json\n")
+
+def getDamIdHack(audioId):
+	damId = audioId.split("/")[2]
+	damIdHacks = {"GRKAVSO1DA": "O1GRKAVS",
+	"ENGNABN2DA": "N2NABXXX",
+	"FRNTLSO2DA": "O2FRATLS",
+	"FRNTLSN2DA": "N2FRATLS",
+	"KDEDPIN1DA": "KDEPBTN1DA",
+	"PRSGNNN2DA": "N2PRSGNN"}
+	if damId in damIdHacks:
+		return damIdHacks[damId]
+	else:
+		return damId
+
 
 textSet = set()
 audioSet = set()
@@ -15,13 +30,15 @@ input = io.open(os.environ['HOME'] + "/ShortSands/DBL/FCBH/dbp_prod.txt", mode="
 for line in input:
 
 	parts = line.split("/")
-	if len(parts) > 2:
-		key = parts[0] + "/" + parts[1] + "/" + parts[2] #+ "/"
+	if len(parts) > 3:
 
-		if key.startswith("text"):
+		if line.startswith("text"):
+			pieces = parts[3].split("_")
+			key = parts[0] + "/" + parts[1] + "/" + parts[2] + "/" + pieces[0] + "_"
 			textSet.add(key)
 
-		elif key.startswith("audio"):
+		elif line.startswith("audio"):
+			key = parts[0] + "/" + parts[1] + "/" + parts[2] + "/" + parts[3][0:1]
 			audioSet.add(key)
 
 input.close()
@@ -41,8 +58,13 @@ for row in rows:
 	if textBucket == BUCKET:
 		textId = row[2]
 		if textId != None:
-			if textId in textSet:
-				output.write(PREFIX + BUCKET + "/" + textId + "/*\n")
+			parts = textId.split("/")
+			lastPart = parts[len(parts) - 1]
+			if lastPart == 'KORKRV': # KKNKRV hack
+				lastPart = 'KKNKRV'
+			search = textId + "/" + lastPart + "_"
+			if search in textSet:
+				output.write(PREFIX + BUCKET + "/" + search + "*.html\n")
 			else:
 				print "missing text", bibleId, textId
 
@@ -52,16 +74,22 @@ for row in rows:
 	if audioBucket == BUCKET:
 		otDamId = row[4]
 		if otDamId != None:
-			if otDamId in audioSet:
-				output.write(PREFIX + BUCKET + "/" + otDamId + "/*\n")
+			search = otDamId + "/A"
+			if search in audioSet:
+				#damId = otDamId.split("/")[2]
+				damId = getDamIdHack(otDamId)
+				output.write(PREFIX + BUCKET + "/" + search + "*" + damId + ".mp3\n")
 			else:
 				print "missing ot audio", bibleId, otDamId
 
 
 		ntDamId = row[5]
 		if ntDamId != None:
-			if ntDamId in audioSet:
-				output.write(PREFIX + BUCKET + "/" + ntDamId + "/*\n")
+			search = ntDamId + "/B"
+			if search in audioSet:
+				#damId = ntDamId.split("/")[2]
+				damId = getDamIdHack(ntDamId)
+				output.write(PREFIX + BUCKET + "/" + search + "*" + damId + ".mp3\n")
 			else:
 				print "missing nt audio", bibleId, ntDamId
 
