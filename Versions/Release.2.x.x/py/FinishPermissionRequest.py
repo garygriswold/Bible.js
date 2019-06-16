@@ -81,28 +81,29 @@ def getDamIdHack(damId):
 input = io.open("PermissionsRequest.txt", mode="r", encoding="utf-8")
 
 for line in input:
-	lineSet = set()
-	line = line.strip()
-	permission = line[22:]
-	lineSet = findAll(permission)
-	print len(lineSet), "\t", permission
-	if permission.startswith("text/"):
-		for entry in lineSet:
-			key = entry.split("/")[3]
-			errMsg = checkTextKey(key)
-			if not errMsg == None:
-				print errMsg, entry
-				sys.exit()
+	if line[1:8] == "arn:aws":
+		lineSet = set()
+		line = line.strip("\n\",")
+		permission = line[22:]
+		lineSet = findAll(permission)
+		print len(lineSet), "\t", permission
+		if permission.startswith("text/"):
+			for entry in lineSet:
+				key = entry.split("/")[3]
+				errMsg = checkTextKey(key)
+				if not errMsg == None:
+					print errMsg, entry
+					sys.exit()
 
-	if permission.startswith("audio/"):
-		damId = permission.split("/")[2].strip("_")
-		damId = getDamIdHack(damId)
-		for entry in lineSet:
-			key = entry.split("/")[3]
-			errMsg = checkAudioKey(key, damId)
-			if not errMsg == None:
-				print errMsg, entry
-				sys.exit()
+		if permission.startswith("audio/"):
+			damId = permission.split("/")[2].strip("_")
+			damId = getDamIdHack(damId)
+			for entry in lineSet:
+				key = entry.split("/")[3]
+				errMsg = checkAudioKey(key, damId)
+				if not errMsg == None:
+					print errMsg, entry
+					sys.exit()
 
 
  

@@ -6,9 +6,11 @@ import os
 import sqlite3
 
 BUCKET = u"dbp-prod"
-PREFIX = u"arn:aws:s3:::"
+PREFIX1 = u"\n\"arn:aws:s3:::"
+PREFIX = u",\n\"arn:aws:s3:::"
 output = io.open("PermissionsRequest.txt", mode="w", encoding="utf-8")
-output.write(PREFIX + BUCKET + "/*/info.json\n")
+output.write(u"\"Resource\": [")
+output.write(PREFIX1 + BUCKET + "/*/info.json\"")
 
 def getDamIdHack(audioId):
 	damId = audioId.split("/")[2]
@@ -64,7 +66,7 @@ for row in rows:
 				lastPart = 'KKNKRV'
 			search = textId + "/" + lastPart + "_"
 			if search in textSet:
-				output.write(PREFIX + BUCKET + "/" + search + "*.html\n")
+				output.write(PREFIX + BUCKET + "/" + search + "*.html\"")
 			else:
 				print "missing text", bibleId, textId
 
@@ -78,7 +80,7 @@ for row in rows:
 			if search in audioSet:
 				#damId = otDamId.split("/")[2]
 				damId = getDamIdHack(otDamId)
-				output.write(PREFIX + BUCKET + "/" + search + "*" + damId + ".mp3\n")
+				output.write(PREFIX + BUCKET + "/" + search + "*" + damId + ".mp3\"")
 			else:
 				print "missing ot audio", bibleId, otDamId
 
@@ -89,8 +91,10 @@ for row in rows:
 			if search in audioSet:
 				#damId = ntDamId.split("/")[2]
 				damId = getDamIdHack(ntDamId)
-				output.write(PREFIX + BUCKET + "/" + search + "*" + damId + ".mp3\n")
+				output.write(PREFIX + BUCKET + "/" + search + "*" + damId + ".mp3\"")
 			else:
 				print "missing nt audio", bibleId, ntDamId
 
 db.close()
+output.write(u"\n],")
+output.close()
