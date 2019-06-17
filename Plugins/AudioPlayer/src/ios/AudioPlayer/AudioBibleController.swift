@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AWS
 
 public class AudioBibleController {
     
@@ -96,6 +97,16 @@ public class AudioBibleController {
                 self.audioBible!.beginReadFile(reference: ref)
             }
         }
+    }
+    
+    public func hasCache(book: String, chapterNum: Int) -> Bool {
+        if let reader = self.audioTOCBible {
+            if let meta = reader.findBook(bookId: book) {
+                let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)
+                return AwsS3Cache.shared.hasFile(s3Bucket: ref.getS3Bucket(), s3Key: ref.getS3Key())
+            }
+        }
+        return false
     }
     
     public func dismiss() {

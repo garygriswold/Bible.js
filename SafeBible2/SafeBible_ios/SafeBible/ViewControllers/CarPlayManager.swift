@@ -121,12 +121,13 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
             case 0:
                 let item = HistoryModel.shared.getHistory(row: indexPath[1])
                 return loadCarPlayItem(ident: item.nodeId(), title: item.description(),
-                                       subtitle: item.bible.name)
+                                       subtitle: item.bible.name, cache: true)
             case 1:
-                let item = Reference(bibleId: self.bibleId,
-                                     bookId: self.favoriteList[indexPath[1]], chapter: 1)
+                let bookId = self.favoriteList[indexPath[1]]
+                let item = Reference(bibleId: self.bibleId, bookId: bookId, chapter: 1)
+                let hasCache = AudioBibleController.shared.hasCache(book: bookId, chapterNum: 1)
                 return loadCarPlayItem(ident: item.nodeId(), title: item.description(),
-                                       subtitle: item.bible.name)
+                                       subtitle: item.bible.name, cache: hasCache)
             default:
                 return nil
             }
@@ -171,12 +172,12 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         return item
     }
     
-    private func loadCarPlayItem(ident: String, title: String, subtitle: String) -> MPContentItem {
+    private func loadCarPlayItem(ident: String, title: String, subtitle: String, cache: Bool) -> MPContentItem {
         let item = MPContentItem(identifier: ident)
         item.isContainer = false
         item.isExplicitContent = false
         item.isPlayable = true
-        item.isStreamingContent = true
+        item.isStreamingContent = !cache
         item.playbackProgress = 0.0
         item.title = title
         item.subtitle = subtitle

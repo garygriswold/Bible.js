@@ -91,6 +91,11 @@ public class AwsS3Cache {
         }
     }
     
+    public func hasFile(s3Bucket: String, s3Key: String) -> Bool {
+        let path: URL = self.getPath(s3Bucket: s3Bucket, s3Key: s3Key)
+        return FileManager.default.isReadableFile(atPath: path.path)
+    }
+    
     private func readCache(path: URL, expireInterval: TimeInterval) -> Data? {
         if (expireInterval >= 0) {
             print("Path to read \(path)")
