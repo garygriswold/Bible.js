@@ -9,6 +9,7 @@
 import AVFoundation
 import AWS
 import Utility
+import MediaPlayer
 
 class AudioBible {
     
@@ -112,6 +113,7 @@ class AudioBible {
             if let reference = self.currReference {
                 print("\n*********** PLAY *************")
                 play.play()
+                MPNowPlayingInfoCenter.default().playbackState = .playing
                 self.audioAnalytics?.playStarted(item: reference.toString(),
                                                  position: play.currentTime())
             }
@@ -123,6 +125,7 @@ class AudioBible {
             if let reference = self.currReference {
                 print("\n*********** PAUSE *************")
                 play.pause()
+                MPNowPlayingInfoCenter.default().playbackState = .paused
                 self.audioAnalytics?.playEnded(item: reference.toString(), position: play.currentTime())
                 self.updateMediaPlayStateTime(reference: reference)
             }
@@ -160,6 +163,7 @@ class AudioBible {
                 }
             } else {
                 self.stop()
+                MPNowPlayingInfoCenter.default().playbackState = .stopped
                 self.mediaPlayState.delete() // Must do after stop, because stop updates
             }
         }
