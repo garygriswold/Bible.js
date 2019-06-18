@@ -63,7 +63,8 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         switch indexPath.count {
         case 0:
             let curr = HistoryModel.shared.current()
-            AudioBibleController.shared.carPlayPlayer(book: curr.bookId, chapterNum: curr.chapter)
+            AudioBibleController.shared.carPlayPlayer(book: curr.bookId, chapterNum: curr.chapter,
+                                                      start: false)
             return CarPlayManager.tabs.count
         case 1:
             switch indexPath[0] {
@@ -146,7 +147,8 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
             let parts = item.identifier.components(separatedBy: ":")
             let bookId = parts[0]
             let chapter: Int = (parts.count > 0) ? Int(parts[1]) ?? 1 : 1
-            AudioBibleController.shared.carPlayPlayer(book: bookId, chapterNum: chapter)
+            AudioBibleController.shared.carPlayPlayer(book: bookId, chapterNum: chapter,
+                                                      start: true)
         }
         completionHandler(nil)
     }
@@ -184,4 +186,3 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         return item
     }
 }
-

@@ -239,7 +239,7 @@ class LanguageModel : SettingsModel {
             }
         }
     }
-    
+/*
     static func testScriptDefaults() {
         let az = Locale(identifier: "az") // az||Azerbaijani (Arabic)
         print("script of az: \(az.scriptCode)")
@@ -302,4 +302,5 @@ class LanguageModel : SettingsModel {
         let zh_hant = Locale(identifier: "zh-Hant") // zh|Hant|Chinese (Traditional)
         print("script of zh_hant: \(zh_hant.scriptCode)")
     }
+ */
 }

@@ -87,7 +87,7 @@ public class AudioBibleController {
         } else { complete(nil) }
     }
     
-    public func carPlayPlayer(book: String, chapterNum: Int) {
+    public func carPlayPlayer(book: String, chapterNum: Int, start: Bool) {
         if self.audioBible == nil {
             self.audioBible = AudioBible.shared(controller: self)
         }
@@ -95,6 +95,9 @@ public class AudioBibleController {
             if let meta = reader.findBook(bookId: book) {
                 let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)
                 self.audioBible!.beginReadFile(reference: ref)
+                if start {
+                    self.audioBible!.play()
+                }
             }
         }
     }
