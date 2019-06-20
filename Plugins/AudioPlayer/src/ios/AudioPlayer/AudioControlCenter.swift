@@ -131,7 +131,6 @@ class AudioControlCenter {
                     self.info[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
    
                     MPNowPlayingInfoCenter.default().nowPlayingInfo = self.info
-                    MPNowPlayingInfoCenter.default().playbackState = .paused // .unknown | .playing | .paused | .stopped | .interrupted
                     
                     self.getIcon()
                     

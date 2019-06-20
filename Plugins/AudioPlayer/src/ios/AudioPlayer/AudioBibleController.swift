@@ -81,7 +81,7 @@ public class AudioBibleController {
             if let reader = self.audioTOCBible {
                 if let meta = reader.findBook(bookId: book) {
                     let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)
-                    self.audioBible!.beginReadFile(reference: ref)
+                    self.audioBible!.beginReadFile(reference: ref, start: false)
                 } else { complete(nil) }
             } else { complete(nil) }
         } else { complete(nil) }
@@ -94,10 +94,7 @@ public class AudioBibleController {
         if let reader = self.audioTOCBible {
             if let meta = reader.findBook(bookId: book) {
                 let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)
-                self.audioBible!.beginReadFile(reference: ref)
-                if start {
-                    self.audioBible!.play()
-                }
+                self.audioBible!.beginReadFile(reference: ref, start: start)
             }
         }
     }

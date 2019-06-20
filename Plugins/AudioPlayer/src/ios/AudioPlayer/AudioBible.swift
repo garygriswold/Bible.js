@@ -55,7 +55,7 @@ class AudioBible {
         return (self.player != nil) ? self.player!.rate > 0.0 : false
     }
     
-    func beginReadFile(reference: AudioReference) {
+    func beginReadFile(reference: AudioReference, start: Bool) {
         print("BibleReader.BEGIN Read File")
         self.currReference = reference
         self.audioAnalytics = AudioFauxAnalytics(mediaSource: reference.tocAudioBook.testament.bible.mediaSource,
@@ -71,12 +71,12 @@ class AudioBible {
                    expireInterval: Double.infinity,
                    getComplete: { [unowned self] url in
                     if let audioURL = url {
-                        self.initAudio(url: audioURL, reference: reference)
+                        self.initAudio(url: audioURL, reference: reference, start: start)
                     }
         })
     }
     
-    private func initAudio(url: URL, reference: AudioReference) {
+    private func initAudio(url: URL, reference: AudioReference, start: Bool) {
         let asset = AVAsset(url: url)
         let playerItem = AVPlayerItem(asset: asset)
         print("Player Item Status \(playerItem.status)")
@@ -89,6 +89,9 @@ class AudioBible {
         self.player?.actionAtItemEnd = AVPlayer.ActionAtItemEnd.none
         
         self.controller.audioReadyToPlay(enabled: true)
+        if start {
+            self.play()
+        }
         self.controlCenter.nowPlaying(player: self)
         self.preFetchNextChapter(reference: reference)
     }
