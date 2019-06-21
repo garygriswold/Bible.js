@@ -64,7 +64,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         case 0:
             let curr = HistoryModel.shared.current()
             AudioBibleController.shared.carPlayPlayer(book: curr.bookId, chapterNum: curr.chapter,
-                                                      start: false)
+                                                      start: false, complete: {_ in })
             return CarPlayManager.tabs.count
         case 1:
             switch indexPath[0] {
@@ -148,9 +148,14 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
             let bookId = parts[0]
             let chapter: Int = (parts.count > 0) ? Int(parts[1]) ?? 1 : 1
             AudioBibleController.shared.carPlayPlayer(book: bookId, chapterNum: chapter,
-                                                      start: true)
+                                                      start: true, complete: completionHandler)
         }
-        completionHandler(nil)
+        //DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(10000)) {
+        //    print("BOOYAH!")
+        //    // When this is called, the Now Playing screen will present,
+        //    // Until it presents, the UI presents an Activity Indicator
+        //    completionHandler(nil)
+        //}
     }
     
     func playableContentManager(_ contentManager: MPPlayableContentManager,

@@ -81,20 +81,25 @@ public class AudioBibleController {
             if let reader = self.audioTOCBible {
                 if let meta = reader.findBook(bookId: book) {
                     let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)
-                    self.audioBible!.beginReadFile(reference: ref, start: false)
+                    self.audioBible!.beginReadFile(reference: ref, start: false,
+                                                   complete: {_ in })
+                    // Note: The 'complete' in beginReadFile is when audio load is complete
+                    // While the complete below was intended to be when play has finished,
+                    // but it appears messed up and is not used by controlling program
                 } else { complete(nil) }
             } else { complete(nil) }
         } else { complete(nil) }
     }
     
-    public func carPlayPlayer(book: String, chapterNum: Int, start: Bool) {
+    public func carPlayPlayer(book: String, chapterNum: Int, start: Bool,
+                              complete: @escaping (Error?) -> Void) {
         if self.audioBible == nil {
             self.audioBible = AudioBible.shared(controller: self)
         }
         if let reader = self.audioTOCBible {
             if let meta = reader.findBook(bookId: book) {
                 let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)
-                self.audioBible!.beginReadFile(reference: ref, start: start)
+                self.audioBible!.beginReadFile(reference: ref, start: start, complete: complete)
             }
         }
     }

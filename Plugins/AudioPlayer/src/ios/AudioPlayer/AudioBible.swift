@@ -55,7 +55,7 @@ class AudioBible {
         return (self.player != nil) ? self.player!.rate > 0.0 : false
     }
     
-    func beginReadFile(reference: AudioReference, start: Bool) {
+    func beginReadFile(reference: AudioReference, start: Bool, complete: @escaping (Error?) -> Void) {
         print("BibleReader.BEGIN Read File")
         self.currReference = reference
         self.audioAnalytics = AudioFauxAnalytics(mediaSource: reference.tocAudioBook.testament.bible.mediaSource,
@@ -72,6 +72,7 @@ class AudioBible {
                    getComplete: { [unowned self] url in
                     if let audioURL = url {
                         self.initAudio(url: audioURL, reference: reference, start: start)
+                        complete(nil)
                     }
         })
     }
