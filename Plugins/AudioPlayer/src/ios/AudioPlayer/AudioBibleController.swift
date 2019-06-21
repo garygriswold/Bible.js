@@ -84,8 +84,7 @@ public class AudioBibleController {
                     self.audioBible!.beginReadFile(reference: ref, start: false,
                                                    complete: {_ in })
                     // Note: The 'complete' in beginReadFile is when audio load is complete
-                    // While the complete below was intended to be when play has finished,
-                    // but it appears messed up and is not used by controlling program
+                    // While the complete in present is when the audio is finished
                 } else { complete(nil) }
             } else { complete(nil) }
         } else { complete(nil) }
