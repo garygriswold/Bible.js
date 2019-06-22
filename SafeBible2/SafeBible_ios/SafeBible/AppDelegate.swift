@@ -20,11 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        // Setup CarPlay
-        CarPlayManager.setUp()
-        
+        // This must go first, because it contains func checkIfAppUpdate()
         let readerNavigator = ReaderViewNavigator()
         let navController = readerNavigator.present()
+        
+        CarPlayManager.setUp()
         
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window!.rootViewController = navController
