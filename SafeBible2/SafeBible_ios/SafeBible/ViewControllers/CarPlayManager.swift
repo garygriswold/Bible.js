@@ -144,6 +144,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
             let chapter: Int = (parts.count > 0) ? Int(parts[1]) ?? 1 : 1
             AudioBibleController.shared.carPlayPlayer(book: bookId, chapterNum: chapter,
                                                       start: true, complete: completionHandler)
+            HistoryModel.shared.changeReference(bookId: bookId, chapter: chapter)
         }
     }
     
