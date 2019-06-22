@@ -44,11 +44,6 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         })
         controlCenter.pauseCommand.isEnabled = false
         controlCenter.stopCommand.isEnabled = false
-        //controlCenter.stopCommand.addTarget(handler: { event in
-        //    return .success
-        //})
-        //controlCenter.nextTrackCommand.isEnabled = false
-        //controlCenter.previousTrackCommand.isEnabled = false
     }
     
     deinit {
@@ -59,7 +54,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     // DataSource
     //
     func numberOfChildItems(at indexPath: IndexPath) -> Int {
-        print("CarPlay number Child Items called \(indexPath)  count: \(indexPath.count)")
+        print("CarPlay: number Child Items called \(indexPath)  count: \(indexPath.count)")
         switch indexPath.count {
         case 0:
             let curr = HistoryModel.shared.current()
@@ -98,16 +93,16 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     
     func contentItem(forIdentifier identifier: String,
                      completionHandler: @escaping (MPContentItem?, Error?) -> Void) {
-        print("Retrieve content item \(identifier)")
+        print("CarPlay: Retrieve content item \(identifier)")
     }
     
     func childItemsDisplayPlaybackProgress(at indexPath: IndexPath) -> Bool {
-        print("Ask if child items Display Progress")
+        print("CarPlay: Ask if child items Display Progress")
         return true
     }
     
     func contentItem(at indexPath: IndexPath) -> MPContentItem? {
-        print("CarPlay content item called \(indexPath)")
+        print("CarPlay: content item called \(indexPath)")
         switch indexPath.count {
         case 1:
             let item = CarPlayManager.tabs[indexPath[0]]
@@ -137,7 +132,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     func playableContentManager(_ contentManager: MPPlayableContentManager,
                                 initiatePlaybackOfContentItemAt indexPath: IndexPath,
                                 completionHandler: @escaping (Error?) -> Void) {
-        print("initiate CarPlay Playback of Content Item called \(indexPath)")
+        print("CarPlay: initiate Playback of Content Item called \(indexPath)")
         if let item = self.contentItem(at: indexPath) {
             let parts = item.identifier.components(separatedBy: ":")
             let bookId = parts[0]
@@ -150,7 +145,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     
     func playableContentManager(_ contentManager: MPPlayableContentManager,
                                 didUpdate context: MPPlayableContentManagerContext) {
-        print("update CarPlay ContentManagerContext called")
+        print("CarPlay: update ContentManagerContext called")
         self.historyLimit = min(context.enforcedContentItemsCount, CarPlayManager.HISTORY_LIMIT)
     }
     
