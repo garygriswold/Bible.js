@@ -123,11 +123,6 @@ class AudioControlCenter {
                     self.info[MPNowPlayingInfoPropertyExternalUserProfileIdentifier] =
                         "Hear Holy Bible XXX" // necessary?
                     self.info[MPNowPlayingInfoPropertyIsLiveStream] = 0.0 // or 0.0 for false
-                    // The following crashes the App
-                    //self.info[MPNowPlayingInfoPropertyMediaType] = MPNowPlayingInfoMediaType.audio
-                    let progress = item.currentTime().seconds / item.asset.duration.seconds
-                    self.info[MPNowPlayingInfoPropertyPlaybackProgress] = progress
-                    self.info[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
    
                     MPNowPlayingInfoCenter.default().nowPlayingInfo = self.info
                     

@@ -26,7 +26,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         MPPlayableContentManager.shared().delegate = CarPlayManager.shared
     }
     
-    private var historyLimit = 0
+    private var historyLimit = CarPlayManager.HISTORY_LIMIT
     private var bibleId: String = "" // this is a problem
     private var favoriteList = [String]()
     
@@ -101,11 +101,6 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         print("Retrieve content item \(identifier)")
     }
     
-//    func beginLoadingChildItems(at indexPath: IndexPath,
-//                                completionHandler: @escaping (Error?) -> Void) {
-//        print("Starts load of item at \(indexPath)")
-//    }
-    
     func childItemsDisplayPlaybackProgress(at indexPath: IndexPath) -> Bool {
         print("Ask if child items Display Progress")
         return true
@@ -150,12 +145,6 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
             AudioBibleController.shared.carPlayPlayer(book: bookId, chapterNum: chapter,
                                                       start: true, complete: completionHandler)
         }
-        //DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(10000)) {
-        //    print("BOOYAH!")
-        //    // When this is called, the Now Playing screen will present,
-        //    // Until it presents, the UI presents an Activity Indicator
-        //    completionHandler(nil)
-        //}
     }
     
     func playableContentManager(_ contentManager: MPPlayableContentManager,
