@@ -14,11 +14,9 @@ class AudioControlCenter {
     static let shared = AudioControlCenter()
     
     private var currentBookChapter: String
-    private var info: [String: Any]
     
     private init() {
         self.currentBookChapter = ""
-        self.info = [String: Any]()
     }
     
     deinit {
@@ -72,9 +70,7 @@ class AudioControlCenter {
         controlCenter.skipBackwardCommand.preferredIntervals = [10.0]
         controlCenter.skipBackwardCommand.addTarget(handler: { event in
             if player.getPlayer() != nil {
-                let position = player.skip(seconds: -10)
-                self.info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
-                MPNowPlayingInfoCenter.default().nowPlayingInfo = self.info
+                player.skip(seconds: -10)
                 // .playbackState is unchanged
                 return MPRemoteCommandHandlerStatus.success
             }
@@ -85,9 +81,7 @@ class AudioControlCenter {
         controlCenter.skipForwardCommand.preferredIntervals = [10.0]
         controlCenter.skipForwardCommand.addTarget(handler: { event in
             if player.getPlayer() != nil {
-                let position = player.skip(seconds: 10)
-                self.info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
-                MPNowPlayingInfoCenter.default().nowPlayingInfo = self.info
+                player.skip(seconds: 10)
                 // .playbackState is unchanged
                 return MPRemoteCommandHandlerStatus.success
             }
@@ -114,27 +108,29 @@ class AudioControlCenter {
         if let reference = player.getCurrentReference() {
             if let play = player.getPlayer() {
                 if let item = play.currentItem {
+                    
+                    var info = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [String: Any]()
                 //https://developer.apple.com/documentation/mediaplayer/mpmediaitem/general_media_item_property_keys
                     // The above crashes App
                     //self.info[MPMediaItemPropertyMediaType] = MPMediaType.audioBook
-                    self.info[MPMediaItemPropertyPodcastTitle] = "Podcast Title" // necessary?
+                    info[MPMediaItemPropertyPodcastTitle] = "Podcast Title" // necessary?
                     self.currentBookChapter = reference.localName
                     print("Title \(self.currentBookChapter)")
-                    self.info[MPMediaItemPropertyTitle] = self.currentBookChapter
+                    info[MPMediaItemPropertyTitle] = self.currentBookChapter
                     
                     //https://developer.apple.com/documentation/mediaplayer/mpnowplayinginfocenter
-                    self.info[MPMediaItemPropertyPlaybackDuration] = item.asset.duration.seconds
-                    self.info[MPNowPlayingInfoCollectionIdentifier] = reference.damId
-                    self.info[MPNowPlayingInfoPropertyChapterNumber] = reference.chapterNum - 1
+                    info[MPMediaItemPropertyPlaybackDuration] = item.asset.duration.seconds
+                    info[MPNowPlayingInfoCollectionIdentifier] = reference.damId
+                    info[MPNowPlayingInfoPropertyChapterNumber] = reference.chapterNum - 1
                     //self.info[MPNowPlayingInfoPropertyCurrentLanguageOptions] postpone
-                    self.info[MPNowPlayingInfoPropertyDefaultPlaybackRate] = 1.0
-                    self.info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = item.currentTime().seconds
-                    self.info[MPNowPlayingInfoPropertyExternalContentIdentifier] = reference.getS3Key()
-                    self.info[MPNowPlayingInfoPropertyExternalUserProfileIdentifier] =
+                    info[MPNowPlayingInfoPropertyDefaultPlaybackRate] = 1.0
+                    info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = item.currentTime().seconds
+                    info[MPNowPlayingInfoPropertyExternalContentIdentifier] = reference.getS3Key()
+                    info[MPNowPlayingInfoPropertyExternalUserProfileIdentifier] =
                         "Hear Holy Bible XXX" // necessary?
-                    self.info[MPNowPlayingInfoPropertyIsLiveStream] = 0.0 // or 0.0 for false
+                    info[MPNowPlayingInfoPropertyIsLiveStream] = 0.0 // or 0.0 for false
    
-                    MPNowPlayingInfoCenter.default().nowPlayingInfo = self.info
+                    MPNowPlayingInfoCenter.default().nowPlayingInfo = info
                     
                     self.getIcon()
                     
@@ -150,7 +146,6 @@ class AudioControlCenter {
             print("Get image in main thread")
             if let iconName = UIApplication.shared.alternateIconName {
                 if let image = UIImage(named: "www/icons/\(iconName)-60.png") {
-                    //self.info[MPMediaItemPropertyArtwork] =
                     MPNowPlayingInfoCenter.default().nowPlayingInfo![MPMediaItemPropertyArtwork] =
                         MPMediaItemArtwork(boundsSize: image.size) { size in
                             return image
@@ -163,16 +158,16 @@ class AudioControlCenter {
     /* This is called by AudioBibleView */
     func updateNowPlaying(reference: AudioReference, verse: Int, position: Double) {
         let title = self.currentBookChapter + ":" + String(verse)
-        let duration = MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration]
-        let playRate = MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate]
-
-        self.info[MPMediaItemPropertyTitle] = title
-        self.info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
-        self.info[MPMediaItemPropertyPlaybackDuration] = duration
-        self.info[MPNowPlayingInfoPropertyPlaybackRate] = playRate
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = self.info
+        var info = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [String: Any]()
+        info[MPMediaItemPropertyTitle] = title
+        info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = info
         
         self.updateTextPosition(nodeId: reference.getNodeId(verse: verse))
+    }
+    
+    func updateNowPlaying(position: Double) {
+        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
     }
     
     private func updateTextPosition(nodeId: String) {
