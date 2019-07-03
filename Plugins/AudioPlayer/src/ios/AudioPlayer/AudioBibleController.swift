@@ -47,10 +47,11 @@ public class AudioBibleController {
     /**
     * This function must be called before present, because it loads the metadata from the damId
     */
-    public func findAudioVersion(bibleId: String, iso3: String,
+    public func findAudioVersion(bibleId: String, bibleName: String, iso3: String,
                                  audioBucket: String?, otDamId: String?, ntDamId: String?) -> String {
-        self.audioTOCBible = AudioTOCBible(source: "FCBH", bibleId: bibleId, iso3: iso3,
-                                            audioBucket: audioBucket, otDamId: otDamId, ntDamId: ntDamId)
+        self.audioTOCBible = AudioTOCBible(bibleId: bibleId, bibleName: bibleName, iso3: iso3,
+                                           audioBucket: audioBucket, otDamId: otDamId,
+                                           ntDamId: ntDamId)
         return self.audioTOCBible!.read()
     }
     

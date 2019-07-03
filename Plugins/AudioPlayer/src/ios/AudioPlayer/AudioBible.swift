@@ -58,7 +58,7 @@ class AudioBible {
     func beginReadFile(reference: AudioReference, start: Bool, complete: @escaping (Error?) -> Void) {
         print("BibleReader.BEGIN Read File")
         self.currReference = reference
-        self.audioAnalytics = AudioFauxAnalytics(mediaSource: reference.tocAudioBook.testament.bible.mediaSource,
+        self.audioAnalytics = AudioFauxAnalytics(mediaSource: reference.getS3Bucket(),
                                              mediaId: reference.damId,
                                              languageId: reference.iso3,
                                              textVersion: reference.bibleId,

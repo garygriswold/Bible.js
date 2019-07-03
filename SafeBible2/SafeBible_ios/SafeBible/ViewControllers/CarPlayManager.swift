@@ -78,10 +78,12 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         let ref = HistoryModel.shared.current()
         self.bibleId = ref.bibleId
         let controller = AudioBibleController.shared
-        let bookIdList = controller.findAudioVersion(bibleId: ref.bibleId, iso3: ref.bible.iso3,
-                                                          audioBucket: ref.bible.audioBucket,
-                                                          otDamId: ref.bible.otDamId,
-                                                          ntDamId: ref.bible.ntDamId)
+        let bookIdList = controller.findAudioVersion(bibleId: ref.bibleId,
+                                                     bibleName: ref.bibleName,
+                                                     iso3: ref.bible.iso3,
+                                                     audioBucket: ref.bible.audioBucket,
+                                                     otDamId: ref.bible.otDamId,
+                                                     ntDamId: ref.bible.ntDamId)
         print("bookIdList \(bookIdList)")
         self.favoriteList = [String]()
         for item in CarPlayManager.FAV_LIST {

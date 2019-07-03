@@ -172,7 +172,9 @@ class ReaderToolbar {
     
     private func findAudioVersion(ref: Reference) -> String {
         let audioController = AudioBibleController.shared
-        let bookIdList = audioController.findAudioVersion(bibleId: ref.bibleId, iso3: ref.bible.iso3,
+        let bookIdList = audioController.findAudioVersion(bibleId: ref.bibleId,
+                                                          bibleName: ref.bibleName,
+                                                          iso3: ref.bible.iso3,
                                                           audioBucket: ref.bible.audioBucket,
                                                           otDamId: ref.bible.otDamId,
                                                           ntDamId: ref.bible.ntDamId)

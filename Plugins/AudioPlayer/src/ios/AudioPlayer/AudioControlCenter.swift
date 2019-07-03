@@ -117,6 +117,8 @@ class AudioControlCenter {
                     self.currentBookChapter = reference.localName
                     print("Title \(self.currentBookChapter)")
                     info[MPMediaItemPropertyTitle] = self.currentBookChapter
+                    info[MPMediaItemPropertyAlbumTitle] = reference.bibleName
+                    // Title \n Artist - Album Title
                     
                     //https://developer.apple.com/documentation/mediaplayer/mpnowplayinginfocenter
                     info[MPMediaItemPropertyPlaybackDuration] = item.asset.duration.seconds

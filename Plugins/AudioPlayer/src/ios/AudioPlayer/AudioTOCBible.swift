@@ -10,8 +10,8 @@ import Utility
 
 class AudioTOCBible {
     
-    let mediaSource: String
     let bibleId: String
+    let bibleName: String
     let iso3: String
     let audioBucket: String?
     let otDamId: String?
@@ -21,10 +21,10 @@ class AudioTOCBible {
     var newTestament: AudioTOCTestament?
     private let database: Sqlite3
     
-    init(source: String, bibleId: String, iso3: String,
+    init(bibleId: String, bibleName: String, iso3: String,
          audioBucket: String?, otDamId: String?, ntDamId: String?) {
-        self.mediaSource = source
         self.bibleId = bibleId
+        self.bibleName = bibleName
         self.iso3 = iso3
         self.audioBucket = audioBucket
         self.otDamId = otDamId

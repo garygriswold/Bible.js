@@ -41,6 +41,12 @@ class AudioReference {
             return self.tocAudioBook.testament.bible.bibleId
         }
     }
+    
+    var bibleName: String {
+        get {
+            return self.tocAudioBook.testament.bible.bibleName
+        }
+    }
  
     var iso3: String {
         get {
