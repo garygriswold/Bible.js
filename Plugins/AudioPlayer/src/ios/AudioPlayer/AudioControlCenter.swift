@@ -94,10 +94,20 @@ class AudioControlCenter {
             return MPRemoteCommandHandlerStatus.commandFailed
         })
         
+        controlCenter.togglePlayPauseCommand.isEnabled = false
         controlCenter.stopCommand.isEnabled = false
+        controlCenter.changePlaybackPositionCommand.isEnabled = false
+        controlCenter.changeRepeatModeCommand.isEnabled = false
+        controlCenter.changeShuffleModeCommand.isEnabled = false
+        controlCenter.changePlaybackRateCommand.isEnabled = false
         controlCenter.seekBackwardCommand.isEnabled = false
         controlCenter.seekForwardCommand.isEnabled = false
+        controlCenter.ratingCommand.isEnabled = false
+        controlCenter.likeCommand.isEnabled = false
+        controlCenter.dislikeCommand.isEnabled = false
         controlCenter.bookmarkCommand.isEnabled = false
+        controlCenter.enableLanguageOptionCommand.isEnabled = false
+        controlCenter.disableLanguageOptionCommand.isEnabled = false
     }
     
     func nowPlaying(player: AudioBible) {
