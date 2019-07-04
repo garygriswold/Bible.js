@@ -56,7 +56,7 @@ class AudioControlCenter {
             return MPRemoteCommandHandlerStatus.commandFailed
         })
         
-        controlCenter.previousTrackCommand.isEnabled = true
+        controlCenter.previousTrackCommand.isEnabled = false // turned of so that skip back appears
         controlCenter.previousTrackCommand.addTarget(handler: { event in
             if player.getPlayer() != nil {
                 player.priorChapter()
@@ -77,7 +77,7 @@ class AudioControlCenter {
             return MPRemoteCommandHandlerStatus.commandFailed
         })
         
-        controlCenter.skipForwardCommand.isEnabled = true
+        controlCenter.skipForwardCommand.isEnabled = false // turned of so that next chapter appears
         controlCenter.skipForwardCommand.preferredIntervals = [10.0]
         controlCenter.skipForwardCommand.addTarget(handler: { event in
             if player.getPlayer() != nil {
