@@ -54,7 +54,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     // DataSource
     //
     func numberOfChildItems(at indexPath: IndexPath) -> Int {
-        print("CarPlay: number Child Items called \(indexPath)  count: \(indexPath.count)")
+        print("CarPlay: number Child Items called \(indexPath)  level: \(indexPath.count)")
         switch indexPath.count {
         case 0:
             let curr = HistoryModel.shared.current()
@@ -99,7 +99,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     }
     
     func childItemsDisplayPlaybackProgress(at indexPath: IndexPath) -> Bool {
-        print("CarPlay: Ask if child items Display Progress")
+        print("CarPlay: Ask if child items Display Progress at \(indexPath)")
         return true
     }
     
