@@ -149,6 +149,17 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
                                 didUpdate context: MPPlayableContentManagerContext) {
         print("CarPlay: update ContentManagerContext called")
         self.historyLimit = min(context.enforcedContentItemsCount, CarPlayManager.HISTORY_LIMIT)
+        
+        // This is in lieu of AudioSession, which I might need to handle earphone connections
+        do {
+            let session = AVAudioSession.sharedInstance()
+            try session.setCategory(AVAudioSession.Category.playback,
+                                    mode: AVAudioSession.Mode.spokenAudio,
+                                    options: [])
+            try session.setActive(true)
+        } catch let err {
+            print("Create Session Error \(err)")
+        }
     }
     
     private func loadCarPlayTab(ident: String, title: String, image: String) -> MPContentItem {
