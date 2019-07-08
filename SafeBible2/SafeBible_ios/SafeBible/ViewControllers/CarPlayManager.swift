@@ -27,23 +27,16 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     }
     
     private var historyLimit = CarPlayManager.HISTORY_LIMIT
-    private var bibleId: String = "" // this is a problem
-    private var favoriteList = [String]()
+    private var bibleId: String
+    private var favoriteList: [String]
     
     private override init() {
-        super.init()
         let curr = HistoryModel.shared.current()
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = [
-            MPMediaItemPropertyTitle: curr.description()
-        ]
-        //AudioControlCenter.shared.getIcon() // from prototype
-        let controlCenter = MPRemoteCommandCenter.shared()
-        controlCenter.playCommand.isEnabled = true
-        controlCenter.playCommand.addTarget(handler: { event in
-            return MPRemoteCommandHandlerStatus.success
-        })
-        controlCenter.pauseCommand.isEnabled = false
-        controlCenter.stopCommand.isEnabled = false
+        self.bibleId = curr.bibleId
+        self.favoriteList = CarPlayManager.FAV_LIST
+        
+        super.init()
+        _ = AudioBibleController.shared // Init AudioBibleController now
     }
     
     deinit {
@@ -57,15 +50,11 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         print("CarPlay: number Child Items called \(indexPath)  level: \(indexPath.count)")
         switch indexPath.count {
         case 0:
-            let curr = HistoryModel.shared.current()
-            AudioBibleController.shared.carPlayPlayer(book: curr.bookId, chapterNum: curr.chapter,
-                                                      start: false, complete: {_ in })
             return CarPlayManager.tabs.count
         case 1:
             switch indexPath[0] {
             case 0: return min(self.historyLimit, HistoryModel.shared.historyCount)
             case 1:
-                self.buildFavoriteList()
                 return self.favoriteList.count
             default: return 0
             }
@@ -77,13 +66,14 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     private func buildFavoriteList() {
         let ref = HistoryModel.shared.current()
         self.bibleId = ref.bibleId
+        let bible = ref.bible
         let controller = AudioBibleController.shared
         let bookIdList = controller.findAudioVersion(bibleId: ref.bibleId,
                                                      bibleName: ref.bibleName,
-                                                     iso3: ref.bible.iso3,
-                                                     audioBucket: ref.bible.audioBucket,
-                                                     otDamId: ref.bible.otDamId,
-                                                     ntDamId: ref.bible.ntDamId)
+                                                     iso3: bible.iso3,
+                                                     audioBucket: bible.audioBucket,
+                                                     otDamId: bible.otDamId,
+                                                     ntDamId: bible.ntDamId)
         print("bookIdList \(bookIdList)")
         self.favoriteList = [String]()
         for item in CarPlayManager.FAV_LIST {
@@ -149,6 +139,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
                                 didUpdate context: MPPlayableContentManagerContext) {
         print("CarPlay: update ContentManagerContext called")
         self.historyLimit = min(context.enforcedContentItemsCount, CarPlayManager.HISTORY_LIMIT)
+        self.buildFavoriteList()
         
         // This is in lieu of AudioSession, which I might need to handle earphone connections
         do {

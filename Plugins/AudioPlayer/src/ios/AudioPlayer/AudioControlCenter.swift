@@ -14,6 +14,7 @@ class AudioControlCenter {
     static let shared = AudioControlCenter()
     
     private init() {
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = [String: Any]()
     }
     
     deinit {
@@ -21,14 +22,12 @@ class AudioControlCenter {
     }
 
     func setupControlCenter(player: AudioBible) {
-        //print("Called setup Control Center \(player.getCurrentReference())")
-        let controlCenter = MPRemoteCommandCenter.shared()
+        let controlCenter = MPRemoteCommandCenter.shared() // Takes 180 ms to init
         
         controlCenter.playCommand.isEnabled = true
         controlCenter.playCommand.addTarget(handler: { event in
             if !player.isPlaying() {
                 player.play()
-                MPNowPlayingInfoCenter.default().playbackState = .playing
                 return MPRemoteCommandHandlerStatus.success
             }
             return MPRemoteCommandHandlerStatus.commandFailed
@@ -38,7 +37,6 @@ class AudioControlCenter {
         controlCenter.pauseCommand.addTarget(handler: { event in
             if player.isPlaying() {
                 player.pause()
-                MPNowPlayingInfoCenter.default().playbackState = .paused
                 return MPRemoteCommandHandlerStatus.success
             }
             return MPRemoteCommandHandlerStatus.commandFailed
@@ -103,15 +101,13 @@ class AudioControlCenter {
     }
     
     func nowPlaying(player: AudioBible) {
-        //print("Called now Playing \(player.getCurrentReference())")
         if let reference = player.getCurrentReference() {
             if let play = player.getPlayer() {
                 if let item = play.currentItem {
                     
-                    var info = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [String: Any]()
+                    var info = [String: Any]()
                     
                     info[MPNowPlayingInfoCollectionIdentifier] = reference.damId
-                    info[MPNowPlayingInfoPropertyMediaType] = MPMediaType.audioBook.rawValue
                     info[MPNowPlayingInfoPropertyIsLiveStream] = 0.0 // 0.0 is false
                     info[MPMediaItemPropertyTitle] = reference.localName
                     info[MPMediaItemPropertyAlbumTitle] = reference.bibleName
@@ -150,7 +146,7 @@ class AudioControlCenter {
     /* This is called by AudioBibleView */
     func updateNowPlaying(reference: AudioReference, verse: Int, position: Double) {
         print("Update now Playing Reference \(reference) : \(verse) \(position)")
-        var info = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [String: Any]()
+        var info = MPNowPlayingInfoCenter.default().nowPlayingInfo!
         info[MPMediaItemPropertyTitle] = reference.localName + ":" + String(verse)
         info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
         MPNowPlayingInfoCenter.default().nowPlayingInfo = info
@@ -162,7 +158,7 @@ class AudioControlCenter {
         print("Update now Playing position: \(position)")
         MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
     }
-    
+ 
     private func updateTextPosition(nodeId: String) {
 // This must be rewritten as posting a notification to the main App, where the webview object is known.
 //        if let webview = AudioBibleView.webview {

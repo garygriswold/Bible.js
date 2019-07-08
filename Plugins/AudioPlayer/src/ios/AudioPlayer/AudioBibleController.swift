@@ -17,8 +17,8 @@ public class AudioBibleController {
     public static var shared = AudioBibleController()
  
     var audioTOCBible: AudioTOCBible?
-    private var fileType: String
-    private var audioBible: AudioBible?
+    private let fileType: String
+    private var audioBible: AudioBible? // can be made definite
     private var audioBibleView: AudioBibleView?
     private var audioSession: AudioSession?
     private var completionHandler: ((Error?)->Void)?
@@ -30,6 +30,7 @@ public class AudioBibleController {
                            name: AudioBibleController.TEXT_PAGE_CHANGED, object: nil)
         notify.addObserver(self, selector: #selector(applicationWillEnterForeground(note:)),
                            name: UIApplication.willEnterForegroundNotification, object: nil)
+        self.audioBible = AudioBible.shared(controller: self)
         print("***** Init AudioBibleController *****")
     }
     
@@ -69,7 +70,6 @@ public class AudioBibleController {
     * in order to set the bucket and damId, and read in the metadata for the damId.
     */
     public func present(view: UIView, book: String, chapterNum: Int, complete: @escaping (_ error:Error?) -> Void) {
-        self.audioBible = AudioBible.shared(controller: self)
         self.audioBibleView = AudioBibleView.shared(view: view, audioBible: self.audioBible!)
         self.audioSession = AudioSession.shared(audioBibleView: self.audioBibleView!)
         self.completionHandler = complete
@@ -93,9 +93,6 @@ public class AudioBibleController {
     
     public func carPlayPlayer(book: String, chapterNum: Int, start: Bool,
                               complete: @escaping (Error?) -> Void) {
-        if self.audioBible == nil {
-            self.audioBible = AudioBible.shared(controller: self)
-        }
         if let reader = self.audioTOCBible {
             if let meta = reader.findBook(bookId: book) {
                 let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)

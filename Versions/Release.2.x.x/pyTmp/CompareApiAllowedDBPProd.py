@@ -24,7 +24,7 @@ def unicode_csv_reader(utf8_data, dialect=csv.excel, **kwargs):
     for row in csv_reader:
         yield [unicode(cell, 'utf-8') for cell in row]
 
-def check(str, expectLen):
+def clean(str, expectLen):
 	if len(str) == 0:
 		return None
 	if str == "NA":
@@ -32,7 +32,6 @@ def check(str, expectLen):
 	if len(str) != expectLen:
 		print "Unexpected length", expectLen, str
 		return None
-	searchDBPProd(str)
 	return str
 
 def searchDBPProd(damId):
@@ -47,13 +46,34 @@ def searchDBPProd(damId):
 	input1.close()
 	return
 
+iso3Set = set()
 filename = os.environ['HOME'] + "/ShortSands/DBL/FCBH/apiallowed.csv"
 reader = unicode_csv_reader(open(filename))
 for row in reader:
-	ntDrama = check(row[6], 10)
-	otDrama = check(row[8], 10)
-	ntAudio = check(row[7], 10)
-	otAudio = check(row[9], 10)
+	ntText = clean(row[2], 10)
+	otText = clean(row[3], 10)
+	ntDrama = clean(row[6], 10)
+	otDrama = clean(row[8], 10)
+	ntAudio = clean(row[7], 10)
+	otAudio = clean(row[9], 10)
+	if ntText != None and ntText[6:7] != "N":
+		ntText = None
+	if otText != None and otText[6:7] != "O":
+		otText = None
+	if ntText != None or otText != None:
+		if ntDrama != None or otDrama != None or ntAudio != None or otAudio != None:
+			#print row[1], row[2], row[3], row[6], row[7], row[8], row[9]
+			lang = ntText[0:3] if ntText != None else otText[0:3]
+			iso3Set.add(lang.lower())
+			# compare iso3 to full language table, and drop if not present.
+
+		#else:
+			#print row[1], row[6], row[7], row[8], row[9]
+	#else:
+		#print row[1], row[2], row[3]
+
 
 
 reader.close()
+
+print iso3Set

@@ -102,7 +102,8 @@ class ReaderToolbar {
         self.tocChapLabel.text = String(reference.chapter)
         self.versionLabel.text = reference.abbr
         self.historyBack.isEnabled = HistoryModel.shared.hasHistory()
-        if AudioBibleController.shared.isBibleChanged(bibleId: reference.bibleId) {
+        if self.audioBookIdSet == nil ||
+            AudioBibleController.shared.isBibleChanged(bibleId: reference.bibleId) {
             self.audioBookIdSet = Set(self.findAudioVersion(ref: reference).split(separator: ","))
         }
         self.audioPlayer.isEnabled = self.audioBookIdSet.contains(Substring(reference.bookId))
