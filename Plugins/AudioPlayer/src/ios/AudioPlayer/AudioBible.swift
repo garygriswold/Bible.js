@@ -117,7 +117,7 @@ class AudioBible {
             if let reference = self.currReference {
                 print("\n*********** PLAY *************")
                 play.play()
-                MPNowPlayingInfoCenter.default().playbackState = .playing
+                self.controlCenter.setNowPlayingPlay(position: play.currentTime().seconds)
                 self.audioAnalytics?.playStarted(item: reference.toString(),
                                                  position: play.currentTime())
             }
@@ -129,7 +129,7 @@ class AudioBible {
             if let reference = self.currReference {
                 print("\n*********** PAUSE *************")
                 play.pause()
-                MPNowPlayingInfoCenter.default().playbackState = .paused
+                self.controlCenter.setNowPlayingPause(position: play.currentTime().seconds)
                 self.audioAnalytics?.playEnded(item: reference.toString(), position: play.currentTime())
                 self.updateMediaPlayStateTime(reference: reference)
             }

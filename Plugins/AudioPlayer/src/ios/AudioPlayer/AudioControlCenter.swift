@@ -159,6 +159,24 @@ class AudioControlCenter {
         print("Update now Playing position: \(position)")
         MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
     }
+    
+    func setNowPlayingPause(position: Double) {
+        var info = MPNowPlayingInfoCenter.default().nowPlayingInfo!
+        info[MPNowPlayingInfoPropertyPlaybackRate] = 0.0
+        info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
+        MPNowPlayingInfoCenter.default().nowPlayingInfo! = info
+        
+        MPNowPlayingInfoCenter.default().playbackState = .paused
+    }
+    
+    func setNowPlayingPlay(position: Double) {
+        var info = MPNowPlayingInfoCenter.default().nowPlayingInfo!
+        info[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
+        info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
+        MPNowPlayingInfoCenter.default().nowPlayingInfo! = info
+        
+        MPNowPlayingInfoCenter.default().playbackState = .playing
+    }
  
     private func updateTextPosition(nodeId: String) {
 // This must be rewritten as posting a notification to the main App, where the webview object is known.
