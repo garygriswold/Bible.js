@@ -79,7 +79,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
                 self.favoriteList.append(item)
             }
         }
-        return reference.bookId
+        return reference.bibleId
     }
     
     func contentItem(forIdentifier identifier: String,
