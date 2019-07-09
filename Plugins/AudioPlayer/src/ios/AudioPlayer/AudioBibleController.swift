@@ -18,19 +18,19 @@ public class AudioBibleController {
  
     var audioTOCBible: AudioTOCBible?
     private let fileType: String
-    private var audioBible: AudioBible? // can be made definite
+    private var audioBible: AudioBible? // must be optional, because self is passed in init
     private var audioBibleView: AudioBibleView?
     private var audioSession: AudioSession?
     private var completionHandler: ((Error?)->Void)?
     
     private init() {
         self.fileType = "mp3"
+        self.audioBible = AudioBible.shared(controller: self)
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(textPageChanged(note:)),
                            name: AudioBibleController.TEXT_PAGE_CHANGED, object: nil)
         notify.addObserver(self, selector: #selector(applicationWillEnterForeground(note:)),
                            name: UIApplication.willEnterForegroundNotification, object: nil)
-        self.audioBible = AudioBible.shared(controller: self)
         print("***** Init AudioBibleController *****")
     }
     
@@ -130,7 +130,11 @@ public class AudioBibleController {
     * This is called by AudioBible, when audio is ready to play
     */
     func audioReadyToPlay(enabled: Bool) {
-        self.audioBibleView?.audioReadyToPlay(enabled: enabled)
+        if self.audioBibleView != nil {
+            DispatchQueue.main.async(execute: {
+                self.audioBibleView!.audioReadyToPlay(enabled: enabled)
+            })
+        }
     }
     
     @objc func textPageChanged(note: NSNotification) {

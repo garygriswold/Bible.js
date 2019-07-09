@@ -14,7 +14,8 @@ class AudioControlCenter {
     static let shared = AudioControlCenter()
     
     private init() {
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = [String: Any]()
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = [
+            MPMediaItemPropertyTitle: "Hear Holy Bible"]
     }
     
     deinit {

@@ -62,14 +62,12 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         }
     }
     
-    /** This is also being done by Toolbar, can't I use that when available? */
-    private func buildFavoriteList() {
-        let ref = HistoryModel.shared.current()
-        self.bibleId = ref.bibleId
-        let bible = ref.bible
+    /** This is also being done by Toolbar, how we share with it? */
+    private func buildFavoriteList(reference: Reference) -> String {
+        let bible = reference.bible
         let controller = AudioBibleController.shared
-        let bookIdList = controller.findAudioVersion(bibleId: ref.bibleId,
-                                                     bibleName: ref.bibleName,
+        let bookIdList = controller.findAudioVersion(bibleId: reference.bibleId,
+                                                     bibleName: bible.name,
                                                      iso3: bible.iso3,
                                                      audioBucket: bible.audioBucket,
                                                      otDamId: bible.otDamId,
@@ -81,6 +79,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
                 self.favoriteList.append(item)
             }
         }
+        return reference.bookId
     }
     
     func contentItem(forIdentifier identifier: String,
@@ -102,15 +101,18 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         case 2:
             switch indexPath[0] {
             case 0:
-                let item = HistoryModel.shared.getHistory(row: indexPath[1])
-                return loadCarPlayItem(ident: item.nodeId(), title: item.description(),
-                                       subtitle: item.bible.name, cache: true)
+                let index = HistoryModel.shared.historyCount - indexPath[1] - 1
+                let ref = HistoryModel.shared.getHistory(row: index)
+                let itemId = "\(ref.bibleId):\(ref.bookId):\(ref.chapter)"
+                return loadCarPlayItem(ident: itemId, title: ref.description(),
+                                       subtitle: ref.bible.name, cache: true)
             case 1:
                 let bookId = self.favoriteList[indexPath[1]]
-                let item = Reference(bibleId: self.bibleId, bookId: bookId, chapter: 1)
+                let ref = Reference(bibleId: self.bibleId, bookId: bookId, chapter: 1)
                 let hasCache = AudioBibleController.shared.hasCache(book: bookId, chapterNum: 1)
-                return loadCarPlayItem(ident: item.nodeId(), title: item.description(),
-                                       subtitle: item.bible.name, cache: hasCache)
+                let itemId = "\(ref.bibleId):\(ref.bookId):\(ref.chapter)"
+                return loadCarPlayItem(ident: itemId, title: ref.description(),
+                                       subtitle: ref.bible.name, cache: hasCache)
             default:
                 return nil
             }
@@ -127,11 +129,19 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         print("CarPlay: initiate Playback of Content Item called \(indexPath)")
         if let item = self.contentItem(at: indexPath) {
             let parts = item.identifier.components(separatedBy: ":")
-            let bookId = parts[0]
-            let chapter: Int = (parts.count > 0) ? Int(parts[1]) ?? 1 : 1
-            AudioBibleController.shared.carPlayPlayer(book: bookId, chapterNum: chapter,
+            let bibleId = parts[0]
+            let bookId = parts[1]
+            let chapter: Int = Int(parts[2]) ?? 1
+            if bibleId != self.bibleId {
+                let ref = Reference(bibleId: bibleId, bookId: bookId, chapter: chapter)
+                self.bibleId = self.buildFavoriteList(reference: ref)
+                HistoryModel.shared.changeReference(reference: ref)
+            } else {
+                HistoryModel.shared.changeReference(bookId: bookId, chapter: chapter)
+            }
+            AudioBibleController.shared.carPlayPlayer(book: bookId,
+                                                      chapterNum: chapter,
                                                       start: true, complete: completionHandler)
-            HistoryModel.shared.changeReference(bookId: bookId, chapter: chapter)
         }
     }
     
@@ -139,7 +149,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
                                 didUpdate context: MPPlayableContentManagerContext) {
         print("CarPlay: update ContentManagerContext called")
         self.historyLimit = min(context.enforcedContentItemsCount, CarPlayManager.HISTORY_LIMIT)
-        self.buildFavoriteList()
+        self.bibleId = self.buildFavoriteList(reference: HistoryModel.shared.current())
         
         // This is in lieu of AudioSession, which I might need to handle earphone connections
         do {
