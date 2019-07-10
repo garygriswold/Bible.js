@@ -116,9 +116,11 @@ public class AudioBibleController {
             self.audioBible!.stop()
         }
         if self.audioBibleView != nil && self.audioBibleView!.audioBibleActive() {
-            self.audioBibleView!.dismissPlayer()
-            self.completionHandler!(nil) // should this be outside and after condition?
+            DispatchQueue.main.async {
+                self.audioBibleView!.dismissPlayer()
+            }
         }
+        self.completionHandler!(nil)
     }
     /**
     * This is called when the Audio must be stopped externally, such as when a Video is started.
