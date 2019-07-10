@@ -15,10 +15,10 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     static var shared = CarPlayManager()
     
     private static let tabs = [
-        ["recents", "Recents", "ios-recents"],
+        ["recents", "History", "ios-recents"],
         ["favorites", "Favorites", "ios-favorites"]
     ]
-    private static var HISTORY_LIMIT = 5
+    private static var HISTORY_LIMIT = 10
     private static let FAV_LIST = ["MAT", "MRK", "LUK", "JHN", "ACT", "EPH", "PHP", "PSA", "PRO" ]
     
     static func setUp() {
@@ -139,6 +139,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
             } else {
                 HistoryModel.shared.changeReference(bookId: bookId, chapter: chapter)
             }
+            MPPlayableContentManager.shared().reloadData()
             AudioBibleController.shared.carPlayPlayer(book: bookId,
                                                       chapterNum: chapter,
                                                       start: true, complete: completionHandler)
