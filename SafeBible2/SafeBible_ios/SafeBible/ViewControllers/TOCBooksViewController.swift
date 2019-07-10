@@ -26,7 +26,7 @@ class TOCBooksViewController : AppTableViewController, UITableViewDataSource {
         super.loadView()
         
         self.navigationItem.title = NSLocalizedString("Books", comment: "Table Contents view page title")
-        let history = NSLocalizedString("Recents", comment: "Button to display Recents")
+        let history = NSLocalizedString("History", comment: "Button to display History")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: history, style: .plain,
                                                                  target: self,
                                                                  action: #selector(historyHandler))

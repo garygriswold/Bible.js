@@ -39,7 +39,7 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
         super.loadView()
         
         self.navigationItem.title = self.book.name
-        let history = NSLocalizedString("Recents", comment: "Button to display Recents")
+        let history = NSLocalizedString("History", comment: "Button to display History")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: history, style: .plain,
                                                                  target: self,
                                                                  action: #selector(historyHandler))
