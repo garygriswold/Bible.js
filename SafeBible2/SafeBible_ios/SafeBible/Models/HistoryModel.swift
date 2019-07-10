@@ -112,6 +112,7 @@ struct HistoryModel {
     private mutating func add(reference: Reference?) {
         if CFAbsoluteTimeGetCurrent() - self._current.datetime > HistoryModel.SAVE_ON_DELAY
             && self._current != self._history.last {
+            self._history.removeAll { $0.reference == reference }
             self._history.append(self._current)
             SettingsDB.shared.storeHistory(history: self._current)
         }

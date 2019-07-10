@@ -17,7 +17,7 @@ class AudioReference {
         self.tocAudioBook = book
         self.chapter = chapter
         self.fileType = fileType
-        print("***** Init AudioReference ***** \(self.toString())")
+        //print("***** Init AudioReference ***** \(self.toString())")
     }
     
     convenience init(book: AudioTOCBook, chapterNum: Int, fileType: String) {
@@ -33,7 +33,7 @@ class AudioReference {
     }
    
     deinit {
-        print("***** Deinit AudioReference ***** \(self.toString())")
+        //print("***** Deinit AudioReference ***** \(self.toString())")
     }
 
     var bibleId: String {
