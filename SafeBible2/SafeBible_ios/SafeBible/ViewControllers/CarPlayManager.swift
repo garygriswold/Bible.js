@@ -148,19 +148,26 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     
     func playableContentManager(_ contentManager: MPPlayableContentManager,
                                 didUpdate context: MPPlayableContentManagerContext) {
-        print("CarPlay: update ContentManagerContext called")
-        self.historyLimit = min(context.enforcedContentItemsCount, CarPlayManager.HISTORY_LIMIT)
-        self.bibleId = self.buildFavoriteList(reference: HistoryModel.shared.current())
+        print("*** CarPlay: update ContentManagerContext connected: \(context.endpointAvailable)")
         
-        // This is in lieu of AudioSession, which I might need to handle earphone connections
-        do {
+        DispatchQueue.main.async {
+            UIApplication.shared.isIdleTimerDisabled = context.endpointAvailable
+        }
+        
+        if context.endpointAvailable {
+            self.historyLimit = min(context.enforcedContentItemsCount, CarPlayManager.HISTORY_LIMIT)
+            self.bibleId = self.buildFavoriteList(reference: HistoryModel.shared.current())
+            
+            // This is in lieu of AudioSession, which I might need to handle earphone connections
             let session = AVAudioSession.sharedInstance()
-            try session.setCategory(AVAudioSession.Category.playback,
-                                    mode: AVAudioSession.Mode.spokenAudio,
-                                    options: [])
-            try session.setActive(true)
-        } catch let err {
-            print("Create Session Error \(err)")
+            do {
+                try session.setCategory(AVAudioSession.Category.playback,
+                                        mode: AVAudioSession.Mode.spokenAudio,
+                                        options: [])
+                try session.setActive(true)
+            } catch let err {
+                print("ERROR: Create Session \(err)")
+            }
         }
     }
     
