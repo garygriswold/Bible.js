@@ -216,11 +216,14 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "REPLACE INTO History2 (datetime, bibleId, bookId, chapter, verse)" +
-                    " VALUES (?,?,?,?,?)"
             let ref = history.reference
-            let values: [Any?] = [history.datetime, ref.bibleId, ref.bookId, ref.chapter, nil]
-            _ = try db.executeV1(sql: sql, values: values)
+            let sql1 = "DELETE FROM History2 WHERE bibleId=? AND bookId=? AND chapter=?"
+            let values1: [Any] = [ref.bibleId, ref.bookId, ref.chapter]
+            _ = try db.executeV1(sql: sql1, values: values1)
+            let sql2 = "INSERT INTO History2 (datetime, bibleId, bookId, chapter, verse)" +
+                    " VALUES (?,?,?,?,?)"
+            let values2: [Any?] = [history.datetime, ref.bibleId, ref.bookId, ref.chapter, nil]
+            _ = try db.executeV1(sql: sql2, values: values2)
         } catch let err {
             print("ERROR SettingsDB.storeHistory \(err)")
         }
