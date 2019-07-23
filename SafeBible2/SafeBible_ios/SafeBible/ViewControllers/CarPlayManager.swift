@@ -157,17 +157,6 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
         if context.endpointAvailable {
             self.historyLimit = min(context.enforcedContentItemsCount, CarPlayManager.HISTORY_LIMIT)
             self.bibleId = self.buildFavoriteList(reference: HistoryModel.shared.current())
-            
-            // This is in lieu of AudioSession, which I might need to handle earphone connections
-            let session = AVAudioSession.sharedInstance()
-            do {
-                try session.setCategory(AVAudioSession.Category.playback,
-                                        mode: AVAudioSession.Mode.spokenAudio,
-                                        options: [])
-                try session.setActive(true)
-            } catch let err {
-                print("ERROR: Create Session \(err)")
-            }
         }
     }
     

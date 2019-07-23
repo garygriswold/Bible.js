@@ -96,6 +96,7 @@ public class AudioBibleController {
         if let reader = self.audioTOCBible {
             if let meta = reader.findBook(bookId: book) {
                 let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)
+                AudioSession.initializeSession()
                 self.audioBible!.beginReadFile(reference: ref, start: start, complete: complete)
             }
         }

@@ -19,6 +19,18 @@ import AVFoundation
 
 class AudioSession : NSObject {
     
+    static func initializeSession() {
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setCategory(AVAudioSession.Category.playback,
+                                    mode: AVAudioSession.Mode.spokenAudio,
+                                    options: [])
+            try session.setActive(true)
+        } catch let err {
+            print("Could not initialize AVAudioSession \(err)")
+        }
+    }
+    
     private static var instance: AudioSession?
     static func shared(audioBibleView: AudioBibleView) -> AudioSession {
         if (AudioSession.instance == nil) {
@@ -27,37 +39,31 @@ class AudioSession : NSObject {
         return AudioSession.instance!
     }
     
-    private let session: AVAudioSession = AVAudioSession.sharedInstance()
     private unowned let audioBibleView: AudioBibleView
     
     init(audioBibleView: AudioBibleView) {
         self.audioBibleView = audioBibleView
         super.init()
-        do {
-            try self.session.setCategory(AVAudioSession.Category.playback,
-                                         mode: AVAudioSession.Mode.spokenAudio,
-                                         options: [])
-            try self.session.setActive(true)
-        } catch let err {
-            print("Could not initialize AVAudioSession \(err)")
-        }
+        AudioSession.initializeSession()
+        
+        let session = AVAudioSession.sharedInstance()
         let center = NotificationCenter.default
         center.addObserver(self,
                            selector: #selector(audioSessionInterruption(note:)),
                            name: AVAudioSession.interruptionNotification,
-                           object: self.session)
+                           object: session)
         center.addObserver(self,
                            selector: #selector(audioSessionRouteChange(note:)),
                            name: AVAudioSession.routeChangeNotification,
-                           object: self.session)
+                           object: session)
         center.addObserver(self,
                            selector: #selector(audioSessionSilenceSecondaryAudioHint(note:)),
                            name: AVAudioSession.silenceSecondaryAudioHintNotification,
-                           object: self.session)
+                           object: session)
         center.addObserver(self,
                            selector: #selector(audioSessionMediaServicesWereReset(note:)),
                            name: AVAudioSession.mediaServicesWereResetNotification,
-                           object: self.session)
+                           object: session)
     }
     
     deinit {
