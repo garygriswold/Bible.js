@@ -55,6 +55,12 @@ class AudioBible {
         return (self.player != nil) ? self.player!.rate > 0.0 : false
     }
     
+    func restartFile() {
+        if let ref = self.currReference {
+            self.beginReadFile(reference: ref, start: false, complete: {_ in })
+        }
+    }
+    
     func beginReadFile(reference: AudioReference, start: Bool, complete: @escaping (Error?) -> Void) {
         print("BibleReader.BEGIN Read File")
         self.currReference = reference
@@ -113,14 +119,16 @@ class AudioBible {
     }
     
     func play() {
-        if let play = self.player {
+        if self.player != nil && self.player!.status != AVPlayer.Status.failed {
             if let reference = self.currReference {
-                print("\n*********** PLAY *************")
-                play.play()
-                self.controlCenter.setNowPlayingPlay(position: play.currentTime().seconds)
+                print("\n*********** PLAY ************* \(self.player!.status.rawValue)")
+                self.player!.play()
+                self.controlCenter.setNowPlayingPlay(position: self.player!.currentTime().seconds)
                 self.audioAnalytics?.playStarted(item: reference.toString(),
-                                                 position: play.currentTime())
+                                                 position: self.player!.currentTime())
             }
+        } else {
+            self.restartFile()
         }
     }
     

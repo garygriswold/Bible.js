@@ -93,7 +93,7 @@ class CarPlayManager : NSObject, MPPlayableContentDataSource, MPPlayableContentD
     }
     
     func contentItem(at indexPath: IndexPath) -> MPContentItem? {
-        print("CarPlay: content item called \(indexPath)")
+        //print("CarPlay: content item called \(indexPath)")
         switch indexPath.count {
         case 1:
             let item = CarPlayManager.tabs[indexPath[0]]
