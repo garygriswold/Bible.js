@@ -47,7 +47,7 @@ class StoreReviewController {
     }
     
     @objc func startTimer(note: Notification) {
-        print("**** applicationDidLaunch or EnteredForeground ****")
+        print("**** Start StoreReview Timer ****")
         self.appStart = CFAbsoluteTimeGetCurrent()
         let settings = UserDefaults.standard
         let seconds = settings.double(forKey: StoreReviewController.APP_USE_SEC)

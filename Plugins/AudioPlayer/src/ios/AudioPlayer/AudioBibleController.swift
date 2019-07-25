@@ -71,7 +71,8 @@ public class AudioBibleController {
     */
     public func present(view: UIView, book: String, chapterNum: Int, complete: @escaping (_ error:Error?) -> Void) {
         self.audioBibleView = AudioBibleView.shared(view: view, audioBible: self.audioBible!)
-        self.audioSession = AudioSession.shared(audioBibleView: self.audioBibleView!)
+        self.audioSession = AudioSession.shared(audioBible: self.audioBible!)
+        self.audioSession?.audioBibleView = self.audioBibleView
         self.completionHandler = complete
         
         if !self.audioBibleView!.audioBibleActive() {
@@ -96,7 +97,7 @@ public class AudioBibleController {
         if let reader = self.audioTOCBible {
             if let meta = reader.findBook(bookId: book) {
                 let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)
-                AudioSession.initializeSession()
+                self.audioSession = AudioSession.shared(audioBible: self.audioBible!)
                 self.audioBible!.beginReadFile(reference: ref, start: start, complete: complete)
             }
         }
