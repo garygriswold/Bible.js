@@ -36,6 +36,9 @@ class AudioSession : NSObject {
         
         let session = AVAudioSession.sharedInstance()
         do {
+            //let options: AVAudioSession.CategoryOptions = [.mixWithOthers]
+            //.mixWithOthers, .duckOthers, .interruptSpokenAudioAndMixWithOthers
+            //.defaultToSpeaker, .allowAirPlay
             try session.setCategory(AVAudioSession.Category.playback,
                                     mode: AVAudioSession.Mode.spokenAudio,
                                     options: [])
@@ -81,15 +84,14 @@ class AudioSession : NSObject {
     }
     
     @objc func audioSessionInterruption(note: NSNotification) {
-        print("\n====== Audio Session Interruption")
         if let value = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt {
             if let interruption =  AVAudioSession.InterruptionType(rawValue: value) {
                 switch interruption {
                 case .began:
-                    print("\n====== Interruption Began")
+                    print("\n====== Audio Interruption Began")
                     self.pausePlayer()
                 case .ended:
-                    print("\n====== Interruption Ended")
+                    print("\n====== Audio Interruption Ended")
                     if let option = note.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt {
                         if AVAudioSession.InterruptionOptions(rawValue: option) == .shouldResume {
                             self.playPlayer()
@@ -101,29 +103,27 @@ class AudioSession : NSObject {
     }
     
     @objc func audioSessionRouteChange(note: Notification) {
-        print("\n====== Audio Session Route Change ======")
         if let userInfo = note.userInfo {
             if let value = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt {
-                print("====== Route Change VALUE \(value))")
                 if let reason = AVAudioSession.RouteChangeReason(rawValue: value) {
                     switch reason {
                     case .unknown:
-                        print("====== Unknown ======")
+                        print("\n====== Audio Route Change, Unknown ======")
                     case .newDeviceAvailable:
-                        print("====== New Device Available ======")
+                        print("\n====== Audio Route Change, New Device Available ======")
                     case .oldDeviceUnavailable: // 2
-                        print("====== Old Device Unavailable ======")
+                        print("\n====== Audio Route Change, Old Device Unavailable ======")
                         self.pausePlayer()
-                    case .categoryChange:
-                        print("====== Category Change ======")
-                    case .override:
-                        print("====== Override ======")
+                    case .categoryChange: // 3
+                        print("\n====== Audio Route Change, Category Change ======")
+                    case .override: // 4
+                        print("\n====== Audio Route Change, Override ======")
                     case .wakeFromSleep:
-                        print("====== Wake From Sleep ======")
+                        print("\n====== Audio Route Change, Wake From Sleep ======")
                     case .noSuitableRouteForCategory:
-                        print("====== No Suitable Route For Category ======")
-                    case .routeConfigurationChange:
-                        print("====== Route Configuration Change ======")
+                        print("\n====== Audio Route Change, No Suitable Route For Category ======")
+                    case .routeConfigurationChange: // 8
+                        print("\n====== Audio Route Change, Route Configuration Change ======")
                     }
                 }
             }
@@ -131,14 +131,15 @@ class AudioSession : NSObject {
     }
     
     @objc func audioSessionSilenceSecondaryAudioHint(note: Notification) {
-        print("\n====== Audio Session Silence Secondary Audio \(String(describing: note.userInfo))")
         if let userInfo = note.userInfo {
             if let value = userInfo[AVAudioSessionSilenceSecondaryAudioHintTypeKey] as? UInt {
                 if let type = AVAudioSession.SilenceSecondaryAudioHintType(rawValue: value) {
                     switch type {
                     case .begin:
+                        print("\n====== Audio Silence Secondary Audio, Begin")
                         self.pausePlayer()
                     case .end:
+                        print("\n====== Audio Silence Secondary Audio, End")
                         self.playPlayer()
                     }
                 }
@@ -181,4 +182,95 @@ class AudioSession : NSObject {
 
 /*
 boolean = session.isOtherAudioPlaying
+*/
+
+/*
+ Interruption Logic
+ 
+ Plugin headphones, or put on earbuds
+    Audio Route Change, New Device Available
+ 
+ Unplug headphones, or take off earbuds
+    Audio Route Change, Old Device Unavailable
+    Will pause Bible Audio
+ 
+ Turn on car, plug in iPhone
+    no interruption
+    List screens ready
+ 
+ Plug in iPhone, turn on car
+    no interruption
+    List screens ready
+ 
+ Select first item to play
+    Audio Route Change, Category, value = 3
+ 
+ Apple Nav starts
+    Audio Interruption began
+    Will Pause Audio
+ 
+ Apple Nav ends
+    Audio Interruption ended
+    Will Resume Audio
+ 
+ Message starts reading
+    Audio Interruption began
+    Will Pause Audio
+    (after pause) Audio Route change, Configuration Change, value = 8
+ 
+ Message ends reading
+    Audio Route change, Configuration Change, value = 8
+    Audio Interruption ended
+    Will Resume Audio
+ 
+ Disconnect phone
+    Audio Route change, Old device Unavailable, value = 2
+    Will Pause Audio
+ 
+ Connect phone
+    Audio Route change, Category Change, value = 3
+    Now Playing is ready to play
+ 
+ Turn car off
+    Audio Route change, Override, value = 4
+    Audio Interruption began
+    Will Pause Audio
+ 
+ Turn car on
+    Audio Interruption ended
+    Will Resume Audio
+    (after play starts) Audio Route change, Category Change, value = 3
+ 
+ Apple Music starts
+    Audio Interruption began
+    Will Pause Audio
+ 
+ Apple Music ends - does not exist
+    User changes back to Bible
+    Now Playing is ready to play
+ 
+ Porsche Music starts
+    Audio Route Change, Override, value = 4
+    Audio Interruption began
+    Will Pause Audio
+ 
+ Porsche Music ends - does not exist
+    User changes back to Bible
+    Now Playing is ready to play
+ 
+ Porsche Nav starts
+    There is no notification
+ 
+ Porsche Nav ends
+    There is no notification
+ 
+ Phone call starts
+    TBD
+ 
+ Phone call ends
+    TBD
+ 
+ App Will Enter Foreground - this does nothing
+ App Will Enter Foreground in View - this presents player if it exists
+
 */
