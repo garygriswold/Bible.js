@@ -89,6 +89,15 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
     * Fixing this might require some rework in ReaderViewQueue or a custom UIPageViewController
     */
     @objc func audioChapterChanged(note: NSNotification) {
+        if let refString = note.object as? String {
+            if let reference = Reference.factory(reference: refString) {
+                HistoryModel.shared.changeReference(reference: reference)
+            }
+        }
+        // This setting of view controller does not work,
+        // the second chapter auto scrolled presents blank.
+        // So, the ability to auto scroll text as audio advances is NOT implemented.
+        // Fixing this might require some rework in ReaderViewQueue or a custom UIPageViewController
         //let ref = HistoryModel.shared.current().nextChapter()
         //let pageNext = self.readerViewQueue.first(reference: ref)
         //self.pageViewController.setViewControllers([pageNext], direction: .forward, animated: true,

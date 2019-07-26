@@ -36,9 +36,12 @@ class AudioSession : NSObject {
         
         let session = AVAudioSession.sharedInstance()
         do {
-            //let options: AVAudioSession.CategoryOptions = [.mixWithOthers]
-            //.mixWithOthers, .duckOthers, .interruptSpokenAudioAndMixWithOthers
-            //.defaultToSpeaker, .allowAirPlay
+            // AVAudioSession.CategoryOptions = []
+            // .mixWithOthers - prevented NowPlaying from appearing
+            // .duckOthers - prevented NowPlaying from appearing
+            // .interruptSpokenAudioAndMixWithOthers - prevented NowPlaying from appearing
+            // .defaultToSpeaker - NowPlaying appears, but was not updated with title and progress
+            // .allowAirPlay - NowPlaying appears, but is not updated
             try session.setCategory(AVAudioSession.Category.playback,
                                     mode: AVAudioSession.Mode.spokenAudio,
                                     options: [])
@@ -265,10 +268,14 @@ boolean = session.isOtherAudioPlaying
     There is no notification
  
  Phone call starts
-    TBD
+    Audio Interruption began
+    Will pause Bible audio
+    (after pause) Audio Route Change, Route Configuration Change (repeated)
  
  Phone call ends
-    TBD
+    Audio Route Change, Route Configuration Change
+    Audio Interruption ended
+    Will resume Bible audio
  
  App Will Enter Foreground - this does nothing
  App Will Enter Foreground in View - this presents player if it exists

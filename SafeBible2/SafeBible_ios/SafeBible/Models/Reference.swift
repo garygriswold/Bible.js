@@ -8,6 +8,17 @@
 
 struct Reference : Equatable {
     
+    static func factory(reference: String) -> Reference? {
+        var result: Reference? = nil
+        let parts = reference.components(separatedBy: ":")
+        if parts.count > 2 {
+            if let chapter = Int(parts[2]) {
+                result = Reference(bibleId: parts[0], bookId: parts[1], chapter: chapter)
+            }
+        }
+        return result
+    }
+    
     private static var bibleMap = [String:Bible]()
     
     let bibleId: String

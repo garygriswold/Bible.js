@@ -129,6 +129,10 @@ class AudioReference {
         }
     }
     
+    func getReference() -> String {
+        return "\(self.bibleId):\(self.bookId):\(self.chapterNum)"
+    }
+    
     func isEqual(reference: AudioReference) -> Bool {
         if (self.chapter != reference.chapter) { return false }
         if (self.bookId != reference.bookId) { return false }
