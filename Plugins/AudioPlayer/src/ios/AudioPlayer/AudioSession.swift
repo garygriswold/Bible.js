@@ -71,6 +71,14 @@ class AudioSession : NSObject {
                            selector: #selector(audioSessionMediaServicesWereReset(note:)),
                            name: AVAudioSession.mediaServicesWereResetNotification,
                            object: session)
+        center.addObserver(self,
+                           selector: #selector(applicationDidEnterBackground(note:)),
+                           name: UIApplication.didEnterBackgroundNotification,
+                           object: nil)
+        center.addObserver(self,
+                           selector: #selector(applicationWillEnterForeground(note:)),
+                           name: UIApplication.willEnterForegroundNotification,
+                           object: nil)
     }
     
     deinit {
@@ -86,7 +94,7 @@ class AudioSession : NSObject {
         }
     }
     
-    @objc func audioSessionInterruption(note: NSNotification) {
+    @objc private func audioSessionInterruption(note: NSNotification) {
         if let value = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt {
             if let interruption =  AVAudioSession.InterruptionType(rawValue: value) {
                 switch interruption {
@@ -105,7 +113,7 @@ class AudioSession : NSObject {
         }
     }
     
-    @objc func audioSessionRouteChange(note: Notification) {
+    @objc private func audioSessionRouteChange(note: Notification) {
         if let userInfo = note.userInfo {
             if let value = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt {
                 if let reason = AVAudioSession.RouteChangeReason(rawValue: value) {
@@ -133,7 +141,7 @@ class AudioSession : NSObject {
         }
     }
     
-    @objc func audioSessionSilenceSecondaryAudioHint(note: Notification) {
+    @objc private func audioSessionSilenceSecondaryAudioHint(note: Notification) {
         if let userInfo = note.userInfo {
             if let value = userInfo[AVAudioSessionSilenceSecondaryAudioHintTypeKey] as? UInt {
                 if let type = AVAudioSession.SilenceSecondaryAudioHintType(rawValue: value) {
@@ -150,14 +158,36 @@ class AudioSession : NSObject {
         }
     }
     
-    @objc func audioSessionMediaServicesWereLost(note: Notification) {
+    @objc private func audioSessionMediaServicesWereLost(note: Notification) {
         print("\n====== Audio Session Services Were Lost \(String(describing: note.userInfo))")
     }
     
-    @objc func audioSessionMediaServicesWereReset(note: Notification) {
+    @objc private func audioSessionMediaServicesWereReset(note: Notification) {
         print("\n====== Audio Session Services Were Reset \(String(describing: note.userInfo))")
         // According to Apple docs, this should be handled, but its occurrance is rare.
         // I do not know how to test, so it has not been done.
+    }
+    
+    /**
+    * Pause audio in background if the builtInSpeaker is the only output.
+    * Otherwise, allow background play to continue
+    */
+    @objc private func applicationDidEnterBackground(note:Notification) {
+        print("\n====== APP DID ENTER BACKGROUND \(String(describing: note.object))")
+        if self.audioBible.isPlaying() {
+            let session = AVAudioSession.sharedInstance()
+            let outputs: [AVAudioSessionPortDescription] = session.currentRoute.outputs
+            print("====== Port Count \(outputs.count) Port 0: \(outputs[0].portName)")
+            if outputs.count == 1 {
+                if outputs[0].portType == AVAudioSession.Port.builtInSpeaker {
+                    self.pausePlayer()
+                }
+            }
+        }
+    }
+    
+    @objc private func applicationWillEnterForeground(note:Notification) {
+        print("\n====== APP WILL ENTER FOREGROUND \(String(describing: note.object))")
     }
     
     private func playPlayer() {

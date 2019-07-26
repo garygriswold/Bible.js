@@ -236,18 +236,6 @@ class AudioBible {
                             name: .AVPlayerItemTimeJumped,
                             object: nil)*/
         notify.addObserver(self,
-                           selector: #selector(applicationDidFinishLaunching(note:)),
-                           name: UIApplication.didFinishLaunchingNotification,
-                           object: nil)
-        notify.addObserver(self,
-                           selector: #selector(applicationWillEnterForeground(note:)),
-                           name: UIApplication.willEnterForegroundNotification,
-                           object: nil)
-        notify.addObserver(self,
-                           selector: #selector(applicationDidEnterBackground(note:)),
-                           name: UIApplication.didEnterBackgroundNotification,
-                           object: nil)
-        notify.addObserver(self,
                            selector: #selector(applicationWillTerminate(note:)),
                            name: UIApplication.willTerminateNotification,
                            object: nil)
@@ -272,25 +260,7 @@ class AudioBible {
     @objc private func playerItemTimeJumped(note:Notification) {
         print("\n****** TIME JUMPED \(String(describing: note.object))")
     }
-    
-    /**
-    * This method is called when an App is first, launched, not when it is restarted in foreground
-    */
-    @objc private func applicationDidFinishLaunching(note:Notification) {
-        print("\n****** APP DID FINISH LAUNCHING \(String(describing: note.object)) \(Date().timeIntervalSince1970)")
-    }
-    /**
-    * This method is called when an already running App, which went to background, restarts in foreground.
-    */
-    @objc private func applicationWillEnterForeground(note:Notification) {
-        print("\n****** APP WILL ENTER FOREGROUND \(String(describing: note.object)) \(Date().timeIntervalSince1970)")
-    }
-    /**
-    * This method is called when the Home button or Lock button terminate the foreground App
-    */
-    @objc private func applicationDidEnterBackground(note:Notification) {
-        print("\n****** APP DID ENTER BACKGROUND \(String(describing: note.object)) \(Date().timeIntervalSince1970)")
-    }
+
     /**
     * This method is called when the App is fully killed.  It is not affected by the Home or Lock button
     */
