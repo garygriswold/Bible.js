@@ -30,9 +30,7 @@
 		E4D74E2A202D671F00097888 /* SS_AWSS3TransferUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = E4D74E27202D671F00097888 /* SS_AWSS3TransferUtility.m */; };
 		E4D74E2B202D671F00097888 /* SS_AWSS3TransferUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = E4D74E28202D671F00097888 /* SS_AWSS3TransferUtility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E4D74E2C202D671F00097888 /* SS_AWSS3PreSignedURL.h in Headers */ = {isa = PBXBuildFile; fileRef = E4D74E29202D671F00097888 /* SS_AWSS3PreSignedURL.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E4D74E2E202D673000097888 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D74E2D202D673000097888 /* AWSCore.framework */; };
 		E4D74E32202D6C7700097888 /* SS_AWSS3PreSignedURL.m in Sources */ = {isa = PBXBuildFile; fileRef = E4D74E31202D6C7700097888 /* SS_AWSS3PreSignedURL.m */; };
-		E4E7330620772AD400318456 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D74E2D202D673000097888 /* AWSCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,7 +78,6 @@
 		E4D74E27202D671F00097888 /* SS_AWSS3TransferUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SS_AWSS3TransferUtility.m; sourceTree = "<group>"; };
 		E4D74E28202D671F00097888 /* SS_AWSS3TransferUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SS_AWSS3TransferUtility.h; sourceTree = "<group>"; };
 		E4D74E29202D671F00097888 /* SS_AWSS3PreSignedURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SS_AWSS3PreSignedURL.h; sourceTree = "<group>"; };
-		E4D74E2D202D673000097888 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
 		E4D74E31202D6C7700097888 /* SS_AWSS3PreSignedURL.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SS_AWSS3PreSignedURL.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -91,7 +88,6 @@
 			files = (
 				E440D02E20942A2A00BE85D4 /* Utility.framework in Frameworks */,
 				E44ED9AF20781FFE0003D90D /* libz.1.1.3.tbd in Frameworks */,
-				E4D74E2E202D673000097888 /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,7 +96,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4C23FDD202D627F00F98324 /* AWS.framework in Frameworks */,
-				E4E7330620772AD400318456 /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,7 +180,6 @@
 				E44ED9C6207866CD0003D90D /* ZipUtilities.swift */,
 				E44ED9B0207859410003D90D /* minizip */,
 				E4C23FD7202D627F00F98324 /* Info.plist */,
-				E4D74E2D202D673000097888 /* AWSCore.framework */,
 			);
 			path = AWS;
 			sourceTree = "<group>";

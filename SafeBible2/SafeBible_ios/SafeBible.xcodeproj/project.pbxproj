@@ -22,7 +22,8 @@
 		E4289B502223B90300C344F7 /* AppSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4289B4F2223B90300C344F7 /* AppSettingsViewController.swift */; };
 		E429FDB621E94F7C004A193A /* www in Resources */ = {isa = PBXBuildFile; fileRef = E429FDB521E94F7B004A193A /* www */; };
 		E429FDB821E94FAB004A193A /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E429FDB721E94FAB004A193A /* Versions.db */; };
-		E429FDBA21E9500E004A193A /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E429FDB921E9500D004A193A /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E42A311522F483D000237180 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E429FDB921E9500D004A193A /* AWSCore.framework */; };
+		E42A311622F483D000237180 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E429FDB921E9500D004A193A /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E42C151B21CD8BAE00AA42D7 /* NotesExportActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42C151A21CD8BAE00AA42D7 /* NotesExportActionSheet.swift */; };
 		E431E92A21938D7300CF609C /* DynamicCSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E431E92921938D7300CF609C /* DynamicCSS.swift */; };
 		E43533C22264461200DAE83C /* ConcordanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43533C12264461200DAE83C /* ConcordanceViewController.swift */; };
@@ -138,7 +139,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				E465D73F2201700B009C2F1F /* AWS.framework in Embed Frameworks */,
-				E429FDBA21E9500E004A193A /* AWSCore.framework in Embed Frameworks */,
+				E42A311622F483D000237180 /* AWSCore.framework in Embed Frameworks */,
 				E4BB145622016BD000D5A704 /* VideoPlayer.framework in Embed Frameworks */,
 				E44C056E211BE1F700476DAD /* Utility.framework in Embed Frameworks */,
 				E4BB145322016BB000D5A704 /* AudioPlayer.framework in Embed Frameworks */,
@@ -303,6 +304,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E465D73E2201700B009C2F1F /* AWS.framework in Frameworks */,
+				E42A311522F483D000237180 /* AWSCore.framework in Frameworks */,
 				E4BB145222016BB000D5A704 /* AudioPlayer.framework in Frameworks */,
 				E44C056D211BE1F700476DAD /* Utility.framework in Frameworks */,
 				E4BB145522016BD000D5A704 /* VideoPlayer.framework in Frameworks */,
@@ -927,6 +929,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Settings",
+					"$(PROJECT_DIR)/SafeBible",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/SafeBible/Info.plist";
 				INFOPLIST_OUTPUT_FORMAT = "same-as-input";
@@ -955,6 +958,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Settings",
+					"$(PROJECT_DIR)/SafeBible",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/SafeBible/Info.plist";
 				INFOPLIST_OUTPUT_FORMAT = "same-as-input";
